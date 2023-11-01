@@ -2,11 +2,10 @@ import styles from '../assets/styles/Video.module.css';
 import ReactPlayer from 'react-player';
 import Controls from './Controls';
 import Describe from './Describe';
+import Sidebar from './Sidebar';
 import { useRef, useState } from 'react';
-function Video({ url, isPlaying, handlePlaying }) {
+function Video({ video, isPlaying, handlePlaying ,ismuted,handleMuted,volume,handleVolume}) {
     const [played, setPlayed] = useState(0);//播放进度
-    const [ismuted, setIsmuted] = useState(true);//是否静音
-    const [volume, setVolume] = useState(0.5);//设置音量
     const playedSeconds = useRef(0);
     const videoRef = useRef(null);
     function handleProgress(state) {
@@ -16,19 +15,14 @@ function Video({ url, isPlaying, handlePlaying }) {
     function handlePlayed(state){
         setPlayed(state);
     }
-    function handleMuted(){
-        setIsmuted(!ismuted);
-    }
-    function handleVolume(state){
-        setVolume(state);
-    }
     return (
         <div className={styles.videoContainer}>
+            <img src={video.cover_url} alt="background" />{/*背景模糊图*/}
             <div className={styles.playerContainer}>
                 <ReactPlayer
                     ref={videoRef}
                     className={styles.video}
-                    url={url}
+                    url={video.play_url}
                     playing={isPlaying}
                     muted={ismuted}
                     volume={volume}
@@ -38,9 +32,9 @@ function Video({ url, isPlaying, handlePlaying }) {
                     progressInterval={1000}
                     onProgress={handleProgress}
                 ></ReactPlayer>
-                <Describe></Describe>
+                <Describe name={video.author.name} title={video.title}></Describe>
             </div>
-            
+            <Sidebar video={video}></Sidebar>
             <div className={styles.controlContainer}>
                 <Controls
                     videoRef={videoRef}

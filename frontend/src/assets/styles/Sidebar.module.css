@@ -1,0 +1,96 @@
+.sidebarContainer {
+    position: absolute;
+    height: 100%;
+    width: 100px;
+    display: flex;
+    flex-direction: column;
+    right: 0;
+    top: 0;
+    justify-content: center;
+    align-items: center;
+    font-size: 3rem;
+    color: aliceblue;
+    z-index: 100;
+}
+
+.sidebar {
+    height: 60%;
+    display: grid;
+    grid-template-rows: 1fr 1fr 1fr 1fr;
+    align-items: center;
+}
+
+.number {
+    font-size: 1rem;
+}
+
+.avatar {
+    width: 3rem;
+    height: 3rem;
+    border-radius: 50%;
+    background-color: aliceblue;
+    position: relative;
+}
+
+.follow {
+    /*关注的小加号按钮*/
+    width: 1.5rem;
+    height: 1.5rem;
+    background-color: rgb(233, 31, 152);
+    position: absolute;
+    bottom: -15%;
+    left: 25%;
+    font-size: 1rem;
+    border-radius: 50%;
+    color: aliceblue;
+    font-weight: bold;
+}
+.followed{
+    /*关注成功后的样式*/
+    width: 1.5rem;
+    height: 1.5rem;
+    position: absolute;
+    bottom: -15%;
+    left: 25%;
+    font-size: 1rem;
+    border-radius: 50%;
+    background-color: aliceblue;
+    color:red;
+    font-weight: bold;
+}
+.follow:hover {
+    cursor: pointer;
+}
+.followed:hover{
+    cursor: pointer;
+}
+.like {
+    display: flex;
+    flex-direction: column;
+}
+.icon:hover {
+    animation: rotateShake 2s linear infinite;
+}
+.liked {
+    color: red;
+}
+@keyframes rotateShake {
+    0% {
+        transform: rotate(0deg);
+    }
+    25% {
+        transform: rotate(-10deg);
+        scale: 1.1;
+    }
+    50% {
+        transform: rotate(0deg);
+        scale: 1.2;
+    }
+    75% {
+        transform: rotate(10deg);
+        scale: 1.1;
+    }
+    100% {
+        transform: rotate(0deg);
+    }
+}

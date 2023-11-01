@@ -6,11 +6,12 @@ function Header(){
         <header>
             <div className={styles.headerContainer}>
                     <div className={styles.brand}>
-                        <Link className={styles.link} to="/">React Video</Link>
+                        <Link className={styles.link} to="/">NewClip</Link>
                     </div>
                     <nav className={styles.navlinks}>
                             <Link className={styles.link} to="/">首页</Link>
-                            <Link className={styles.link} to="/sports">体育</Link>
+                            <Link className={styles.link} to="/hot">热门视频</Link>
+                            <Link className={styles.link} to="/sports">体育频道</Link>
                     </nav>
                     <div className={styles.searchInput}>
                         <input type="text" />

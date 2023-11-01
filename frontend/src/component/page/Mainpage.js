@@ -11,10 +11,33 @@ function Mainpage() {
     const realPrevIndex = useRef(0);
     const swiperRef = useRef(null);
     const trueIndex = useRef(0);
-    const [swiper, setSwiper] = useState([videos[0], videos[1], videos[2]]);
+    const [swiper, setSwiper] = useState(videos ? [videos[0], videos[1], videos[2]] : []);//设置三个swiper的实际加载的视频
     const [isPlaying, setIsPlaying] = useState([true, false, false]);//是否播放，仅当前视频自动播放
+    const [ismuted, setIsmuted] = useState(true);//设置是否静音，状态提升全局通用
     const [canSLide, setCanSlide] = useState([false, true]);//是否可以滑动,0:上滑,1:下滑
+    const [volume, setVolume] = useState(0);//设置音量，全局通用
     useEffect(() => {
+        function debounce(fn, delay) {
+            let timer = null;
+            return function () {
+                if (timer) {
+                    clearTimeout(timer);
+                }
+                timer = setTimeout(() => {
+                    fn.apply(this, arguments);
+                    timer = null;
+                }, delay);
+            }
+        }
+        function handleWheel(e) {
+            if (e.deltaY > 0) {
+                if (trueIndex.current !== videos.length - 1) swiperRef.current.slideNext();
+            }
+            else if (e.deltaY < 0) {
+                if (trueIndex.current !== 0) swiperRef.current.slidePrev();
+            }
+        }
+        const debouncedHandleWheel = debounce(handleWheel, 100);
         function handleKeydown(e) {
             if (e.key === "ArrowDown") {
                 if (trueIndex.current !== videos.length - 1) swiperRef.current.slideNext();
@@ -22,23 +45,34 @@ function Mainpage() {
             else if (e.key === "ArrowUp") {
                 if (trueIndex.current !== 0) swiperRef.current.slidePrev();
             }
+            else if (e.key === " ") {
+                handlePlaying();
+            }
         }
         window.addEventListener('keydown', handleKeydown);
-        return () => window.removeEventListener('keydown', handleKeydown);
-    }, [videos, trueIndex])
-    useEffect(()=>{
-        if(trueIndex.current>=videos.length/2){
+        window.addEventListener('wheel', debouncedHandleWheel);
+        return () => {
+            window.removeEventListener('keydown', handleKeydown);
+            window.removeEventListener('wheel', debouncedHandleWheel);
+        }// eslint-disable-next-line
+    }, [videos, trueIndex]) 
+    useEffect(() => {
+        if (videos && trueIndex.current >= videos.length / 2) {
             //TODO 从后端获取新数据
         }
-    })
+    },[swiper,videos])
     function handleSlideChange(swiper) {
-        if(swiper.realIndex === realPrevIndex.current) return;
+        if (videos === null || swiper.realIndex === realPrevIndex.current) return;//使用realIndex来获取当前swiper的真正index，避免swiper设置loop后activeIndex不对的问题
         switch (swiper.realIndex) {
             case 0:
-                if (realPrevIndex.current === 2 && trueIndex.current !== 0 && trueIndex.current !== videos.length - 1) {
+                if (trueIndex.current === 0) {
+                    setSwiper([videos[trueIndex.current], videos[trueIndex.current + 1], videos[trueIndex.current + 1]]);
+                    break;
+                }
+                else if (realPrevIndex.current === 2 && trueIndex.current !== 0 && trueIndex.current !== videos.length - 1) {
                     trueIndex.current = trueIndex.current + 1;
                 }
-                else if (realPrevIndex.current === 1 && trueIndex.current !== 0 && trueIndex.current !== videos.length - 1) {
+                else if (realPrevIndex.current === 1 && trueIndex.current !== 0) {
                     trueIndex.current = trueIndex.current - 1;
                 }
                 setIsPlaying([true, false, false]);
@@ -71,21 +105,30 @@ function Mainpage() {
         if (trueIndex.current === videos.length - 1) setCanSlide([true, false]);
         realPrevIndex.current = swiper.realIndex;
     }
-    function handlePlaying(){
-
-        switch(swiperRef.current.realIndex){
+    function handlePlaying() {
+        switch (swiperRef.current.realIndex) {
             case 0:
-                setIsPlaying([!isPlaying[0],false,false]);
+                setIsPlaying([!isPlaying[0], false, false]);
                 break;
             case 1:
-                setIsPlaying([false,!isPlaying[1],false]);
+                setIsPlaying([false, !isPlaying[1], false]);
                 break;
             case 2:
-                setIsPlaying([false,false,!isPlaying[2]]);
+                setIsPlaying([false, false, !isPlaying[2]]);
                 break;
             default:
                 break;
         }
+    }
+    function handleMuted() {
+        if (ismuted) setVolume(0.5);
+        else setVolume(0);
+        setIsmuted(!ismuted);
+    }
+    function handleVolume(state) {
+        setVolume(parseFloat(state));
+        if (parseFloat(state) === 0) setIsmuted(true);
+        else setIsmuted(false);
     }
     return (
         <div className={styles.mainpage}>
@@ -101,13 +144,13 @@ function Mainpage() {
                 allowSlideNext={canSLide[1]}
                 loop>
                 {swiper[0] && <SwiperSlide key="0">
-                    <Video url={swiper[0].url} isPlaying={isPlaying[0]} handlePlaying={handlePlaying}></Video>
+                    <Video video={swiper[0]} isPlaying={isPlaying[0]} handlePlaying={handlePlaying} ismuted={ismuted} handleMuted={handleMuted} volume={volume} handleVolume={handleVolume}></Video>
                 </SwiperSlide>}
                 {swiper[1] && <SwiperSlide key="1">
-                    <Video url={swiper[1].url} isPlaying={isPlaying[1]} handlePlaying={handlePlaying}></Video>
+                    <Video video={swiper[1]} isPlaying={isPlaying[1]} handlePlaying={handlePlaying} ismuted={ismuted} handleMuted={handleMuted} volume={volume} handleVolume={handleVolume}></Video>
                 </SwiperSlide>}
                 {swiper[2] && <SwiperSlide key="2">
-                    <Video url={swiper[2].url} isPlaying={isPlaying[2]} handlePlaying={handlePlaying}></Video>
+                    <Video video={swiper[2]} isPlaying={isPlaying[2]} handlePlaying={handlePlaying} ismuted={ismuted} handleMuted={handleMuted} volume={volume} handleVolume={handleVolume}></Video>
                 </SwiperSlide>}
             </Swiper>
         </div>
