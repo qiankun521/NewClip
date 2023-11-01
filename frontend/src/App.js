@@ -5,15 +5,13 @@ import Mainpage from './component/page/Mainpage';
 import Header from './component/Header';
 import getVideo from './utils/getVideos';
 function App() {
-  const [videos, setVideos] = useState([]);
   useEffect(() => {
     async function get() {
       const newVideo = await getVideo();
-      setVideos(newVideo);
       localStorage.setItem('videos', JSON.stringify(newVideo));
     }
     const localVideo = localStorage.getItem('videos');
-    if (localVideo) {
+    if (!localVideo) {
       get();
     }// eslint-disable-next-line
   }, [])
@@ -22,7 +20,7 @@ function App() {
       <div className="App">
         <Header></Header>
         <Routes>
-          <Route path='/' element={<Mainpage videos={videos}></Mainpage>}></Route>
+          <Route path='/' element={<Mainpage ></Mainpage>}></Route>
         </Routes>
       </div>
     </Router>

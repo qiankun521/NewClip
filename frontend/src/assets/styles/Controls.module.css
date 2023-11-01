@@ -1,0 +1,80 @@
+.controlContainer {
+    width: 100%;
+    background-color: transparent;
+    height: 100%;
+    bottom: 0;
+    display: flex;
+    flex-direction: column;
+    justify-content: space-between;
+    align-items: center;
+}
+
+.topContainer {
+    width: 100%;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+}
+
+.progress {
+    -webkit-appearance: none;
+    /* 禁用默认样式 */
+    appearance: none;
+    width: 100%;
+    height: 2px;
+}
+
+.progress::-webkit-slider-thumb {
+    -webkit-appearance: none;
+    appearance: none;
+    width: 0.8rem;
+    height: 0.8rem;
+    border-radius: 50%;
+    background: #ffffff;
+    cursor: pointer;
+}
+
+.progress::-moz-range-thumb {
+    /* Firefox */
+    -webkit-appearance: none;
+    appearance: none;
+    width: 0.8rem;
+    height: 0.8rem;
+    border-radius: 50%;
+    background: #ffffff;
+    cursor: pointer;
+}
+
+.bottomContainer {
+    padding-bottom: 1%;
+    width: 100%;
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+}
+
+.leftContainer {
+    width: 50%;
+    display: flex;
+    justify-content: flex-start;
+    align-items: center;
+}
+
+.button {
+    font-size: 2rem;
+    color: white;
+    padding: 0 10% 0 10%;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+}
+.playedTime {
+    font-size: 1rem;
+    color: white;
+}
+.rightContainer {
+    width: 50%;
+    display: flex;
+    justify-content: flex-end;
+    align-items: center;
+}
