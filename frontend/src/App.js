@@ -26,6 +26,7 @@ function App() {
         console.log(err);
       })
     }
+    
     get();// eslint-disable-next-line
   }, [])
   return (

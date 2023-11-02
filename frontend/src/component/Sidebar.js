@@ -2,12 +2,9 @@ import styles from '../assets/styles/Sidebar.module.css';
 import { HeartFilled } from '@ant-design/icons';
 import { BiSolidCommentDots } from 'react-icons/bi';
 import { BiSolidShare } from 'react-icons/bi';
-function Sidebar({ video }) {
+function Sidebar({ video,handleComments }) {
     function handleLike(){
         console.log("like");
-    }
-    function handleComment(){
-        console.log("comment");
     }
     function handleShare(){
         console.log("share");
@@ -26,7 +23,7 @@ function Sidebar({ video }) {
                     <div className={styles.number}>{video.favorite_count}</div>
                 </div>
                 <div className={styles.comment}>
-                    <div><BiSolidCommentDots className={styles.icon} onClick={handleComment}/></div>
+                    <div><BiSolidCommentDots className={styles.icon} onClick={handleComments}/></div>
                     <div className={styles.number}>{video.comment_count}</div>
                 </div>
                 <div className={styles.share}>

@@ -4,27 +4,56 @@
     width: 100%;
     height: 10vh;
     background-color: black;
-    color: white;
+    justify-content: center;
+    align-items: center;
+}
+.header{
+    width: 80%;
+    height: 100%;
+    display: flex;
+    justify-content: space-around;
+    align-items: center;
 }
 .brand{
-    width: 10%;
+    width: 15%;
     display: flex;
     align-items: center;
     justify-content: center;
 }
+.brand .link{
+    font-size: 1.5rem;
+    color: #FFF;
+    font-weight: bold;
+}
 .navlinks{
-    width: 40%;
+    width: 30%;
     display: flex;
-    justify-content: space-around;
+    justify-content: space-evenly;
     align-items: center;
 }
 .searchInput{
     width: 30%;
+    height: 100%;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+}
+.searchInput input{
+    width: 100%;
+    height: 30%;
+    border: 1px solid #ffffff;
+    outline: none;
+    padding: 0.5rem;
+    border-radius: 0.5rem;
+    font-size: 1rem;
+    background-color: transparent;
+    color: #FFF;
 }
 .personalbar{
-    width: 20%;
+    width: 25%;
+    height: 100%;
     display: flex;
-    justify-content: space-around;
+    justify-content: space-evenly;
     align-items: center;
 }
 
@@ -32,7 +61,41 @@
     text-decoration: none;
 }
 .link{
-    color: white;
+    color: #CCC;
     text-decoration: none;
     font-size: 1rem;
+}
+.link:hover{
+    color: #FFF;
+    cursor: pointer;
+}
+.upload{
+    display: flex;
+    height: 100%;
+    flex-direction: column;
+    justify-content: center;
+    font-size: 2rem;
+    color: #CCC;
+}
+.upload:hover{
+    color: #FFF;
+    cursor: pointer;
+}
+.personal{
+    display: flex;
+    min-width: 80px;
+    height: 100%;
+    flex-direction: column;
+    justify-content: center;
+    font-size: 1.5rem;
+    color: #ffffff;
+}
+.personal div{
+    border: 2px solid #ffffff;
+    padding: 0.5rem;
+    border-radius: 2rem;
+    background-color: #EB3661;
+}
+.personal:hover{
+    cursor: pointer;
 }

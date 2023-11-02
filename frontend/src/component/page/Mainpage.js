@@ -16,6 +16,7 @@ function Mainpage() {
     const [ismuted, setIsmuted] = useState(true);//设置是否静音，状态提升全局通用
     const [canSLide, setCanSlide] = useState([false, true]);//是否可以滑动,0:上滑,1:下滑
     const [volume, setVolume] = useState(0);//设置音量，全局通用
+    const [showComments, setShowComments] = useState(false);//是否显示评论区，全局通用
     useEffect(() => {
         function debounce(fn, delay) {
             let timer = null;
@@ -55,12 +56,13 @@ function Mainpage() {
             window.removeEventListener('keydown', handleKeydown);
             window.removeEventListener('wheel', debouncedHandleWheel);
         }// eslint-disable-next-line
-    }, [videos, trueIndex]) 
+    }, [videos, trueIndex])
     useEffect(() => {
+        console.log("111");
         if (videos && trueIndex.current >= videos.length / 2) {
             //TODO 从后端获取新数据
         }
-    },[swiper,videos])
+    }, [videos])
     function handleSlideChange(swiper) {
         if (videos === null || swiper.realIndex === realPrevIndex.current) return;//使用realIndex来获取当前swiper的真正index，避免swiper设置loop后activeIndex不对的问题
         switch (swiper.realIndex) {
@@ -101,6 +103,7 @@ function Mainpage() {
             default:
                 break;
         }
+        if (trueIndex.current === 0) setCanSlide([false, true]);
         if (trueIndex.current !== 0) setCanSlide([true, true]);
         if (trueIndex.current === videos.length - 1) setCanSlide([true, false]);
         realPrevIndex.current = swiper.realIndex;
@@ -130,6 +133,9 @@ function Mainpage() {
         if (parseFloat(state) === 0) setIsmuted(true);
         else setIsmuted(false);
     }
+    function handleComments() {
+        setShowComments(!showComments);
+    }
     return (
         <div className={styles.mainpage}>
             <Swiper
@@ -138,19 +144,19 @@ function Mainpage() {
                 onSlideChange={handleSlideChange}
                 onSwiper={(swiper) => swiperRef.current = swiper}
                 style={{
-                    height: "90vh"
+                    height: "100%"
                 }}
                 allowSlidePrev={canSLide[0]}
                 allowSlideNext={canSLide[1]}
                 loop>
                 {swiper[0] && <SwiperSlide key="0">
-                    <Video video={swiper[0]} isPlaying={isPlaying[0]} handlePlaying={handlePlaying} ismuted={ismuted} handleMuted={handleMuted} volume={volume} handleVolume={handleVolume}></Video>
+                    <Video video={swiper[0]} isPlaying={isPlaying[0]} handlePlaying={handlePlaying} ismuted={ismuted} handleMuted={handleMuted} volume={volume} handleVolume={handleVolume} showComments={showComments} handleComments={handleComments}></Video>
                 </SwiperSlide>}
                 {swiper[1] && <SwiperSlide key="1">
-                    <Video video={swiper[1]} isPlaying={isPlaying[1]} handlePlaying={handlePlaying} ismuted={ismuted} handleMuted={handleMuted} volume={volume} handleVolume={handleVolume}></Video>
+                    <Video video={swiper[1]} isPlaying={isPlaying[1]} handlePlaying={handlePlaying} ismuted={ismuted} handleMuted={handleMuted} volume={volume} handleVolume={handleVolume} showComments={showComments} handleComments={handleComments}></Video>
                 </SwiperSlide>}
                 {swiper[2] && <SwiperSlide key="2">
-                    <Video video={swiper[2]} isPlaying={isPlaying[2]} handlePlaying={handlePlaying} ismuted={ismuted} handleMuted={handleMuted} volume={volume} handleVolume={handleVolume}></Video>
+                    <Video video={swiper[2]} isPlaying={isPlaying[2]} handlePlaying={handlePlaying} ismuted={ismuted} handleMuted={handleMuted} volume={volume} handleVolume={handleVolume} showComments={showComments} handleComments={handleComments}></Video>
                 </SwiperSlide>}
             </Swiper>
         </div>
