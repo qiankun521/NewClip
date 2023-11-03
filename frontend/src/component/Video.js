@@ -6,7 +6,7 @@ import Sidebar from './Sidebar';
 import CommentArea from './CommentArea';
 import getComments from '../utils/getComments';
 import { useEffect, useRef, useState } from 'react';
-function Video({ video, isPlaying, handlePlaying, ismuted, handleMuted, volume, handleVolume, showComments,handleComments}) {
+function Video({ video, isPlaying, handlePlaying, ismuted, handleMuted, volume, handleVolume, showComments,handleComments,handleModal,trueIndex}) {
     const [played, setPlayed] = useState(0);//播放进度
     const [haveComments, setHaveComments] = useState(false);//是否获取到评论
     const [comments, setComments] = useState([]);//评论
@@ -56,7 +56,7 @@ function Video({ video, isPlaying, handlePlaying, ismuted, handleMuted, volume, 
                     ></ReactPlayer>
                     <Describe name={video.author.name} title={video.title}></Describe>
                 </div>
-                <Sidebar video={video} showComments={showComments} handleComments={handleComments}></Sidebar>
+                <Sidebar trueIndex={trueIndex} handleModal={handleModal} video={video} showComments={showComments} handleComments={handleComments}></Sidebar>
                 <div className={styles.controlContainer}>
                     <Controls
                         videoRef={videoRef}

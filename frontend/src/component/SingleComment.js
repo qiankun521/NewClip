@@ -4,7 +4,6 @@ import {AiOutlineLike} from 'react-icons/ai';
 import {AiOutlineDislike} from 'react-icons/ai';
 import {BiShare} from 'react-icons/bi';
 function SingleComment({ comment }) {
-    console.log(comment.user.avatar)
     return (
         <div className={styles.singleContainer}>
             <div className={styles.avatarContainer}>

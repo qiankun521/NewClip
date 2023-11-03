@@ -1,0 +1,69 @@
+.singleVideo {
+    width: 100%;
+    height: 100%;
+}
+
+.videoContainer {
+    width: 100%;
+    height: 100%;
+    display: flex;
+    flex-direction: column;
+    background-color: transparent;
+    scale: 1;
+    transition: scale 0.3s ease-in-out;
+}
+.videoContainer:hover{
+    cursor: pointer;
+    scale: 1.1;
+    transition: scale 0.3s ease-in-out;
+    border-radius: 1rem;
+}
+.picture {
+    width: 100%;
+    height: 70%;
+    border-radius: 1rem 1rem 0 0;
+    background-size: cover;
+    position: relative;
+}
+.heart{
+    position: absolute;
+    bottom: 0;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    color: aliceblue;
+    font-size: 1rem;
+    left: 5%;
+}
+.heart div{
+    margin-right: 10%;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+}
+.describe {
+    width: 100%;
+    height: 30%;
+    background-color: rgb(37,38,50,1);
+    border-radius: 0 0 1rem 1rem;
+}
+.topArea{
+    height: 66%;
+    font-size: 1rem;
+    color: aliceblue;
+    padding: 0 10%;
+    word-wrap: break-word;
+    text-align: start;
+}
+.topArea > div{
+    width: 100%;
+    padding-top: 1rem;
+}
+.bottomArea{
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    padding: 0 10%;
+    color: #5E5F68;
+    font-size: 0.9rem;
+}

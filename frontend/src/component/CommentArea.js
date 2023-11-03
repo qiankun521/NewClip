@@ -1,5 +1,6 @@
 import styles from '../assets/styles/CommentArea.module.css';
 import SingleComment from './SingleComment';
+import {TbSend} from 'react-icons/tb';
 function CommentArea({ haveComments, comments, video,handleComments }) {
     return (
         <div className={styles.commentArea} onWheel={(e)=>e.stopPropagation()}>
@@ -18,9 +19,11 @@ function CommentArea({ haveComments, comments, video,handleComments }) {
                         <SingleComment key={comment.id} comment={comment} />
                     )
                 })}
+                <div className={styles.empty}>评论到底了~</div>
             </div>
             <div className={styles.sendArea}>
                     <input className={styles.sendInput} type="text" placeholder="请输入你想说的话" />
+                    <div className={styles.sendIcon}><TbSend></TbSend></div>
             </div>
         </div>
     )

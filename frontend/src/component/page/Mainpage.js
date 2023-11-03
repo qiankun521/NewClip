@@ -6,7 +6,7 @@ import 'swiper/css';
 import 'swiper/css/pagination'
 import 'swiper/css/navigation'
 import styles from '../../assets/styles/Mainpage.module.css';
-function Mainpage() {
+function Mainpage({handleModal}) {
     const videos = JSON.parse(localStorage.getItem('videos'));
     const realPrevIndex = useRef(0);
     const swiperRef = useRef(null);
@@ -58,7 +58,7 @@ function Mainpage() {
         }// eslint-disable-next-line
     }, [videos, trueIndex])
     useEffect(() => {
-        console.log("111");
+        console.log("TODO");
         if (videos && trueIndex.current >= videos.length / 2) {
             //TODO 从后端获取新数据
         }
@@ -150,13 +150,13 @@ function Mainpage() {
                 allowSlideNext={canSLide[1]}
                 loop>
                 {swiper[0] && <SwiperSlide key="0">
-                    <Video video={swiper[0]} isPlaying={isPlaying[0]} handlePlaying={handlePlaying} ismuted={ismuted} handleMuted={handleMuted} volume={volume} handleVolume={handleVolume} showComments={showComments} handleComments={handleComments}></Video>
+                    <Video video={swiper[0]} trueIndex={trueIndex.current} handleModal={handleModal} isPlaying={isPlaying[0]} handlePlaying={handlePlaying} ismuted={ismuted} handleMuted={handleMuted} volume={volume} handleVolume={handleVolume} showComments={showComments} handleComments={handleComments}></Video>
                 </SwiperSlide>}
                 {swiper[1] && <SwiperSlide key="1">
-                    <Video video={swiper[1]} isPlaying={isPlaying[1]} handlePlaying={handlePlaying} ismuted={ismuted} handleMuted={handleMuted} volume={volume} handleVolume={handleVolume} showComments={showComments} handleComments={handleComments}></Video>
+                    <Video video={swiper[1]} trueIndex={trueIndex.current} handleModal={handleModal} isPlaying={isPlaying[1]} handlePlaying={handlePlaying} ismuted={ismuted} handleMuted={handleMuted} volume={volume} handleVolume={handleVolume} showComments={showComments} handleComments={handleComments}></Video>
                 </SwiperSlide>}
                 {swiper[2] && <SwiperSlide key="2">
-                    <Video video={swiper[2]} isPlaying={isPlaying[2]} handlePlaying={handlePlaying} ismuted={ismuted} handleMuted={handleMuted} volume={volume} handleVolume={handleVolume} showComments={showComments} handleComments={handleComments}></Video>
+                    <Video video={swiper[2]} trueIndex={trueIndex.current} handleModal={handleModal} isPlaying={isPlaying[2]} handlePlaying={handlePlaying} ismuted={ismuted} handleMuted={handleMuted} volume={volume} handleVolume={handleVolume} showComments={showComments} handleComments={handleComments}></Video>
                 </SwiperSlide>}
             </Swiper>
         </div>
