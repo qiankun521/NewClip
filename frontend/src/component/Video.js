@@ -6,10 +6,11 @@ import Sidebar from './Sidebar';
 import CommentArea from './CommentArea';
 import getComments from '../utils/getComments';
 import { useEffect, useRef, useState } from 'react';
-function Video({ video, isPlaying, handlePlaying, ismuted, handleMuted, volume, handleVolume, showComments,handleComments,handleModal,trueIndex}) {
+function Video({ video, isPlaying, handlePlaying, ismuted, handleMuted, volume, handleVolume, showComments, handleComments, handleModal, trueIndex, changeVideos }) {
     const [played, setPlayed] = useState(0);//播放进度
     const [haveComments, setHaveComments] = useState(false);//是否获取到评论
     const [comments, setComments] = useState([]);//评论
+    //TODO 视频未加载完成时使用封面cover
     const playedSeconds = useRef(0);
     const videoRef = useRef(null);
     function handleProgress(state) {
@@ -19,10 +20,9 @@ function Video({ video, isPlaying, handlePlaying, ismuted, handleMuted, volume, 
     function handlePlayed(state) {
         setPlayed(state);
     }
-    useEffect(() => {
-        //TODO 获取一级评论区
-        getComments(video.id).then(res=>{
-            switch(res.status_code){
+    function get() {
+        getComments(video.id).then(res => {
+            switch (res.status_code) {
                 case 0:
                     setHaveComments(true);
                     setComments(res.comment_list);
@@ -33,9 +33,12 @@ function Video({ video, isPlaying, handlePlaying, ismuted, handleMuted, volume, 
                 default:
                     break;
             }
-        
         })
-    }, [showComments,video.id]);
+    }
+    useEffect(()=>{
+        get();// eslint-disable-next-line
+    },[haveComments])
+    
     return (
         <div className={styles.outside}>
             <img src={video.cover_url} alt="background" />{/*背景模糊图*/}
@@ -56,7 +59,7 @@ function Video({ video, isPlaying, handlePlaying, ismuted, handleMuted, volume, 
                     ></ReactPlayer>
                     <Describe name={video.author.name} title={video.title}></Describe>
                 </div>
-                <Sidebar trueIndex={trueIndex} handleModal={handleModal} video={video} showComments={showComments} handleComments={handleComments}></Sidebar>
+                <Sidebar changeVideos={changeVideos} trueIndex={trueIndex} handleModal={handleModal} video={video} showComments={showComments} handleComments={handleComments}></Sidebar>
                 <div className={styles.controlContainer}>
                     <Controls
                         videoRef={videoRef}
@@ -72,7 +75,7 @@ function Video({ video, isPlaying, handlePlaying, ismuted, handleMuted, volume, 
                     </Controls>
                 </div>
             </div>
-            {showComments && <CommentArea video={video} haveComments={haveComments} comments={comments} handleComments={handleComments}></CommentArea>}
+            {showComments && <CommentArea handleModal={handleModal} update={get} video={video} haveComments={haveComments} comments={comments} handleComments={handleComments}></CommentArea>}
         </div>
     )
 }

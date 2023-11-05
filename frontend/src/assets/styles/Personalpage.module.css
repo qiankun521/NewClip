@@ -1,0 +1,105 @@
+.personal {
+    background-color: #1A1823;
+    width: 100%;
+    height: 90vh;
+    display: flex;
+    flex-direction: column;
+}
+.personalPage{
+    padding-top: 30px;
+    padding-left: 10%;
+    padding-right: 10%;
+    padding-bottom: 0;
+    overflow-y: hidden;
+}
+.personalInfo{
+    width: 100%;
+    height: 30vh;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    margin-bottom: 1rem;
+}
+.personalLeft{
+    width: 60%;
+    height: 100%;
+    background-color: transparent;
+    display: flex;
+}
+.avatarContainer{
+    width:30%;
+    border-radius: 50%;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+}
+.avatar{
+    width: 8rem;
+    height: 8rem;
+    border-radius: 50%;
+}
+.info{
+    width: 70%;
+    height: 100%;
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+    color: #FFF;
+}
+.name{
+    font-size: 2rem;
+    font-weight: 600;
+    padding-left: 5%;
+    margin-bottom: 5%;
+    text-align: start;
+}
+.countContainer{
+    display: flex;
+    padding-left: 5%;
+}
+.count{
+    font-size: 1.2rem;
+    font-weight: 600;
+    padding-left: 5%;
+    margin-bottom: 5%;
+    text-align: start;
+    display: flex;
+}
+.count:first-child{
+    padding-left: 0;
+}
+.title{
+    color: #CCC;
+    padding-right: 1rem;
+}
+.sign{
+    color: #FFF;
+    text-align: start;
+    padding-left: 5%;
+    font-size: 1rem;
+    word-wrap: break-word;
+}
+.personalRight{
+    width: 40%;
+    height: 100%;
+    background-color: rgb(11, 103, 72);
+    display: flex;
+}
+.classify{
+    width: 100%;
+    display: flex;
+    font-size: 1.5rem;
+}
+.classifyTitle{
+    padding-left: 5%;
+    color: #CCC;
+    font-weight: 200;
+}
+.classifyTitle:hover{
+    cursor: pointer;
+}
+.classifyTitleActive{
+    padding-left: 5%;
+    color: #ff0f0f;
+    font-weight: 600;
+}

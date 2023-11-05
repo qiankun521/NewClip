@@ -1,24 +1,46 @@
 import { Link } from 'react-router-dom';
 import styles from '../assets/styles/Header.module.css';
-import {FiUpload} from 'react-icons/fi';
-import { Modal, Form, Input, Button, message } from 'antd';
-import { useState } from 'react';
+import { FiUpload } from 'react-icons/fi';
+import { Modal, Form, Input, Button, message, Popover } from 'antd';
+import { useEffect, useState,useRef } from 'react';
 import { BiShare, BiSearchAlt2 } from 'react-icons/bi';
 import { AiOutlineHeart } from 'react-icons/ai';
 import { useDispatch } from 'react-redux';
 import { useSelector } from 'react-redux/es/hooks/useSelector';
 import { login, register } from '../utils/loginRegister';
 import { useNavigate } from 'react-router-dom';
+import getPersonalInfo from '../utils/getPersonalInfo';
+import PersonalPopover from './PersonalPopover';
 import { loginFailure, loginRequest, loginSuccess, logOut, registerFailure, registerRequest, registerSuccess } from '../redux/actions/loginRegisterAction';
-function Header({ visible, handleModal}) {
-    
+function Header({ visible, handleModal }) {
     const [choose, setChoose] = useState([true, false]);//登录注册选择
     const [search, setSearch] = useState('');//搜索框内容
+    const [info, setInfo] = useState(localStorage.getItem("info") ? JSON.parse(localStorage.getItem("info")) : null);//先从本地缓存获取个人信息
     const logout = useSelector(state => state?.loginRegister?.logout);
     const loginWaiting = useSelector(state => state?.loginRegister?.loginWaiting);
     const registerWaiting = useSelector(state => state?.loginRegister?.registerWaiting);
+    const id = useSelector(state => state?.loginRegister?.user_id);
+    const token = useSelector(state => state?.loginRegister?.token);
+    const fileInputRef = useRef(null);
     const navigate = useNavigate();
     const dispatch = useDispatch();
+    useEffect(() => {
+        getPersonalInfo(id, token).then(res => {
+            switch (res.status_code) {
+                case 0:
+                    localStorage.setItem("info", JSON.stringify(res.user));
+                    setInfo(res.user);
+                    break;
+                case -1:
+                    console.log(res.status_msg);
+                    break;
+                default:
+                    break;
+            }
+        }).catch(err => {
+            console.log(err);
+        })
+    }, [id, token])
     function onFinishLogin(values) {
         dispatch(loginRequest());
         message.loading({
@@ -36,6 +58,7 @@ function Header({ visible, handleModal}) {
                         duration: 2
                     })
                     dispatch(loginSuccess(values.username, res.token, res.status_msg, res.user_id));
+                    localStorage.setItem("token", res.token);
                     handleModal();
                     break;
                 case -1:
@@ -99,8 +122,18 @@ function Header({ visible, handleModal}) {
         dispatch(logOut());
     }
     function handleSearch() {
-        setSearch('');
-        navigate('/search?keyword=' + search);
+        if (search !== "") {
+            navigate('/search?keyword=' + search);
+            setSearch('');
+        }
+    }
+    function handleKeydown(e) {
+        if (e.key === "Enter") {
+            handleSearch();
+        }
+    }
+    function handleFileChange(e) {//TODO 上传视频
+
     }
     return (
         <header>
@@ -116,13 +149,20 @@ function Header({ visible, handleModal}) {
                         <Link className={styles.link} to="/game">游戏</Link>
                     </nav>
                     <div className={styles.searchInput}>
-                        <input type="text" placeholder="请输入你想搜索的关键词" value={search} onChange={(e)=>{setSearch(e.target.value)}}/>
+                        <input type="text" placeholder="请输入搜索关键词" value={search} onChange={(e) => { setSearch(e.target.value) }} onKeyDown={handleKeydown} />
                         <div className={styles.searchIcon} onClick={handleSearch}>
                             <BiSearchAlt2></BiSearchAlt2>
                         </div>
                     </div>
                     <div className={styles.personalbar}>
-                        <div className={styles.upload}>
+                        <div className={styles.upload} onClick={()=>{
+                            if(logout){
+                                message.error("请先登录");
+                                handleModal();
+                                return;
+                            }
+                            fileInputRef.current.click();
+                        }}>
                             <FiUpload></FiUpload>
                             <Link className={styles.uploadText} to='/upload'>上传</Link>
                         </div>
@@ -130,10 +170,26 @@ function Header({ visible, handleModal}) {
                             <div className={styles.personal}>
                                 <div className={styles.login} onClick={handleModal}>登录</div>
                             </div> :
-                            <button onClick={handleLogout}>退出</button>
+                            (info &&
+                                <Popover classname={styles.popover} content={<PersonalPopover info={info} handleLogout={handleLogout} />} placement="bottomRight" trigger="hover">
+                                    <div className={styles.avatar} style={{
+                                        backgroundImage: `url(${info.avatar})`,
+                                        backgroundSize: 'cover',
+                                    }} onClick={() => { navigate('/personal') }}>
+                                    </div>
+                                </Popover>
+                            )
                         }
                     </div>
                 </div>
+                <input
+                    type="file"
+                    accept="video/*"
+                    ref={fileInputRef}
+                    onChange={handleFileChange}
+                    style={{ display: 'none' }}
+                    capture="environment"
+                />{/* 隐藏的文件上传input */}
             </div>
             <Modal
                 open={visible}

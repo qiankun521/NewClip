@@ -1,0 +1,39 @@
+.PersonalPopover{
+    width: 400px;
+    display: flex;
+    flex-direction: column;
+}
+.PersonalPopover:hover{
+    cursor: pointer;
+}
+.name{
+    font-size: 1.5rem;
+    padding-left: 5%;
+    padding-bottom: 3%;
+    color: #63636C;
+}
+.info{
+    font-size: 1rem;
+    color: #63636C;
+    display: flex;
+    justify-content: space-around;
+    align-items: center;
+}
+.info>div{
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+    align-items: center;
+}
+.icon{
+    font-size: 2.5rem;
+}
+.option{
+    display: flex;
+    justify-content: space-around;
+    align-items: center;
+    padding-top: 5%;
+}
+.option:hover{
+    cursor: pointer;
+}
