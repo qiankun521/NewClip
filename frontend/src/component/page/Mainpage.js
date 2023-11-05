@@ -15,7 +15,6 @@ function Mainpage({handleModal,videos,changeVideos,updateVideos}) {
     const [canSLide, setCanSlide] = useState([false, true]);//是否可以滑动,0:上滑,1:下滑
     const [volume, setVolume] = useState(0);//设置音量，全局通用
     const [showComments, setShowComments] = useState(false);//是否显示评论区，全局通用
-
     useEffect(() => {
         function debounce(fn, delay) {//防抖动
             let timer = null;
@@ -57,7 +56,7 @@ function Mainpage({handleModal,videos,changeVideos,updateVideos}) {
         }// eslint-disable-next-line
     }, [videos, trueIndex])
     function handleSlideChange(swiper) {
-        if (videos && trueIndex.current >= videos.length / 2) {//每次滑动后调用updateVideos检查是否需要更新视频
+        if (videos && (trueIndex.current >= videos.length / 2)) {//每次滑动后调用updateVideos检查是否需要更新视频
             updateVideos();
         }
         if (videos === null || swiper.realIndex === realPrevIndex.current) return;//使用realIndex来获取当前swiper的真正index，避免swiper设置loop后activeIndex不对的问题
@@ -113,9 +112,10 @@ function Mainpage({handleModal,videos,changeVideos,updateVideos}) {
                 setIsPlaying([false, !isPlaying[1], false]);
                 break;
             case 2:
-                setIsPlaying([false, false, !isPlaying[2]]);
+                setIsPlaying([false, false, !isPlaying[2]]);  
                 break;
             default:
+                
                 break;
         }
     }

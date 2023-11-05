@@ -1,45 +1,61 @@
-.headerContainer{
+.headerContainer {
     display: flex;
     align-items: center;
     width: 100%;
     height: 10vh;
-    background-color: #1A1823;
+    /* background-color: #1A1823; */
+    background: linear-gradient(to right, #1A1823, #2D2A3E);
     justify-content: center;
     align-items: center;
 }
-.header{
+
+.header {
     width: 100%;
     height: 100%;
     display: flex;
     justify-content: space-around;
     align-items: center;
 }
-.brand{
-    width: 15%;
+
+.brand {
+    width: 10%;
+    min-width: 107px;
     display: flex;
     align-items: center;
     justify-content: center;
+    
 }
-.brand .link{
+
+.brand .link {
     font-size: 1.5rem;
     color: #FFF;
     font-weight: bold;
+    border: none;
 }
-.navlinks{
+
+.navlinks {
     width: 30%;
     display: flex;
     justify-content: space-evenly;
     align-items: center;
 }
-.searchInput{
+.choose.link{
+    color: #EB3661;
+    border: 2px solid #595356;
+    padding: 0.5rem 1rem;
+    border-radius: 1rem;
+}
+.searchInput {
     width: 30%;
+    min-width: 170px;
     height: 100%;
     display: flex;
     justify-content: center;
     align-items: center;
     position: relative;
 }
-.searchInput input{
+
+.searchInput input {
     width: 100%;
     height: 30%;
     border: 1px solid #ffffff;
@@ -50,27 +66,43 @@
     background-color: transparent;
     color: #FFF;
 }
-.personalbar{
-    width: 25%;
+
+.personalbar {
+    width: 20%;
+    min-width: 100px;
     height: 100%;
     display: flex;
     justify-content: space-evenly;
     align-items: center;
 }
 
-.line{
+.personalbar:hover {
+    cursor: pointer;
+}
+
+.person {
+    width: 5%;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+}
+
+.line {
     text-decoration: none;
 }
-.link{
+
+.link {
     color: #CCC;
     text-decoration: none;
     font-size: 1rem;
 }
-.link:hover{
+
+.link:hover {
     color: #FFF;
     cursor: pointer;
 }
-.upload{
+
+.upload {
     display: flex;
     height: 100%;
     flex-direction: column;
@@ -78,16 +110,59 @@
     font-size: 1.5rem;
     color: #CCC;
 }
-.uploadText{
+
+.uploadText {
     font-size: 0.8rem;
     color: #CCC;
     text-decoration: none;
 }
-.upload:hover{
+
+.upload:hover {
     color: #FFF;
     cursor: pointer;
 }
-.personal{
+
+.message {
+    display: flex;
+    height: 100%;
+    flex-direction: column;
+    justify-content: center;
+    font-size: 1.5rem;
+    color: #CCC;
+}
+
+.messageText {
+    font-size: 0.8rem;
+    color: #CCC;
+    text-decoration: none;
+}
+
+.message:hover {
+    color: #FFF;
+    cursor: pointer;
+}
+
+.more {
+    display: flex;
+    height: 100%;
+    flex-direction: column;
+    justify-content: center;
+    font-size: 1.5rem;
+    color: #CCC;
+}
+
+.moreText {
+    font-size: 0.8rem;
+    color: #CCC;
+    text-decoration: none;
+}
+
+.more:hover {
+    color: #FFF;
+    cursor: pointer;
+}
+
+.personal {
     display: flex;
     min-width: 80px;
     height: 100%;
@@ -96,39 +171,47 @@
     font-size: 1rem;
     color: #ffffff;
 }
-.personal div{
+
+.personal div {
     border: 2px solid #ffffff;
     padding: 0.5rem;
     border-radius: 2rem;
     background-color: #EB3661;
 }
-.personal:hover{
+
+.personal:hover {
     cursor: pointer;
 }
-.avatar{
+
+.avatar {
     width: 2.5rem;
     height: 2.5rem;
     border-radius: 50%;
     background-color: #ffffff;
 }
-.modal{
+
+.modal {
     border-radius: 10px;
 }
-.titleContainer{
+
+.titleContainer {
     display: flex;
     flex-direction: column;
     justify-content: center;
     align-items: center;
     padding: 1rem;
 }
-.titleContainer > div{
+
+.titleContainer>div {
     display: flex;
 }
-.modalTitle{
+
+.modalTitle {
     font-size: 1.5rem;
     color: #595356;
 }
-.modalTitleSmall{
+
+.modalTitleSmall {
     font-size: 0.8rem;
     color: #595356;
     padding: 0 1rem 0 1rem;
@@ -136,40 +219,48 @@
     align-items: center;
     justify-content: center;
 }
-.choose{
+
+.choose {
     display: flex;
     justify-content: center;
     align-items: center;
 }
-.chooseItem{
+
+.chooseItem {
     padding-left: 10%;
     padding-right: 10%;
     padding-bottom: 1%;
     margin-left: 5%;
     margin-right: 5%;
-    
+
 }
-.chooseItem:hover{
+
+.chooseItem:hover {
     cursor: pointer;
 }
-.choosed{
+
+.choosed {
     border-bottom: 1px solid red;
 }
-.modalInput{
+
+.modalInput {
     display: flex;
     justify-content: center;
     align-items: center;
     padding-top: 1rem;
     height: 50px;
 }
-.input{
+
+.input {
     width: 200px;
 }
-.icon{
+
+.icon {
     display: flex;
     align-items: center;
 }
-.searchIcon{
+
+.searchIcon {
     position: absolute;
     color: #FFF;
     right: 0;

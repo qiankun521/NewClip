@@ -1,39 +1,62 @@
-.PersonalPopover{
+.PersonalPopover {
     width: 400px;
     display: flex;
     flex-direction: column;
 }
-.PersonalPopover:hover{
+
+.PersonalPopover:hover {
     cursor: pointer;
 }
-.name{
+
+.name {
     font-size: 1.5rem;
     padding-left: 5%;
     padding-bottom: 3%;
     color: #63636C;
 }
-.info{
+
+.info {
     font-size: 1rem;
     color: #63636C;
     display: flex;
     justify-content: space-around;
     align-items: center;
 }
-.info>div{
+
+.info>div {
     display: flex;
     flex-direction: column;
     justify-content: center;
     align-items: center;
 }
-.icon{
+
+.icon {
     font-size: 2.5rem;
 }
-.option{
+
+.option {
     display: flex;
     justify-content: space-around;
     align-items: center;
     padding-top: 5%;
 }
-.option:hover{
+
+.option:hover {
     cursor: pointer;
+}
+
+.follow:hover {
+    scale: 1.1;
+}
+
+.followed:hover {
+    scale: 1.1;
+}
+
+.like:hover {
+    scale: 1.1;
+}
+
+.self:hover {
+    scale: 1.1;
 }

@@ -18,25 +18,28 @@ function App() {
   const logout = useSelector(state => state?.loginRegister?.logout);
   const [videos, setVideos] = useState(JSON.parse(localStorage.getItem('videos')) ? JSON.parse(localStorage.getItem('videos')) : null);
   const token = useSelector(state => state?.loginRegister?.token);
+  const [chooseClass, setChooseClass] = useState(0);//分类类别选择，0为全部，1为体育，2为游戏，3为音乐
+  const videoClass=["","体育","游戏","音乐"];
   useEffect(() => {
-    async function get() {
-      const latest_time = localStorage.getItem("next_time") || undefined;
-      getVideo(latest_time, logout ? undefined : token).then((res) => {//TODO latest_time修改，0为测试
+    function get() {
+      const latest_time = localStorage.getItem(`next_time${chooseClass}`) || undefined;
+      console.log(latest_time);
+      getVideo(latest_time, logout ? undefined : token,videoClass[chooseClass]).then((res) => {
         switch (res.status_code) {
           case 0:
-            if(res.video_list==null){
-              localStorage.setItem('next_time', res.next_time);
-              get();
+            if (res.video_list == null) {
+              localStorage.setItem(`next_time${chooseClass}`, res.next_time);
+              get();//当前类别没有更多的视频，重新请求之后后端从头开始返回
               break;
             }
             localStorage.setItem('videos', JSON.stringify(res.video_list));
-            localStorage.setItem('next_time', res.next_time);
+            localStorage.setItem(`next_time${chooseClass}`, res.next_time);
             setVideos(res.video_list);
             setHaveVideo(true);
             break;
           case -1:
             console.log(res.status_msg);
-            dispatch(logOut());
+            dispatch(logOut());//token过期，踢出重新登录
             break;
           default:
             break;
@@ -46,15 +49,15 @@ function App() {
       })
     }
     get();// eslint-disable-next-line
-  }, [logout])
+  }, [logout,chooseClass])//登录状态改变、视频类别改变时重新获取视频
   function updateVideos() {//动态增加视频，达到无限下滑的效果
-    const latest_time = localStorage.getItem("next_time");
-    getVideo(latest_time, token).then((res) => {
+    const latest_time = localStorage.getItem(`next_time${chooseClass}`) || undefined;
+    getVideo(latest_time, token,videoClass[chooseClass]).then((res) => {
       switch (res.status_code) {
         case 0:
           setVideos([...videos, ...res.video_list]);
           localStorage.setItem('videos', JSON.stringify([...videos, ...res.video_list]));
-          localStorage.setItem('next_time', res.next_time);
+          localStorage.setItem(`next_time${chooseClass}`, res.next_time);
           setHaveVideo(true);
           break;
         case -1:
@@ -72,7 +75,6 @@ function App() {
     setVisible(!visible);
   }
   function changeVideos(trueIndex, newState, isChild = false, childName = "") {//适用于点赞、关注等操作,先修改本地数据提供反馈
-    console.log(trueIndex, newState);
     if (!isChild) {
       const newVideos = videos.map((item, index) => {
         return index === trueIndex ? { ...item, ...newState } : item
@@ -84,7 +86,6 @@ function App() {
       })
       setVideos(newVideos);
     }
-
   }
   return (
     <ConfigProvider
@@ -102,11 +103,11 @@ function App() {
       }}>
       <Router>
         <div className="App">
-          <Header visible={visible} handleModal={handleModal}></Header>
+          <Header visible={visible} handleModal={handleModal} chooseClass={chooseClass} setChooseClass={setChooseClass}></Header>
           <Routes>
             <Route path='/' element={haveVideo ? <Mainpage handleModal={handleModal} videos={videos} changeVideos={changeVideos} updateVideos={updateVideos}></Mainpage> : null}></Route>
-            <Route path='/search' element={<Searchpage></Searchpage>}></Route>
-            <Route path='/personal' element={<Personalpage></Personalpage>}></Route>
+            <Route path='/search' element={<Searchpage handleModal={handleModal}></Searchpage>}></Route>
+            <Route path='/personal' element={<Personalpage handleModal={handleModal}></Personalpage>}></Route>
             <Route path='*' element={<Page404></Page404>}></Route>
           </Routes>
         </div>

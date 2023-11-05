@@ -2,9 +2,9 @@ import { Link } from 'react-router-dom';
 import styles from '../assets/styles/Header.module.css';
 import { FiUpload } from 'react-icons/fi';
 import { Modal, Form, Input, Button, message, Popover } from 'antd';
-import { useEffect, useState,useRef } from 'react';
+import { useEffect, useState, useRef } from 'react';
 import { BiShare, BiSearchAlt2 } from 'react-icons/bi';
-import { AiOutlineHeart } from 'react-icons/ai';
+import { AiOutlineHeart, AiOutlineMessage, AiOutlineMore } from 'react-icons/ai';
 import { useDispatch } from 'react-redux';
 import { useSelector } from 'react-redux/es/hooks/useSelector';
 import { login, register } from '../utils/loginRegister';
@@ -12,15 +12,17 @@ import { useNavigate } from 'react-router-dom';
 import getPersonalInfo from '../utils/getPersonalInfo';
 import PersonalPopover from './PersonalPopover';
 import { loginFailure, loginRequest, loginSuccess, logOut, registerFailure, registerRequest, registerSuccess } from '../redux/actions/loginRegisterAction';
-function Header({ visible, handleModal }) {
+function Header({ visible, handleModal,setChooseClass,chooseClass }) {
     const [choose, setChoose] = useState([true, false]);//登录注册选择
     const [search, setSearch] = useState('');//搜索框内容
     const [info, setInfo] = useState(localStorage.getItem("info") ? JSON.parse(localStorage.getItem("info")) : null);//先从本地缓存获取个人信息
     const logout = useSelector(state => state?.loginRegister?.logout);
     const loginWaiting = useSelector(state => state?.loginRegister?.loginWaiting);
     const registerWaiting = useSelector(state => state?.loginRegister?.registerWaiting);
+    const [visiblePopover, setVisiblePopover] = useState(false);
     const id = useSelector(state => state?.loginRegister?.user_id);
     const token = useSelector(state => state?.loginRegister?.token);
+
     const fileInputRef = useRef(null);
     const navigate = useNavigate();
     const dispatch = useDispatch();
@@ -40,7 +42,7 @@ function Header({ visible, handleModal }) {
         }).catch(err => {
             console.log(err);
         })
-    }, [id, token])
+    }, [id, token, visiblePopover])//每次modal可见的时候都重新获取个人信息
     function onFinishLogin(values) {
         dispatch(loginRequest());
         message.loading({
@@ -135,18 +137,20 @@ function Header({ visible, handleModal }) {
     function handleFileChange(e) {//TODO 上传视频
 
     }
+    function handleMessage() {//TODO 私信
+    }
     return (
         <header>
             <div className={styles.headerContainer}>
                 <div className={styles.header}>
                     <div className={styles.brand}>
-                        <Link className={styles.link} to="/">NewClip</Link>
+                        <Link className={styles.link} to="https://github.com/chenxi393/NewClip">NewClip</Link>
                     </div>
                     <nav className={styles.navlinks}>
-                        <Link className={styles.link} to="/">首页</Link>
-                        <Link className={styles.link} to="/hot">热门</Link>
-                        <Link className={styles.link} to="/sports">体育</Link>
-                        <Link className={styles.link} to="/game">游戏</Link>
+                        <Link className={`${styles.link} ${chooseClass === 0 && styles.choose}`} to="/" onClick={()=>setChooseClass(0)}>首页</Link>
+                        <div className={`${styles.link} ${chooseClass === 1 && styles.choose}`} onClick={()=>setChooseClass(1)}>体育</div>
+                        <div className={`${styles.link} ${chooseClass === 2 && styles.choose}`} onClick={()=>setChooseClass(2)}>游戏</div>
+                        <div className={`${styles.link} ${chooseClass === 3 && styles.choose}`} onClick={()=>setChooseClass(3)}>音乐</div>
                     </nav>
                     <div className={styles.searchInput}>
                         <input type="text" placeholder="请输入搜索关键词" value={search} onChange={(e) => { setSearch(e.target.value) }} onKeyDown={handleKeydown} />
@@ -155,23 +159,34 @@ function Header({ visible, handleModal }) {
                         </div>
                     </div>
                     <div className={styles.personalbar}>
-                        <div className={styles.upload} onClick={()=>{
-                            if(logout){
+                        <div className={styles.upload} onClick={() => {
+                            if (logout) {
                                 message.error("请先登录");
                                 handleModal();
                                 return;
                             }
                             fileInputRef.current.click();
                         }}>
-                            <FiUpload></FiUpload>
-                            <Link className={styles.uploadText} to='/upload'>上传</Link>
+                            <div><FiUpload></FiUpload></div>
+                            <div className={styles.uploadText}>上传</div>
                         </div>
+                        <div className={styles.message}>
+                            <div><AiOutlineMessage></AiOutlineMessage></div>
+                            <div className={styles.messageText}>私信</div>
+                        </div>
+                        <div className={styles.more}>
+                            <div><AiOutlineMore></AiOutlineMore></div>
+                            <div className={styles.moreText}>更多</div>
+                        </div>
+                    </div>
+                    <div className={styles.person}>
                         {logout ?
                             <div className={styles.personal}>
                                 <div className={styles.login} onClick={handleModal}>登录</div>
                             </div> :
                             (info &&
-                                <Popover classname={styles.popover} content={<PersonalPopover info={info} handleLogout={handleLogout} />} placement="bottomRight" trigger="hover">
+                                <Popover classname={styles.popover} content={<PersonalPopover info={info} handleLogout={handleLogout} />}
+                                    placement="bottomRight" trigger="hover" onVisibleChange={() => setVisiblePopover(!visiblePopover)}>
                                     <div className={styles.avatar} style={{
                                         backgroundImage: `url(${info.avatar})`,
                                         backgroundSize: 'cover',
@@ -181,6 +196,7 @@ function Header({ visible, handleModal }) {
                             )
                         }
                     </div>
+
                 </div>
                 <input
                     type="file"

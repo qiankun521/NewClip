@@ -20,7 +20,7 @@ function Video({ video, isPlaying, handlePlaying, ismuted, handleMuted, volume, 
     function handlePlayed(state) {
         setPlayed(state);
     }
-    function get() {
+    function get() {//获取评论,也用于发布评论后刷新评论区
         getComments(video.id).then(res => {
             switch (res.status_code) {
                 case 0:

@@ -24,7 +24,7 @@ function PersonalPopover({ info,handleLogout }) {
                 <div className={styles.followed}>
                     <div><BsPersonHearts className={styles.icon} style={{
                         color:"rgb(255, 251, 5)"
-                    
+
                     }}></BsPersonHearts></div>
                     <div>我的关注</div>
                     <div>{info.follow_count}</div>

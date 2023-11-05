@@ -6,10 +6,12 @@ import { useSelector } from 'react-redux';
 import { postLike, postCancelLike } from '../utils/postLike';
 import { postFollow, postCancelFollow } from '../utils/postFollow';
 import { message } from 'antd';
+import { useNavigate } from 'react-router';
 function Sidebar({ video, handleComments, handleModal, trueIndex, changeVideos }) {
     const logout = useSelector(state => state?.loginRegister?.logout);
     const token = useSelector(state => state?.loginRegister?.token);
     const id=useSelector(state=>state?.loginRegister?.user_id);
+    const navigate = useNavigate();
     function handleLike() {
         if (logout) handleModal();
         else {
@@ -78,7 +80,8 @@ function Sidebar({ video, handleComments, handleModal, trueIndex, changeVideos }
             })
         }
     }
-    function handleFollow() {
+    function handleFollow(e) {
+        e.stopPropagation();
         if (logout) handleModal();
         else {
             if (video.author.is_follow) postCancelFollow(video.author.id, token).then(res => {
@@ -149,15 +152,18 @@ function Sidebar({ video, handleComments, handleModal, trueIndex, changeVideos }
     function handleShare() {
         console.log("share");//TODO 分享
     }
+    function handleUserpage(){
+        navigate(`/personal/?user_id=${video.author.id}`)
+    }
     return (
         <div className={styles.sidebarContainer}>
             <div className={styles.sidebar}>
                 <div className={styles.avatar} style={{
                     backgroundImage: `url(${video.author.avatar})`,
                     backgroundSize: 'cover',
-                }}>
+                }} onClick={handleUserpage}>
                     {id!==video.author.id&&
-                        <div className={video.author.is_follow ? styles.followed : styles.follow} onClick={handleFollow}>{video.author.is_follow ? "✔" : "+"}</div>
+                        <div className={video.author.is_follow ? styles.followed : styles.follow} onClick={e=>handleFollow(e)}>{video.author.is_follow ? "✔" : "+"}</div>
                     }
                 </div>
                 <div className={styles.like}>

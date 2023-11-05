@@ -8,7 +8,35 @@ body {
   -webkit-font-smoothing: antialiased;
   -moz-osx-font-smoothing: grayscale;
 }
-
+/* 默认字体大小，适用于较小的移动设备 */
+html {
+  font-size: 10px;
+  box-sizing: border-box;
+}
+/* 当屏幕宽度大于等于375px时，增大字体大小 */
+@media (min-width: 375px) {
+  html {
+    font-size: 15px;
+  }
+}
+/* 当屏幕宽度大于等于768px时，增大字体大小 */
+@media (min-width: 768px) {
+  html {
+    font-size: 16px;
+  }
+}
+/* 当屏幕宽度大于等于1024px时，增大字体大小 */
+@media (min-width: 1024px) {
+  html {
+    font-size: 17px;
+  }
+}
+/* 当屏幕宽度大于等于1200px时，增大字体大小 */
+@media (min-width: 1200px) {
+  html {
+    font-size: 18px;
+  }
+}
 code {
   font-family: source-code-pro, Menlo, Monaco, Consolas, 'Courier New',
     monospace;
