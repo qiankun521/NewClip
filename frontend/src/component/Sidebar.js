@@ -5,8 +5,9 @@ import { BiSolidShare } from 'react-icons/bi';
 import { useSelector } from 'react-redux';
 import { postLike, postCancelLike } from '../utils/postLike';
 import { postFollow, postCancelFollow } from '../utils/postFollow';
-import { message } from 'antd';
+import { Popover, message } from 'antd';
 import { useNavigate } from 'react-router';
+import SharePopover from './SharePopover';
 function Sidebar({ video, handleComments, handleModal, trueIndex, changeVideos }) {
     const logout = useSelector(state => state?.loginRegister?.logout);
     const token = useSelector(state => state?.loginRegister?.token);
@@ -174,10 +175,12 @@ function Sidebar({ video, handleComments, handleModal, trueIndex, changeVideos }
                     <div><BiSolidCommentDots className={styles.icon} onClick={handleComments} /></div>
                     <div className={styles.number}>{video.comment_count}</div>
                 </div>
+                <Popover content={<SharePopover></SharePopover>} trigger="click" placement='right'>
                 <div className={styles.share}>
                     <div><BiSolidShare className={styles.icon} onClick={handleShare} /></div>
                     <div className={styles.number}>{video.share_count}</div>
                 </div>
+                </Popover>
             </div>
         </div>
     )

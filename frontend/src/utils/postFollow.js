@@ -1,5 +1,5 @@
 async function postFollow(id, token = "") {
-    const response = await fetch(`${process.env.REACT_APP_API_URL}:${process.env.REACT_APP_API_PORT}/douyin/relation/action/?to_user_id=${id}&token=${token}&action_type=1`,{
+    const response = await fetch(`${process.env.REACT_APP_API_URL}:${process.env.REACT_APP_API_PORT}${process.env.REACT_APP_API_PATH}/relation/action/?to_user_id=${id}&token=${token}&action_type=1`,{
         method: 'POST',
         headers: {
             'Content-Type': 'application/json'
@@ -10,7 +10,7 @@ async function postFollow(id, token = "") {
 }
 
 async function postCancelFollow(id, token = "") {
-    const response = await fetch(`${process.env.REACT_APP_API_URL}:${process.env.REACT_APP_API_PORT}/douyin/relation/action/?to_user_id=${id}&token=${token}&action_type=2`,{
+    const response = await fetch(`${process.env.REACT_APP_API_URL}:${process.env.REACT_APP_API_PORT}${process.env.REACT_APP_API_PATH}/relation/action/?to_user_id=${id}&token=${token}&action_type=2`,{
         method:'POST',
         headers:{
             'Content-Type':'application/json'

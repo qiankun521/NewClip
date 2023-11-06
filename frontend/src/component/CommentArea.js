@@ -54,7 +54,7 @@ function CommentArea({ haveComments, comments, video, handleComments, update,han
             <div className={styles.commentTop}>
                 <div className={styles.topAreaLeft}>
                     <div className={styles.commentTitle}>评论区</div>
-                    <div className={styles.commentCount}>共{video.comment_count}条</div>
+                    <div className={styles.commentCount}>共{comments?.length}条</div>
                 </div>
                 <div className={styles.topAreaRight}>
                     <div className={styles.close} onClick={handleComments}>╳</div>

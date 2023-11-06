@@ -92,12 +92,20 @@ function App() {
       theme={{
         components: {
           Popover: {
-            colorBgElevated: "#1A1823",//背景
+            colorBgElevated: "#252632",//背景
             colorText: "#C9C9CA",//文本
             colorTextHeading: "#C9C9CA",//标题
           },
           Modal: {
-            //TODO 改变modal的样式,使其符合主题
+            colorBgElevated: "#252632",//背景
+            colorText: "#C9C9CA",//文本
+            colorTextHeading: "#C9C9CA",//标题
+          },
+          Input: {
+            colorBgContainer: "#252632",
+            colorText: "rgb(255, 255, 255)",
+            colorTextDescription:"#C9C9CA",
+            colorTextPlaceholder:"#C9C9CA"
           }
         }
       }}>

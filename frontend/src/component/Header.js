@@ -11,19 +11,23 @@ import { login, register } from '../utils/loginRegister';
 import { useNavigate } from 'react-router-dom';
 import getPersonalInfo from '../utils/getPersonalInfo';
 import PersonalPopover from './PersonalPopover';
+import MessagePopover from './MessagePopover';
 import { loginFailure, loginRequest, loginSuccess, logOut, registerFailure, registerRequest, registerSuccess } from '../redux/actions/loginRegisterAction';
-function Header({ visible, handleModal,setChooseClass,chooseClass }) {
+import { getFriendList, getMessages } from '../utils/getMessage';
+import UploadPopover from './UploadPopover';
+import SharePopover from './SharePopover';
+function Header({ visible, handleModal, setChooseClass, chooseClass }) {
     const [choose, setChoose] = useState([true, false]);//登录注册选择
     const [search, setSearch] = useState('');//搜索框内容
     const [info, setInfo] = useState(localStorage.getItem("info") ? JSON.parse(localStorage.getItem("info")) : null);//先从本地缓存获取个人信息
     const logout = useSelector(state => state?.loginRegister?.logout);
     const loginWaiting = useSelector(state => state?.loginRegister?.loginWaiting);
     const registerWaiting = useSelector(state => state?.loginRegister?.registerWaiting);
-    const [visiblePopover, setVisiblePopover] = useState(false);
+    const [visiblePopover, setVisiblePopover] = useState(false);//个人页popover是否可见
     const id = useSelector(state => state?.loginRegister?.user_id);
     const token = useSelector(state => state?.loginRegister?.token);
-
-    const fileInputRef = useRef(null);
+    const [messageVisible, setMessageVisible] = useState(false);//私信页popover是否可见
+    const [uploadVisible, setUploadVisible] = useState(false);//上传视频页popover是否可见
     const navigate = useNavigate();
     const dispatch = useDispatch();
     useEffect(() => {
@@ -42,7 +46,27 @@ function Header({ visible, handleModal,setChooseClass,chooseClass }) {
         }).catch(err => {
             console.log(err);
         })
-    }, [id, token, visiblePopover])//每次modal可见的时候都重新获取个人信息
+        const friendList = localStorage.getItem("friend_list") ? JSON.parse(localStorage.getItem("friend_list")) : undefined;
+        if (friendList) {
+            for (let i = 0; i < friendList.length; i++) {
+                getMessages(token, friendList[i].id).then(res => {
+                    switch (res.status_code) {
+                        case 0:
+                            let messages = JSON.parse(localStorage.getItem('messages')) || {};
+                            messages[friendList[i].id] = res.message_list;
+                            localStorage.setItem('messages', JSON.stringify(messages));
+                            break;
+                        case -1:
+                            console.log(res.status_msg);
+                            break;
+                        default:
+                            break;
+                    }
+                })
+
+            }
+        }
+    }, [id, token, visiblePopover])//每次个人页modal可见的时候都重新获取个人信息
     function onFinishLogin(values) {
         dispatch(loginRequest());
         message.loading({
@@ -61,6 +85,18 @@ function Header({ visible, handleModal,setChooseClass,chooseClass }) {
                     })
                     dispatch(loginSuccess(values.username, res.token, res.status_msg, res.user_id));
                     localStorage.setItem("token", res.token);
+                    getFriendList(res.user_id, res.token).then(res => {//登录成功后获取好友列表
+                        switch (res.status_code) {
+                            case 0:
+                                localStorage.setItem("friend_list", JSON.stringify(res.user_list));
+                                break;
+                            case -1:
+                                console.log(res.status_msg);
+                                break;
+                            default:
+                                break;
+                        }
+                    })
                     handleModal();
                     break;
                 case -1:
@@ -134,10 +170,23 @@ function Header({ visible, handleModal,setChooseClass,chooseClass }) {
             handleSearch();
         }
     }
-    function handleFileChange(e) {//TODO 上传视频
-
+    function handleFileChange() {//控制开启关闭上传popover
+        if (logout) {
+            message.error("请先登录");
+            handleModal();
+            setUploadVisible(false);
+            return;
+        }
+        setUploadVisible(!uploadVisible);
     }
-    function handleMessage() {//TODO 私信
+    function handleMessage() {//控制开启关闭私信popover
+        if (logout) {
+            message.error("请先登录");
+            handleModal();
+            setMessageVisible(false);
+            return;
+        }
+        setMessageVisible(!messageVisible);
     }
     return (
         <header>
@@ -147,10 +196,10 @@ function Header({ visible, handleModal,setChooseClass,chooseClass }) {
                         <Link className={styles.link} to="https://github.com/chenxi393/NewClip">NewClip</Link>
                     </div>
                     <nav className={styles.navlinks}>
-                        <Link className={`${styles.link} ${chooseClass === 0 && styles.choose}`} to="/" onClick={()=>setChooseClass(0)}>首页</Link>
-                        <div className={`${styles.link} ${chooseClass === 1 && styles.choose}`} onClick={()=>setChooseClass(1)}>体育</div>
-                        <div className={`${styles.link} ${chooseClass === 2 && styles.choose}`} onClick={()=>setChooseClass(2)}>游戏</div>
-                        <div className={`${styles.link} ${chooseClass === 3 && styles.choose}`} onClick={()=>setChooseClass(3)}>音乐</div>
+                        <Link className={`${styles.link} ${chooseClass === 0 && styles.choose}`} to="/" onClick={() => setChooseClass(0)}>首页</Link>
+                        <div className={`${styles.link} ${chooseClass === 1 && styles.choose}`} onClick={() => setChooseClass(1)}>体育</div>
+                        <div className={`${styles.link} ${chooseClass === 2 && styles.choose}`} onClick={() => setChooseClass(2)}>游戏</div>
+                        <div className={`${styles.link} ${chooseClass === 3 && styles.choose}`} onClick={() => setChooseClass(3)}>音乐</div>
                     </nav>
                     <div className={styles.searchInput}>
                         <input type="text" placeholder="请输入搜索关键词" value={search} onChange={(e) => { setSearch(e.target.value) }} onKeyDown={handleKeydown} />
@@ -159,21 +208,18 @@ function Header({ visible, handleModal,setChooseClass,chooseClass }) {
                         </div>
                     </div>
                     <div className={styles.personalbar}>
-                        <div className={styles.upload} onClick={() => {
-                            if (logout) {
-                                message.error("请先登录");
-                                handleModal();
-                                return;
-                            }
-                            fileInputRef.current.click();
-                        }}>
-                            <div><FiUpload></FiUpload></div>
-                            <div className={styles.uploadText}>上传</div>
-                        </div>
-                        <div className={styles.message}>
-                            <div><AiOutlineMessage></AiOutlineMessage></div>
-                            <div className={styles.messageText}>私信</div>
-                        </div>
+                        <Popover open={uploadVisible} onClick={()=>handleFileChange()} content={<UploadPopover handleUpload={handleFileChange}></UploadPopover>}>
+                            <div className={styles.upload} onClick={handleFileChange}>
+                                <div><FiUpload></FiUpload></div>
+                                <div className={styles.uploadText}>上传</div>
+                            </div>
+                        </Popover>
+                        <Popover content={<MessagePopover handleMessage={handleMessage}></MessagePopover>} open={messageVisible} onClick={() => handleMessage()}>
+                            <div className={styles.message}>
+                                <div><AiOutlineMessage></AiOutlineMessage></div>
+                                <div className={styles.messageText}>私信</div>
+                            </div>
+                        </Popover>
                         <div className={styles.more}>
                             <div><AiOutlineMore></AiOutlineMore></div>
                             <div className={styles.moreText}>更多</div>
@@ -185,8 +231,8 @@ function Header({ visible, handleModal,setChooseClass,chooseClass }) {
                                 <div className={styles.login} onClick={handleModal}>登录</div>
                             </div> :
                             (info &&
-                                <Popover classname={styles.popover} content={<PersonalPopover info={info} handleLogout={handleLogout} />}
-                                    placement="bottomRight" trigger="hover" onVisibleChange={() => setVisiblePopover(!visiblePopover)}>
+                                <Popover content={<PersonalPopover info={info} handleLogout={handleLogout} />}
+                                    placement="bottomRight" trigger="hover" onOpenChange={() => setVisiblePopover(!visiblePopover)}>
                                     <div className={styles.avatar} style={{
                                         backgroundImage: `url(${info.avatar})`,
                                         backgroundSize: 'cover',
@@ -196,21 +242,11 @@ function Header({ visible, handleModal,setChooseClass,chooseClass }) {
                             )
                         }
                     </div>
-
                 </div>
-                <input
-                    type="file"
-                    accept="video/*"
-                    ref={fileInputRef}
-                    onChange={handleFileChange}
-                    style={{ display: 'none' }}
-                    capture="environment"
-                />{/* 隐藏的文件上传input */}
             </div>
             <Modal
                 open={visible}
                 onCancel={handleModal}
-                maskClosable={false}
                 footer={null}
                 className={styles.modal}
             >
@@ -247,10 +283,11 @@ function Header({ visible, handleModal,setChooseClass,chooseClass }) {
                                 flexDirection: "column",
                                 alignItems: "center",
                                 marginTop: "20px",
+                
                             }}
                         >
                             <Form.Item
-                                label="用户名"
+                                label={<span style={{ color: "#C9C9CA" }}>用户名</span>}
                                 name="username"
                                 rules={[
                                     {
@@ -263,7 +300,7 @@ function Header({ visible, handleModal,setChooseClass,chooseClass }) {
                             </Form.Item>
 
                             <Form.Item
-                                label="用户密码"
+                                label={<span style={{ color: "#C9C9CA" }}>用户密码</span>}
                                 name="password"
                                 rules={[
                                     {
@@ -302,7 +339,7 @@ function Header({ visible, handleModal,setChooseClass,chooseClass }) {
                             }}
                         >
                             <Form.Item
-                                label="用户名"
+                                label={<span style={{ color: "#C9C9CA" }}>用户名</span>}
                                 name="username"
                                 rules={[
                                     {
@@ -319,7 +356,7 @@ function Header({ visible, handleModal,setChooseClass,chooseClass }) {
                             </Form.Item>
 
                             <Form.Item
-                                label="用户密码"
+                                label={<span style={{ color: "#C9C9CA" }}>用户密码</span>}
                                 name="password"
                                 rules={[
                                     {

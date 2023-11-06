@@ -1,5 +1,5 @@
 {
-  "name": "my-app",
+  "name": "new-clip",
   "version": "0.1.0",
   "private": true,
   "dependencies": {
@@ -44,5 +44,9 @@
       "last 1 firefox version",
       "last 1 safari version"
     ]
+  },
+  "author": {
+    "name": "github-qiankun521",
+    "email": "lvmuxing@gmail.com"
   }
 }

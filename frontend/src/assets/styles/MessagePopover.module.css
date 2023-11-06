@@ -1,0 +1,163 @@
+.messageContainer {
+    width: 50vw;
+    min-width: 600px;
+    height: 60vh;
+    display: flex
+}
+
+.left {
+    width: 30%;
+    height: 100%;
+    display: flex;
+    flex-direction: column;
+    overflow-y: auto;
+}
+.rightContainer{
+    width: 70%;
+    height: 100%;
+    position: relative;
+}
+.right {
+    width: 100%;
+    height: 100%;
+    background:linear-gradient(to right, #1A1823, #2D2A3E);
+    display: flex;
+    flex-direction: column;
+    overflow-y: auto;
+    position: relative;
+}
+
+.person {
+    width: 100%;
+    height: 60px;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    border-radius: 20px 0 0 20px;
+}
+
+.selected {
+    background-color: #33343F;
+}
+
+.avatar {
+    margin-left: 0.5rem;
+    width: 2.5rem;
+    height: 2.5rem;
+    border-radius: 50%;
+    background-color: #CCC;
+}
+
+.person:hover {
+    background-color: #33343F;
+    cursor: pointer;
+}
+
+.info {
+    flex-grow: 1;
+    display: flex;
+    flex-direction: column;
+    padding-left: 1rem;
+}
+
+.name {
+    font-size: 1.2rem;
+}
+
+.lastMessage {
+    font-size: 0.8rem;
+    color: #CCC;
+}
+
+.messageArea {
+    width: 100%;
+    height: 100%;
+}
+
+.right::-webkit-scrollbar {
+    width: 10px;
+}
+
+.right::-webkit-scrollbar-track {
+    background-color: transparent;
+}
+
+.right::-webkit-scrollbar-thumb {
+    background-color: rgb(204, 204, 204, 0.3);
+    border-radius: 10px;
+}
+
+.right::-webkit-scrollbar-thumb:hover {
+    background-color: rgb(204, 204, 204, 0.3);
+}
+
+.message {
+    width: 100%;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    border-radius: 20px 0 0 20px;
+}
+
+.single {
+    width: 100%;
+    display: flex;
+    align-items: center;
+}
+
+.singleReverse {
+    width: 100%;
+    display: flex;
+    align-items: center;
+    justify-content: flex-end;
+}
+
+.avatarSmall {
+    width: 2rem;
+    height: 2rem;
+    min-height: 2rem;
+    min-width: 2rem;
+    background-color: aliceblue;
+    border-radius: 50%;
+    margin: 1rem;
+}
+
+.content {
+    margin: 1rem;
+    padding: 0.5rem 1rem;
+    background-color: #41424C;
+    border-radius: 20px;
+    word-wrap: break-word;
+}
+
+.input {
+    position: absolute;
+    bottom: 0;
+    right: 0;
+    background-color: #41424C;
+    height: 15px;
+    width: 90%;
+    border-radius: 20px;
+    padding: 1rem;
+    color: antiquewhite;
+    font-size: 1rem;
+}
+
+.icon {
+    position: absolute;
+    right: 5%;
+    bottom: 3%;
+    font-size: 1.5rem;
+    color: #FE2C55;
+}
+.close{
+    position: absolute;
+    top: 0;
+    right: 0;
+    font-size: 2rem;
+    color: #CCC;
+}
+.close:hover{
+    cursor: pointer;
+    color: #FE2C55;
+}
