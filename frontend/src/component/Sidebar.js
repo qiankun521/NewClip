@@ -11,7 +11,7 @@ import SharePopover from './SharePopover';
 function Sidebar({ video, handleComments, handleModal, trueIndex, changeVideos }) {
     const logout = useSelector(state => state?.loginRegister?.logout);
     const token = useSelector(state => state?.loginRegister?.token);
-    const id=useSelector(state=>state?.loginRegister?.user_id);
+    const id = useSelector(state => state?.loginRegister?.user_id);
     const navigate = useNavigate();
     function handleLike() {
         if (logout) handleModal();
@@ -150,10 +150,8 @@ function Sidebar({ video, handleComments, handleModal, trueIndex, changeVideos }
             })
         }
     }
-    function handleShare() {
-        console.log("share");//TODO 分享
-    }
-    function handleUserpage(){
+
+    function handleUserpage() {
         navigate(`/personal/?user_id=${video.author.id}`)
     }
     return (
@@ -163,8 +161,8 @@ function Sidebar({ video, handleComments, handleModal, trueIndex, changeVideos }
                     backgroundImage: `url(${video.author.avatar})`,
                     backgroundSize: 'cover',
                 }} onClick={handleUserpage}>
-                    {id!==video.author.id&&
-                        <div className={video.author.is_follow ? styles.followed : styles.follow} onClick={e=>handleFollow(e)}>{video.author.is_follow ? "✔" : "+"}</div>
+                    {id !== video.author.id &&
+                        <div className={video.author.is_follow ? styles.followed : styles.follow} onClick={e => handleFollow(e)}>{video.author.is_follow ? "✔" : "+"}</div>
                     }
                 </div>
                 <div className={styles.like}>
@@ -175,11 +173,11 @@ function Sidebar({ video, handleComments, handleModal, trueIndex, changeVideos }
                     <div><BiSolidCommentDots className={styles.icon} onClick={handleComments} /></div>
                     <div className={styles.number}>{video.comment_count}</div>
                 </div>
-                <Popover content={<SharePopover></SharePopover>} trigger="click" placement='right'>
-                <div className={styles.share}>
-                    <div><BiSolidShare className={styles.icon} onClick={handleShare} /></div>
-                    <div className={styles.number}>{video.share_count}</div>
-                </div>
+                <Popover content={<SharePopover video={video}></SharePopover>} trigger="hover" placement='right'>
+                    <div className={styles.share}>
+                        <div><BiSolidShare className={styles.icon}/></div>
+                        <div className={styles.number}>{video.share_count}</div>
+                    </div>
                 </Popover>
             </div>
         </div>

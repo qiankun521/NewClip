@@ -64,3 +64,13 @@ button{
     justify-content: space-around;
     font-size: 1.5rem;
 }
+.qrcode>div{
+    display: flex;
+    justify-content: center;
+    align-items: center;
+}
+.copy>div{
+    display: flex;
+    justify-content: center;
+    align-items: center;
+}

@@ -52,7 +52,7 @@ function Header({ visible, handleModal, setChooseClass, chooseClass }) {
                 getMessages(token, friendList[i].id).then(res => {
                     switch (res.status_code) {
                         case 0:
-                            let messages = JSON.parse(localStorage.getItem('messages')) || {};
+                            let messages = localStorage.getItem('messages')===undefined ? JSON.parse(localStorage.getItem('messages')):{};
                             messages[friendList[i].id] = res.message_list;
                             localStorage.setItem('messages', JSON.stringify(messages));
                             break;

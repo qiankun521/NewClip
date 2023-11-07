@@ -105,7 +105,7 @@ function MessagePopover({handleMessage}) {
                                     {item?.name}
                                 </div>
                                 <div className={styles.lastMessage}>
-                                    {item?.message?.length > 15 ? item?.message?.slice(0, 7) + '...' : item?.message}
+                                    {item?.message?.length > 7 ? item?.message?.slice(0, 7) + '...' : item?.message}
                                 </div>
                             </div>
                         </div>
