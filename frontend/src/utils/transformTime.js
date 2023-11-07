@@ -1,3 +1,8 @@
+/**
+ * 将时间戳转换为格式化的时间字符串
+ * @param {number} timestamp - 时间戳
+ * @returns {string} 格式化的时间字符串，格式为：yyyy-MM-dd HH:mm:ss
+ */
 function transformTime(timestamp) {
     const date = new Date(timestamp);
     const year = date.getFullYear();

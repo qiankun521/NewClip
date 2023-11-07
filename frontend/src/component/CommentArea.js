@@ -1,3 +1,7 @@
+/**
+ * @file 评论区组件
+ * @module CommentArea
+ */
 import styles from '../assets/styles/CommentArea.module.css';
 import SingleComment from './SingleComment';
 import { TbSend } from 'react-icons/tb';
@@ -5,22 +9,37 @@ import { useState } from 'react';
 import postComment from '../utils/postComment';
 import { useSelector } from 'react-redux';
 import { message } from 'antd';
-function CommentArea({ haveComments, comments, video, handleComments, update,handleModal }) {
-    const [commentValue, setCommentValue] = useState("");
-    const logout = useSelector(state => state.loginRegister.logout);
-    const token = useSelector(state => state.loginRegister.token);
+
+/**
+ * 评论区组件
+ * @param {Object} props - 组件属性
+ * @param {boolean} props.haveComments - 是否获取到评论
+ * @param {Array} props.comments - 评论列表
+ * @param {Object} props.video - 视频信息
+ * @param {Function} props.handleComments - 关闭评论区的回调函数
+ * @param {Function} props.update - 更新评论列表的回调函数
+ * @param {Function} props.handleModal - 打开登录/注册模态框的回调函数
+ * @returns {JSX.Element} - 评论区组件
+ */
+function CommentArea({ haveComments, comments, video, handleComments, update, handleModal }) {
+    const [commentValue, setCommentValue] = useState(""); // 评论输入框的值
+    const logout = useSelector(state => state.loginRegister.logout); // 是否已注销
+    const token = useSelector(state => state.loginRegister.token); // 用户 token
+    /**
+     * 发送评论的回调函数
+     */
     function handleSendMessage() {
-        if(logout)handleModal();
-        else{
-            postComment(token,video.id,1,commentValue).then((data)=>{
-                switch(data.status_code){
+        if (logout) handleModal(); // 如果已注销，打开登录/注册模态框
+        else {
+            postComment(token, video.id, 1, commentValue).then((data) => {
+                switch (data.status_code) {
                     case 0:
-                        setTimeout(update,10);//延迟10ms更新评论，后端出现了同步问题返回脏数据
-                        setCommentValue("");
+                        setTimeout(update, 10); // 延迟 10ms 更新评论，后端出现了同步问题返回脏数据
+                        setCommentValue(""); // 清空评论输入框的值
                         message.success({
-                            content:data.status_msg,
-                            key:'comment',
-                            duration:1,
+                            content: data.status_msg,
+                            key: 'comment',
+                            duration: 1,
                         })
                         break;
                     case -1:
@@ -35,11 +54,11 @@ function CommentArea({ haveComments, comments, video, handleComments, update,han
                             content: '评论失败',
                             key: 'comment',
                             duration: 1,
-                        
+
                         })
                         break;
                 }
-            }).catch((err)=>{
+            }).catch((err) => {
                 console.log(err);
                 message.error({
                     content: '评论失败,请检查网络',

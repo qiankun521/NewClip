@@ -9,6 +9,7 @@
     justify-content: center;
     align-items: center;
     border-radius: 20px 0 0 20px;
+    overflow-y: auto;
 }
 .top:last-child{
     margin-bottom: 0.5rem;

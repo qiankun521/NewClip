@@ -1,8 +1,23 @@
+/**
+ * @file 单个评论组件
+ * @module SingleComment
+ */
 import styles from '../assets/styles/SingleComment.module.css';
 import {AiOutlineMessage} from 'react-icons/ai';
 import {AiOutlineLike} from 'react-icons/ai';
 import {AiOutlineDislike} from 'react-icons/ai';
 import {BiShare} from 'react-icons/bi';
+/**
+ * 单个评论组件
+ * @param {Object} props - 组件属性
+ * @param {Object} props.comment - 评论对象
+ * @param {Object} props.comment.user - 评论用户对象
+ * @param {string} props.comment.user.avatar - 评论用户头像链接
+ * @param {string} props.comment.user.name - 评论用户昵称
+ * @param {string} props.comment.content - 评论内容
+ * @param {string} props.comment.create_date - 评论创建时间
+ * @returns {JSX.Element} 单个评论组件
+ */
 function SingleComment({ comment }) {
     return (
         <div className={styles.singleContainer}>

@@ -1,9 +1,21 @@
+/**
+ * @file 单个视频组件
+ * @module SingleVideo
+ */
 import styles from '../assets/styles/SingleVideo.module.css';
 import { AiOutlineHeart } from 'react-icons/ai';
 
+/**
+ * 单个视频组件
+ * @param {Object} props - 组件属性
+ * @param {Object} props.data - 视频数据
+ * @param {Function} props.handleClick - 打开视频的处理函数(搜索页和个人主页)
+ * @param {number} props.trueIndex - 打开的视频的真实索引
+ * @returns {JSX.Element} 单个视频组件
+ */
 function SingleVideo({ data,handleClick,trueIndex }) {
     return (
-        <div className={styles.singleVideo} onClick={()=>handleClick(data,trueIndex)}>
+        <div className={styles.singleVideo} onClick={()=>handleClick(trueIndex)}>
             <div className={styles.videoContainer}>
                 <div className={styles.picture} style={{
                     backgroundImage: `url(${data.cover_url})`

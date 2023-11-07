@@ -1,0 +1,47 @@
+.FollowPopover{
+    width:20vw;
+    min-width: 200px;
+    max-height: 250px;
+    overflow-y: auto;
+}
+.FollowPopover:hover{
+    cursor: pointer;
+}
+.person{
+    height: 50px;
+    display: flex;
+    align-items: center;
+    width: 100%;
+    margin-bottom: 1rem;
+}
+.person:last-child{
+    margin-bottom: 0;
+}
+.avatar{
+    width: 50px;
+    height: 50px;
+    border-radius: 50%;
+    background-color: aliceblue;
+}
+.info{
+    flex-grow: 1;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+}
+.FollowPopover::-webkit-scrollbar {
+    width: 10px;
+}
+
+.FollowPopover::-webkit-scrollbar-track {
+    background-color: transparent;
+}
+
+.FollowPopover::-webkit-scrollbar-thumb {
+    background-color: rgb(204, 204, 204, 0.3);
+    border-radius: 10px;
+}
+
+.FollowPopover::-webkit-scrollbar-thumb:hover {
+    background-color: rgb(204, 204, 204, 0.3);
+}

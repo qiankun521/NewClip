@@ -11,19 +11,45 @@ import { logOut } from './redux/actions/loginRegisterAction';
 import { ConfigProvider } from 'antd';
 import Page404 from './component/page/Page404';
 import Personalpage from './component/page/Personalpage';
+
+/**
+ * 应用程序入口组件
+ * @returns {JSX.Element} 应用程序组件
+ */
 function App() {
   const [haveVideo, setHaveVideo] = useState(false);
-  const [visible, setVisible] = useState(false);//modal是否可见
+  const [visible, setVisible] = useState(false);
   const dispatch = useDispatch();
+  /**
+   * 是否已经登出
+   * @type {boolean}
+   */
   const logout = useSelector(state => state?.loginRegister?.logout);
   const [videos, setVideos] = useState(JSON.parse(localStorage.getItem('videos')) ? JSON.parse(localStorage.getItem('videos')) : null);
+  /**
+   * 用户token
+   * @type {string}
+   */
   const token = useSelector(state => state?.loginRegister?.token);
-  const [chooseClass, setChooseClass] = useState(0);//分类类别选择，0为全部，1为体育，2为游戏，3为音乐
+  /**
+   * 选择的主页分类类别
+   * @type {Array} 状态钩子
+   */
+  const [chooseClass, setChooseClass] = useState(0);
+  /**
+   * 视频类别列表
+   * @type {Array}
+   */
   const videoClass=["","体育","游戏","音乐"];
+  /**
+   * 获取视频列表
+   */
   useEffect(() => {
+    /**
+     * 获取视频列表
+     */
     function get() {
       const latest_time = localStorage.getItem(`next_time${chooseClass}`) || undefined;
-      console.log(latest_time);
       getVideo(latest_time, logout ? undefined : token,videoClass[chooseClass]).then((res) => {
         switch (res.status_code) {
           case 0:
@@ -50,7 +76,10 @@ function App() {
     }
     get();// eslint-disable-next-line
   }, [logout,chooseClass])//登录状态改变、视频类别改变时重新获取视频
-  function updateVideos() {//动态增加视频，达到无限下滑的效果
+  /**
+   * 更新视频列表
+   */
+  function updateVideos() {
     const latest_time = localStorage.getItem(`next_time${chooseClass}`) || undefined;
     getVideo(latest_time, token,videoClass[chooseClass]).then((res) => {
       switch (res.status_code) {
@@ -71,10 +100,20 @@ function App() {
       console.log(err);
     })
   }
+  /**
+   * 处理modal的显示/隐藏
+   */
   function handleModal() {
     setVisible(!visible);
   }
-  function changeVideos(trueIndex, newState, isChild = false, childName = "") {//适用于点赞、关注等操作,先修改本地数据提供反馈
+  /**
+   * 修改本地视频列表中的数据
+   * @param {number} trueIndex 视频的真实索引
+   * @param {object} newState 新状态
+   * @param {boolean} isChild 是否是嵌套数据
+   * @param {string} childName 嵌套数据的名称
+   */
+  function changeVideos(trueIndex, newState, isChild = false, childName = "") {
     if (!isChild) {
       const newVideos = videos.map((item, index) => {
         return index === trueIndex ? { ...item, ...newState } : item
@@ -82,7 +121,7 @@ function App() {
       setVideos(newVideos);
     } else {
       const newVideos = videos.map((item, index) => {
-        return index === trueIndex ? { ...item, [childName]: { ...item[childName], ...newState } } : item//修改嵌套的数据，如video的author对象，深拷贝
+        return index === trueIndex ? { ...item, [childName]: { ...item[childName], ...newState } } : item
       })
       setVideos(newVideos);
     }
@@ -92,14 +131,14 @@ function App() {
       theme={{
         components: {
           Popover: {
-            colorBgElevated: "#252632",//背景
-            colorText: "#C9C9CA",//文本
-            colorTextHeading: "#C9C9CA",//标题
+            colorBgElevated: "#252632",
+            colorText: "#C9C9CA",
+            colorTextHeading: "#C9C9CA",
           },
           Modal: {
-            colorBgElevated: "#252632",//背景
-            colorText: "#C9C9CA",//文本
-            colorTextHeading: "#C9C9CA",//标题
+            colorBgElevated: "#252632",
+            colorText: "#C9C9CA",
+            colorTextHeading: "#C9C9CA",
           },
           Input: {
             colorBgContainer: "#252632",

@@ -14,6 +14,7 @@
     display: flex;
     align-items: center;
     justify-content: center;
+    overflow: auto;
 }
 .title{
     height: 40%;
@@ -45,4 +46,16 @@
 .close:hover{
     cursor: pointer;
     color: #FE2C55;
+}
+.classifyTitle{
+    font-size: 1rem;
+    color: #CCC;
+}
+.classifyContent{
+    width: 80%;
+    height: 100%;
+    display: flex;
+    font-size: 1rem;
+    align-items: center;
+    justify-content: space-around;
 }

@@ -1,3 +1,7 @@
+/**
+ * @file 侧边栏组件
+ * @module Sidebar
+ */
 import styles from '../assets/styles/Sidebar.module.css';
 import { HeartFilled } from '@ant-design/icons';
 import { BiSolidCommentDots } from 'react-icons/bi';
@@ -8,15 +12,31 @@ import { postFollow, postCancelFollow } from '../utils/postFollow';
 import { Popover, message } from 'antd';
 import { useNavigate } from 'react-router';
 import SharePopover from './SharePopover';
+/**
+ * 侧边栏组件
+ * @param {Object} props - 组件属性
+ * @param {Object} props.video - 当前播放的视频信息
+ * @param {Function} props.handleComments - 处理评论的函数
+ * @param {Function} props.handleModal - 处理登录注册模态框的函数
+ * @param {number} props.trueIndex - 视频在列表中的真实索引
+ * @param {Function} props.changeVideos - 改变本地视频信息的函数
+ * @returns {JSX.Element} 侧边栏组件
+ */
 function Sidebar({ video, handleComments, handleModal, trueIndex, changeVideos }) {
     const logout = useSelector(state => state?.loginRegister?.logout);
     const token = useSelector(state => state?.loginRegister?.token);
     const id = useSelector(state => state?.loginRegister?.user_id);
     const navigate = useNavigate();
+    /**
+     * 处理点赞事件
+     * @function
+     * @memberof module:Sidebar
+     * @returns {void}
+     */
     function handleLike() {
         if (logout) handleModal();
         else {
-            if (video.is_favorite) postCancelLike(video.id, token).then(res => {
+            if (video?.is_favorite) postCancelLike(video?.id, token).then(res => {
                 switch (res.status_code) {
                     case 0:
                         // changeVideos(trueIndex, 'favorite_count', parseInt(video.favorite_count - 1))
@@ -50,7 +70,7 @@ function Sidebar({ video, handleComments, handleModal, trueIndex, changeVideos }
                 });
                 console.log(err);
             })
-            else postLike(video.id, token).then(res => {
+            else postLike(video?.id, token).then(res => {
                 switch (res.status_code) {
                     case 0:
                         // changeVideos(trueIndex, 'favorite_count', parseInt(video.favorite_count + 1))
@@ -81,6 +101,12 @@ function Sidebar({ video, handleComments, handleModal, trueIndex, changeVideos }
             })
         }
     }
+
+    /**
+     * 处理关注/取消关注事件
+     * @param {Event} e - 事件对象
+     * @returns {void}
+     */
     function handleFollow(e) {
         e.stopPropagation();
         if (logout) handleModal();
@@ -152,31 +178,32 @@ function Sidebar({ video, handleComments, handleModal, trueIndex, changeVideos }
     }
 
     function handleUserpage() {
-        navigate(`/personal/?user_id=${video.author.id}`)
+        navigate(`/personal/?user_id=${video?.author?.id}`)
     }
+    
     return (
         <div className={styles.sidebarContainer}>
             <div className={styles.sidebar}>
                 <div className={styles.avatar} style={{
-                    backgroundImage: `url(${video.author.avatar})`,
+                    backgroundImage: `url(${video?.author?.avatar})`,
                     backgroundSize: 'cover',
                 }} onClick={handleUserpage}>
-                    {id !== video.author.id &&
-                        <div className={video.author.is_follow ? styles.followed : styles.follow} onClick={e => handleFollow(e)}>{video.author.is_follow ? "✔" : "+"}</div>
+                    {id !== video?.author?.id &&
+                        <div className={video?.author?.is_follow ? styles.followed : styles.follow} onClick={e => handleFollow(e)}>{video?.author?.is_follow ? "✔" : "+"}</div>
                     }
                 </div>
                 <div className={styles.like}>
-                    <div><HeartFilled className={`${video.is_favorite && styles.liked} ${styles.icon}`} onClick={handleLike} /></div>
-                    <div className={styles.number}>{video.favorite_count}</div>
+                    <div><HeartFilled className={`${video?.is_favorite && styles.liked} ${styles.icon}`} onClick={handleLike} /></div>
+                    <div className={styles.number}>{video?.favorite_count}</div>
                 </div>
                 <div className={styles.comment}>
                     <div><BiSolidCommentDots className={styles.icon} onClick={handleComments} /></div>
-                    <div className={styles.number}>{video.comment_count}</div>
+                    <div className={styles.number}>{video?.comment_count}</div>
                 </div>
                 <Popover content={<SharePopover video={video}></SharePopover>} trigger="hover" placement='right'>
                     <div className={styles.share}>
                         <div><BiSolidShare className={styles.icon}/></div>
-                        <div className={styles.number}>{video.share_count}</div>
+                        <div className={styles.number}>{video?.share_count}</div>
                     </div>
                 </Popover>
             </div>

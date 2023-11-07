@@ -1,8 +1,12 @@
+/**
+ * @file Header组件，包含导航栏，搜索框，上传，私信，登录按钮或个人信息头像
+ * @module Header
+ */
 import { Link } from 'react-router-dom';
 import styles from '../assets/styles/Header.module.css';
 import { FiUpload } from 'react-icons/fi';
 import { Modal, Form, Input, Button, message, Popover } from 'antd';
-import { useEffect, useState, useRef } from 'react';
+import { useEffect, useState } from 'react';
 import { BiShare, BiSearchAlt2 } from 'react-icons/bi';
 import { AiOutlineHeart, AiOutlineMessage, AiOutlineMore } from 'react-icons/ai';
 import { useDispatch } from 'react-redux';
@@ -15,21 +19,86 @@ import MessagePopover from './MessagePopover';
 import { loginFailure, loginRequest, loginSuccess, logOut, registerFailure, registerRequest, registerSuccess } from '../redux/actions/loginRegisterAction';
 import { getFriendList, getMessages } from '../utils/getMessage';
 import UploadPopover from './UploadPopover';
-import SharePopover from './SharePopover';
+/**
+ * Header组件
+ * @param {Object} props - 组件属性
+ * @param {boolean} props.visible - 登录modal是否可见
+ * @param {function} props.handleModal - 登录modal的显示/隐藏函数
+ * @param {function} props.setChooseClass - 设置主页视频的类别
+ * @param {string} props.chooseClass - 视频选择的类别
+ * @returns {JSX.Element} Header组件
+ */
 function Header({ visible, handleModal, setChooseClass, chooseClass }) {
-    const [choose, setChoose] = useState([true, false]);//登录注册选择
-    const [search, setSearch] = useState('');//搜索框内容
-    const [info, setInfo] = useState(localStorage.getItem("info") ? JSON.parse(localStorage.getItem("info")) : null);//先从本地缓存获取个人信息
+    /**
+     * 登录注册选择状态
+     * @type {Array}
+     */
+    const [choose, setChoose] = useState([true, false]);
+    /**
+     * 搜索框内容
+     * @type {string}
+     */
+    const [search, setSearch] = useState('');
+    /**
+     * 个人信息
+     * @type {Object}
+     */
+    const [info, setInfo] = useState(localStorage.getItem("info") ? JSON.parse(localStorage.getItem("info")) : null);
+    /**
+     * 是否登出
+     * @type {boolean}
+     */
     const logout = useSelector(state => state?.loginRegister?.logout);
+    /**
+     * 是否正在登录
+     * @type {boolean}
+     */
     const loginWaiting = useSelector(state => state?.loginRegister?.loginWaiting);
+    /**
+     * 是否正在注册
+     * @type {boolean}
+     */
     const registerWaiting = useSelector(state => state?.loginRegister?.registerWaiting);
-    const [visiblePopover, setVisiblePopover] = useState(false);//个人页popover是否可见
+    /**
+     * 个人页popover是否可见
+     * @type {boolean}
+     */
+    const [visiblePopover, setVisiblePopover] = useState(false);
+    /**
+     * 用户id
+     * @type {string}
+     */
     const id = useSelector(state => state?.loginRegister?.user_id);
+    /**
+     * 用户token
+     * @type {string}
+     */
     const token = useSelector(state => state?.loginRegister?.token);
-    const [messageVisible, setMessageVisible] = useState(false);//私信页popover是否可见
-    const [uploadVisible, setUploadVisible] = useState(false);//上传视频页popover是否可见
+    /**
+     * 私信页popover是否可见
+     * @type {boolean}
+     */
+    const [messageVisible, setMessageVisible] = useState(false);
+    /**
+     * 上传视频页popover是否可见
+     * @type {boolean}
+     */
+    const [uploadVisible, setUploadVisible] = useState(false);
+    /**
+     * 路由导航
+     * @type {function}
+     */
     const navigate = useNavigate();
+    /**
+     * redux dispatch函数
+     * @type {function}
+     */
     const dispatch = useDispatch();
+    /**
+     * 获取个人信息
+     * @param {string} id - 用户id
+     * @param {string} token - 用户token
+     */
     useEffect(() => {
         getPersonalInfo(id, token).then(res => {
             switch (res.status_code) {
@@ -66,7 +135,13 @@ function Header({ visible, handleModal, setChooseClass, chooseClass }) {
 
             }
         }
-    }, [id, token, visiblePopover])//每次个人页modal可见的时候都重新获取个人信息
+    }, [id, token, visiblePopover])
+    /**
+     * 登录表单提交函数
+     * @param {Object} values - 表单值
+     * @param {string} values.username - 用户名
+     * @param {string} values.password - 密码
+     */
     function onFinishLogin(values) {
         dispatch(loginRequest());
         message.loading({
@@ -85,7 +160,7 @@ function Header({ visible, handleModal, setChooseClass, chooseClass }) {
                     })
                     dispatch(loginSuccess(values.username, res.token, res.status_msg, res.user_id));
                     localStorage.setItem("token", res.token);
-                    getFriendList(res.user_id, res.token).then(res => {//登录成功后获取好友列表
+                    getFriendList(res.user_id, res.token).then(res => {
                         switch (res.status_code) {
                             case 0:
                                 localStorage.setItem("friend_list", JSON.stringify(res.user_list));
@@ -117,6 +192,12 @@ function Header({ visible, handleModal, setChooseClass, chooseClass }) {
             dispatch(loginFailure(err));
         })
     }
+    /**
+     * 注册表单提交函数
+     * @param {Object} values - 表单值
+     * @param {string} values.username - 用户名
+     * @param {string} values.password - 密码
+     */
     function onFinishRegister(values) {
         dispatch(registerRequest());
         message.loading({

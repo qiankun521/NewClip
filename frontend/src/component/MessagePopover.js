@@ -1,3 +1,7 @@
+/**
+ * @file 消息弹窗组件
+ * @module MessagePopover
+ */
 import styles from '../assets/styles/MessagePopover.module.css';
 import { useEffect, useState,useRef } from 'react';
 import { useSelector } from 'react-redux';
@@ -5,20 +9,66 @@ import { getFriendList, getMessages, sendMessage } from '../utils/getMessage';
 import { BsSendFill } from 'react-icons/bs';
 import { AiFillCloseCircle } from 'react-icons/ai';
 import transfromTime from '../utils/transformTime';
+/**
+ * 消息弹窗组件
+ * @param {Object} props - 组件属性
+ * @param {Function} props.handleMessage - 关闭消息弹窗的回调函数
+ * @returns {JSX.Element} 消息弹窗组件
+ */
 function MessagePopover({handleMessage}) {
+    /**
+     * 用户登录token
+     * @type {string}
+     */
     const token = useSelector(state => state?.loginRegister?.token);
+    /**
+     * 用户id
+     * @type {string}
+     */
     const user_id = useSelector(state => state?.loginRegister?.user_id);
-    const [messages, setMessages] = useState(localStorage.getItem('messages')?JSON.parse(localStorage.getItem('messages')):{});//消息列表
-    const [list, setList] = useState(localStorage.getItem('friend_list')?JSON.parse(localStorage.getItem('friend_list')):[]);//好友列表
-    const [friendIndex, setFriendIndex] = useState(0);//当前聊天好友的索引
+    /**
+     * 好友的消息列表
+     * @type {Object}
+     */
+    const [messages, setMessages] = useState(localStorage.getItem('messages')?JSON.parse(localStorage.getItem('messages')):{});
+    /**
+     * 好友列表
+     * @type {Array}
+     */
+    const [list, setList] = useState(localStorage.getItem('friend_list')?JSON.parse(localStorage.getItem('friend_list')):[]);
+    /**
+     * 当前聊天好友的索引
+     * @type {number}
+     */
+    const [friendIndex, setFriendIndex] = useState(0);
+    /**
+     * 用户信息
+     * @type {Object|undefined}
+     */
     const info = localStorage.getItem("info") ? JSON.parse(localStorage.getItem("info")) : undefined;
+    /**
+     * 输入框的值
+     * @type {string}
+     */
     const [inputValue, setInputValue] = useState("");
+    /**
+     * 消息列表的滚动条
+     * @type {Object}
+     */
     const scrollRef = useRef(null);
+
+    /**
+     * 组件挂载时，滚动到消息列表的底部
+     */
     useEffect(() => {
         if (scrollRef.current) {
             scrollRef.current.scrollTop = scrollRef.current.scrollHeight;
-        }// 开始进入消息列表时，显示最新的消息
+        }
     },[])
+
+    /**
+     * 轮询刷新好友列表
+     */
     useEffect(() => {
         const intervalId = setInterval(() => {
             getFriendList(user_id, token).then(res => {
@@ -36,8 +86,12 @@ function MessagePopover({handleMessage}) {
             })
 
         }, 1000);
-        return () => clearInterval(intervalId);//轮询刷新好友列表
+        return () => clearInterval(intervalId);
     }, [])
+
+    /**
+     * 轮询刷新消息列表，依赖于好友列表
+     */
     useEffect(() => {
         const intervalId = setInterval(() => {
             if (list.length > 0) {
@@ -45,8 +99,7 @@ function MessagePopover({handleMessage}) {
                     getMessages(token, list[i].id).then(res => {
                         switch (res.status_code) {
                             case 0:
-                                //setMessages({ ...messages, [list[i].id]: res.message_list });
-                                setMessages(prevMessages => ({//使用循环的时候直接更新可能会依赖同一个旧状态，会使界面一直重复渲染，使用函数式更新可以避免这个问题
+                                setMessages(prevMessages => ({
                                     ...prevMessages,
                                     [list[i].id]: res.message_list
                                 }));
@@ -60,22 +113,30 @@ function MessagePopover({handleMessage}) {
                     })
                 }
             }
-            return () => clearInterval(intervalId);//轮询刷新消息列表，依赖于好友列表
+            return () => clearInterval(intervalId);
         }, 1000);
     },[])
+
+    /**
+     * 监听消息列表的变化，更新本地存储
+     */
     useEffect(() => {
         localStorage.setItem('messages', JSON.stringify(messages));
     }, [messages]);    
+
+    /**
+     * 处理发送消息的函数
+     */
     function handleSendMessage() {
+        setInputValue("");
         sendMessage(token, list[friendIndex].id, inputValue).then(res => {
             switch (res.status_code) {
                 case 0:
-                    setInputValue("");
                     if (scrollRef.current) {
                         setTimeout(() => {
                             scrollRef.current.scrollTop = scrollRef.current.scrollHeight;
-                        },800);//延迟800ms滚动，否则无法做到滚动到最新消息，因为消息列表还没有更新
-                    }//TODO 找到更好的解决办法
+                        },800);
+                    }
                     break;
                 case -1:
                     console.log(res.status_msg);
@@ -87,6 +148,7 @@ function MessagePopover({handleMessage}) {
             console.log(err);
         })
     }
+
     return (
         <div className={styles.messageContainer} onWheel={(e) => e.stopPropagation()}>
             <div className={styles.left}>

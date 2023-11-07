@@ -1,3 +1,7 @@
+/**
+ * @file 搜索页面组件
+ * @module Searchpage
+ */
 import { useSearchParams } from "react-router-dom";
 import { useEffect, useState } from "react";
 import styles from '../../assets/styles/Searchpage.module.css';
@@ -6,9 +10,10 @@ import { useSelector } from "react-redux";
 import { message } from 'antd';
 import SingleVideo from "../SingleVideo";
 import Video from "../Video";
+
 /**
  * 搜索页面组件
- * @param {Object} handleModal - 处理模态框的函数
+ * @param {Object} handleModal - 处理登录注册模态框的函数
  * @returns {JSX.Element} 搜索页面组件
  */
 function Searchpage({ handleModal }) {
@@ -56,11 +61,10 @@ function Searchpage({ handleModal }) {
     }, [keyword, token])
 
     /**
-     * 处理视频点击事件
-     * @param {Object} data - 视频数据
-     * @param {number} trueIndex - 视频在本次搜索请求得到的数组中的真实下标
+     * 处理搜索页的视频点击事件
+     * @param {number} trueIndex - 视频在本次搜索请求得到的数组中的真实下标，传递给video组件
      */
-    function handleClick(data,trueIndex) {
+    function handleClick(trueIndex) {
         setVisible(true);
         setTrueIndex(trueIndex);
     }

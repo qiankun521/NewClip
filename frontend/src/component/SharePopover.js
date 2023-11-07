@@ -1,3 +1,7 @@
+/**
+ * @file 分享弹窗组件
+ * @module SharePopover
+ */
 import styles from '../assets/styles/SharePopover.module.css';
 import { useSelector } from 'react-redux';
 import { useState } from 'react';
@@ -5,6 +9,12 @@ import { AiOutlineQrcode } from 'react-icons/ai';
 import { AiOutlineLink } from 'react-icons/ai';
 import { message, Space, QRCode, Popover } from 'antd';
 import { sendMessage } from '../utils/getMessage';
+/**
+ * 分享弹窗组件
+ * @param {Object} props - 组件属性
+ * @param {Object} props.video - 视频对象，包含当前播放的视频信息
+ * @returns {JSX.Element} 分享弹窗组件
+ */
 function SharePopover({ video }) {
     const logout = useSelector(state => state?.loginRegister?.logout);
     const token = useSelector(state => state?.loginRegister?.token);
@@ -19,6 +29,14 @@ function SharePopover({ video }) {
             message.error('复制失败', err);
         }
     }
+    /**
+     * 处理分享操作
+     * @function
+     * @param {string} token - 用户令牌
+     * @param {string} friendId - 好友ID
+     * @param {string} inputValue - 分享内容
+     * @returns {Promise} - 返回一个Promise对象，resolve时返回一个对象，包含status_code和status_msg两个属性；reject时返回错误信息
+     */
     function handleShare() {
         sendMessage(token, friend_list[friendIndex].id, inputValue).then(res => {
             switch (res.status_code) {
@@ -47,7 +65,7 @@ function SharePopover({ video }) {
         )
     }
     return (
-        <div className={styles.sharePopover}>
+        <div className={styles.sharePopover} onWheel={(e)=>e.stopPropagation()}>
             {!logout && friend_list &&
                 <div className={styles.top}>
                     {friend_list.map((item, index) => {

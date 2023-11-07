@@ -1,8 +1,18 @@
+/**
+ * @file 个人弹出框组件
+ * @module PersonalPopover
+ */
 import styles from '../assets/styles/PersonalPopover.module.css';
 import { BsPersonHeart,BsPersonHearts } from 'react-icons/bs';
 import { AiFillHeart } from 'react-icons/ai';
 import { AiFillVideoCamera } from 'react-icons/ai';
 import { useNavigate } from 'react-router';
+/**
+ * 个人弹出框组件
+ * @param {Object} info - 个人信息对象，包括name、follower_count、follow_count、favorite_count、work_count等属性
+ * @param {Function} handleLogout - 退出登录回调函数
+ * @returns {JSX.Element} - 返回个人弹出框组件的JSX元素
+ */
 function PersonalPopover({ info,handleLogout }) {
     const navigate = useNavigate();
     function handlePersonal(){

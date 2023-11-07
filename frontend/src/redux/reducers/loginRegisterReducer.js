@@ -1,6 +1,23 @@
+/**
+ * @file
+ * 这个文件包含了处理用户登录和注册的 reducer 函数
+ */
 const savedState=localStorage.getItem("loginRegisterState");//用于页面刷新后从本地存储中读取状态，只有在页面刷新时才会使用，初始状态在下面定义
 const initState={logout:true,username:"",token:"",user_id:"",error:"",loginWaiting:false,registerWaiting:false};
 const loginState=savedState?JSON.parse(savedState):initState;
+/**
+ * @function loginRegisterReducer
+ * @description 处理登录和注册的 reducer 函数
+ * @param {Object} state - 当前状态
+ * @param {Object} action - 分发的 action
+ * @param {string} action.type - action 类型
+ * @param {string} action.username - 用户名
+ * @param {string} action.token - 用户 token
+ * @param {string} action.success - 成功信息
+ * @param {string} action.error - 错误信息
+ * @param {string} action.user_id - 用户 ID
+ * @returns {Object} 新的状态
+ */
 const loginRegisterReducer=(state=loginState,action)=>{
     let newState;
     switch(action.type){

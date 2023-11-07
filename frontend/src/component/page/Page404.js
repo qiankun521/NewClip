@@ -1,4 +1,8 @@
 /**
+ * @file 页面404组件
+ * @module Page404
+ */
+/**
  * 页面404组件
  * @returns {JSX.Element} 页面404组件
  */

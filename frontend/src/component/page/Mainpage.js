@@ -1,3 +1,7 @@
+/**
+ * @file Mainpage.js是一个React组件，用于渲染主页。它包含了三个视频swiper，可以通过滑动或按键来切换视频swiper，通过更改swiper实际加载的视频达到改变视频的效果。同时，它还提供了音量控制、静音、评论区等功能。
+ * @module Mainpage
+ */
 import Video from "../Video";
 import { Swiper, SwiperSlide } from 'swiper/react';
 import { useRef, useEffect, useState } from "react";
@@ -5,12 +9,6 @@ import 'swiper/css';
 import 'swiper/css/pagination'
 import 'swiper/css/navigation'
 import styles from '../../assets/styles/Mainpage.module.css';
-
-/**
- * @file Mainpage.js是一个React组件，用于渲染主页。它包含了三个视频swiper，可以通过滑动或按键来切换视频swiper，通过更改swiper实际加载的视频达到改变视频的效果。同时，它还提供了音量控制、静音、评论区等功能。
- * @module Mainpage
- */
-
 /**
  * 主页面组件
  * @param {Object} props - 组件属性
