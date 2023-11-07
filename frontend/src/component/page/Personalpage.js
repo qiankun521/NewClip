@@ -10,24 +10,85 @@ import SingleVideo from '../SingleVideo';
 import { message } from 'antd';
 import { postFollow, postCancelFollow } from '../../utils/postFollow';
 import Video from '../Video';
+
+/**
+ * 个人主页组件
+ * @param {Object} handleModal - 处理登录注册模态框的函数
+ * @returns {JSX.Element} 个人主页组件
+ */
 function Personalpage({ handleModal }) {
+    /**
+     * 获取url中的searchParams
+     */
     const [searchParams] = useSearchParams();
+    /**
+     * 搜索参数用户id
+     */
     const user_id = searchParams.get('user_id');
+    /**
+     * 用户登录id
+     */
     const id = useSelector(state => state?.loginRegister?.user_id);
+    /**
+     * 下面将要使用的id，判断是否为用户自己的主页，如果是用户主页，使用user_id，否则使用id
+     */
     const trueId = user_id ? user_id : id;
+    /**
+     * 用户token
+     */
     const token = useSelector(state => state?.loginRegister?.token);
+    /**
+     * 用户信息
+     */
     const [info, setInfo] = useState(JSON.parse(localStorage.getItem("info")) || null);
+    /**
+     * 用户喜欢的视频列表
+     */
     const [like, setLike] = useState(null);
+    /**
+     * 用户作品列表
+     */
     const [work, setWork] = useState(null);
-    const [active, setActive] = useState(0);//0为作品，1为喜欢
+    /**
+     * 当前活跃的tab，0为用户主页作品栏，1为用户作品喜欢栏
+     */
+    const [active, setActive] = useState(0);
+    /**
+     * 用户是否登出
+     */
     const logout = useSelector(state => state?.loginRegister?.logout);
-    const [visible, setVisible] = useState(false);//视频是否可见
-    const [isPlaying, setIsPlaying] = useState(true);//是否播放
-    const [ismuted, setIsmuted] = useState(true);//设置是否静音
-    const [volume, setVolume] = useState(0);//设置音量，全局通用
-    const [showComments, setShowComments] = useState(false);//是否显示评论区
-    const [trueIndex, setTrueIndex] = useState(0);//在个人主页的视频真实下标，因为作品和喜欢互斥，trueindex可以复用
+    /**
+     * 视频是否可见
+     */
+    const [visible, setVisible] = useState(false);
+    /**
+     * 视频是否正在播放
+     */
+    const [isPlaying, setIsPlaying] = useState(true);
+    /**
+     * 视频是否静音
+     */
+    const [ismuted, setIsmuted] = useState(true);
+    /**
+     * 视频音量
+     */
+    const [volume, setVolume] = useState(0);
+    /**
+     * 是否显示评论区
+     */
+    const [showComments, setShowComments] = useState(false);
+    /**
+     * 在个人主页的视频真实下标，因为作品和喜欢互斥，trueindex可以复用
+     */
+    const [trueIndex, setTrueIndex] = useState(0);
+    /**
+     * 路由导航
+     */
     const navigate = useNavigate();
+
+    /**
+     * 获取个人信息，作品列表、喜欢列表
+     */
     useEffect(() => {
         if (logout && user_id === null) {
             navigate('/');
@@ -77,6 +138,10 @@ function Personalpage({ handleModal }) {
             console.log(err);
         })
     }, [trueId, token, id, logout, navigate, user_id, visible])
+
+    /**
+     * 处理关注/取消关注
+     */
     function handleFollow() {
         if (logout) handleModal();
         else {
@@ -139,25 +204,52 @@ function Personalpage({ handleModal }) {
             })
         }
     }
+
+    /**
+     * 处理私信
+     */
     function handleMessage() {
         //TODO 私信
     }
-    function handleClick(data, trueIndex) {//复制点开视频的处理
+
+    /**
+     * 点击视频处理
+     * @param {Object} data - 视频数据
+     * @param {number} trueIndex - 真实下标
+     */
+    function handleClick(data, trueIndex) {
         setTrueIndex(trueIndex);
         console.log(trueIndex);
         setVisible(true);
     }
+
+    /**
+     * 处理静音
+     */
     function handleMuted() {
         if (ismuted) setVolume(0.5);
         else setVolume(0);
         setIsmuted(!ismuted);
     }
+
+    /**
+     * 处理音量
+     * @param {number} state - 音量值
+     */
     function handleVolume(state) {
         setVolume(parseFloat(state));
         if (parseFloat(state) === 0) setIsmuted(true);
         else setIsmuted(false);
     }
-    function changeVideos0(trueIndex, newState, isChild = false, childName = "") {//修改本地个人作品数据work
+
+    /**
+     * 修改本地个人作品数据work
+     * @param {number} trueIndex - 真实下标
+     * @param {Object} newState - 新状态
+     * @param {boolean} isChild - 是否为嵌套子元素
+     * @param {string} childName - 嵌套子元素名称
+     */
+    function changeVideos0(trueIndex, newState, isChild = false, childName = "") {
         if (!isChild) {
             const newVideos = work.map((item, index) => {
                 return index === trueIndex ? { ...item, ...newState } : item
@@ -170,6 +262,13 @@ function Personalpage({ handleModal }) {
             setWork(newVideos);
         }
     }
+    /**
+     * 修改本地个人喜欢数据like
+     * @param {number} trueIndex - 真实下标
+     * @param {Object} newState - 新状态
+     * @param {boolean} isChild - 是否为嵌套子元素
+     * @param {string} childName - 嵌套子元素名称
+     */
     function changeVideos1(trueIndex, newState, isChild = false, childName = "") {//修改本地个人喜欢数据like
         if (!isChild) {
             const newVideos = like.map((item, index) => {
@@ -183,6 +282,13 @@ function Personalpage({ handleModal }) {
             setLike(newVideos);
         }
     }
+    /**
+     * 判断修改哪个个人主页数据的函数
+     * @param {number} trueIndex - 真实下标
+     * @param {Object} newState - 新状态
+     * @param {boolean} isChild - 是否为嵌套子元素
+     * @param {string} childName - 嵌套子元素名称
+     */
     function changeVideos(trueIndex, newState, isChild = false, childName = "") {//修改本地数据
         if (active === 0) changeVideos0(trueIndex, newState, isChild, childName);
         else changeVideos1(trueIndex, newState, isChild, childName);

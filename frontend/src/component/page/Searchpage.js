@@ -6,7 +6,15 @@ import { useSelector } from "react-redux";
 import { message } from 'antd';
 import SingleVideo from "../SingleVideo";
 import Video from "../Video";
+/**
+ * 搜索页面组件
+ * @param {Object} handleModal - 处理模态框的函数
+ * @returns {JSX.Element} 搜索页面组件
+ */
 function Searchpage({ handleModal }) {
+    /**
+     * 获取搜索参数
+     */
     const [searchParams] = useSearchParams();
     const keyword = searchParams.get('keyword');
     const token = useSelector(state => state?.loginRegister?.token);
@@ -17,6 +25,10 @@ function Searchpage({ handleModal }) {
     const [volume, setVolume] = useState(0);//设置音量，全局通用
     const [showComments, setShowComments] = useState(false);//是否显示评论区
     const [trueIndex, setTrueIndex] = useState(0);//点开的视频在本次搜索请求得到的数组中的真实下标
+
+    /**
+     * 获取搜索结果
+     */
     useEffect(() => {
         message.loading({
             content: '加载中...',
@@ -42,20 +54,43 @@ function Searchpage({ handleModal }) {
             message.destroy();
         }
     }, [keyword, token])
+
+    /**
+     * 处理视频点击事件
+     * @param {Object} data - 视频数据
+     * @param {number} trueIndex - 视频在本次搜索请求得到的数组中的真实下标
+     */
     function handleClick(data,trueIndex) {
         setVisible(true);
         setTrueIndex(trueIndex);
     }
+
+    /**
+     * 处理静音事件
+     */
     function handleMuted() {
         if (ismuted) setVolume(0.5);
         else setVolume(0);
         setIsmuted(!ismuted);
     }
+
+    /**
+     * 处理音量事件
+     * @param {string} state - 音量状态
+     */
     function handleVolume(state) {
         setVolume(parseFloat(state));
         if (parseFloat(state) === 0) setIsmuted(true);
         else setIsmuted(false);
     }
+
+    /**
+     * 修改本次搜索结果的数据
+     * @param {number} trueIndex - 视频在本次搜索请求得到的数组中的真实下标
+     * @param {Object} newState - 新的状态
+     * @param {boolean} isChild - 是否为嵌套数据
+     * @param {string} childName - 嵌套数据的名称
+     */
     function changeVideos(trueIndex, newState, isChild = false, childName = "") {//对于搜索页、个人主页视频的sidebar以及评论操作，修改本次请求得到的数据
         if (!isChild) {
             const newVideos = data.map((item, index) => {
@@ -69,6 +104,7 @@ function Searchpage({ handleModal }) {
             setData(newVideos);
         }
     }
+
     return (
         <div className={styles.Searchpage}>
             {data && data.length !== 0 ?

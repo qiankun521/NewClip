@@ -1,3 +1,7 @@
+/**
+ * 页面404组件
+ * @returns {JSX.Element} 页面404组件
+ */
 function Page404() {
   return (
     <div style={{
