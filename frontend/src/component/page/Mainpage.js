@@ -242,7 +242,6 @@ function Mainpage({ handleModal, videos, changeVideos, updateVideos }) {
         if (parseFloat(state) === 0) setIsmuted(true);
         else setIsmuted(false);
     }
-
     /**
      * 控制评论区显示的函数
      */

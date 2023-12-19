@@ -87,7 +87,7 @@ function MessagePopover({handleMessage}) {
 
         }, 1000);
         return () => clearInterval(intervalId);
-    }, [])
+    }, [token, user_id])
 
     /**
      * 轮询刷新消息列表，依赖于好友列表
@@ -115,7 +115,7 @@ function MessagePopover({handleMessage}) {
             }
             return () => clearInterval(intervalId);
         }, 1000);
-    },[])
+    },[list, token])
 
     /**
      * 监听消息列表的变化，更新本地存储

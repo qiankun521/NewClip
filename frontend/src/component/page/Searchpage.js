@@ -10,7 +10,6 @@ import { useSelector } from "react-redux";
 import { message } from 'antd';
 import SingleVideo from "../SingleVideo";
 import Video from "../Video";
-
 /**
  * 搜索页面组件
  * @param {Object} handleModal - 处理登录注册模态框的函数

@@ -21,7 +21,7 @@ import { message } from 'antd';
  * @param {Function} props.handleModal - 打开登录/注册模态框的回调函数
  * @returns {JSX.Element} - 评论区组件
  */
-function CommentArea({ haveComments, comments, video, handleComments, update, handleModal }) {
+function CommentArea({ haveComments, comments, video, handleComments, update, handleModal,trueIndex,changeVideos }) {
     const [commentValue, setCommentValue] = useState(""); // 评论输入框的值
     const logout = useSelector(state => state.loginRegister.logout); // 是否已注销
     const token = useSelector(state => state.loginRegister.token); // 用户 token
@@ -31,7 +31,13 @@ function CommentArea({ haveComments, comments, video, handleComments, update, ha
     function handleSendMessage() {
         if (logout) handleModal(); // 如果已注销，打开登录/注册模态框
         else {
+            message.loading({
+                content: '发送中...',
+                key: 'comment',
+                duration: 0
+            }); // 显示加载中提示
             postComment(token, video.id, 1, commentValue).then((data) => {
+                message.destroy();
                 switch (data.status_code) {
                     case 0:
                         setTimeout(update, 10); // 延迟 10ms 更新评论，后端出现了同步问题返回脏数据
@@ -41,6 +47,9 @@ function CommentArea({ haveComments, comments, video, handleComments, update, ha
                             key: 'comment',
                             duration: 1,
                         })
+                        changeVideos(trueIndex,{
+                            comment_count:parseInt(video.comment_count+1)
+                        });
                         break;
                     case -1:
                         message.error({

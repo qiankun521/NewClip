@@ -22,11 +22,13 @@ function SharePopover({ video }) {
     const [friendIndex, setFriendIndex] = useState(0);
     const inputValue = "我正在看@" + video?.author.name + "的视频《" + video?.title + "》，快来一起看吧！";
     const copyToClipboard = async () => {
+        
         try {
             await navigator.clipboard.writeText(window.location.href);
-            message.success("网址已复制到剪切板")
+            message.success("网址已复制到剪切板");
         } catch (err) {
-            message.error('复制失败', err);
+            console.log(err);
+            message.error('复制失败');
         }
     }
     /**

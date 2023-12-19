@@ -76,9 +76,6 @@ function UploadPopover({ handleUpload }) {
             topic: topic,
         },
         action: `${process.env.REACT_APP_API_URL}:${process.env.REACT_APP_API_PORT}${process.env.REACT_APP_API_PATH}/publish/action/`,
-        headers: {
-            authorization: 'authorization-text',
-        },
         onChange(info) {
             message.loading({
                 content: '上传中...',
@@ -101,7 +98,6 @@ function UploadPopover({ handleUpload }) {
 
     return (
         <div className={styles.uploadContainer}>
-
             <div className={styles.title}>
                 <TextArea
                     showCount

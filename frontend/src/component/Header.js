@@ -242,6 +242,10 @@ function Header({ visible, handleModal, setChooseClass, chooseClass }) {
     }
     function handleSearch() {
         if (search !== "") {
+            if(search.length<2){
+                message.warning("请至少输入两个字！")
+                return;
+            }
             navigate('/search?keyword=' + search);
             setSearch('');
         }
@@ -278,9 +282,9 @@ function Header({ visible, handleModal, setChooseClass, chooseClass }) {
                     </div>
                     <nav className={styles.navlinks}>
                         <Link className={`${styles.link} ${chooseClass === 0 && styles.choose}`} to="/" onClick={() => setChooseClass(0)}>首页</Link>
-                        <div className={`${styles.link} ${chooseClass === 1 && styles.choose}`} onClick={() => setChooseClass(1)}>体育</div>
-                        <div className={`${styles.link} ${chooseClass === 2 && styles.choose}`} onClick={() => setChooseClass(2)}>游戏</div>
-                        <div className={`${styles.link} ${chooseClass === 3 && styles.choose}`} onClick={() => setChooseClass(3)}>音乐</div>
+                        <Link className={`${styles.link} ${chooseClass === 1 && styles.choose}`} to='/' onClick={() => setChooseClass(1)}>体育</Link>
+                        <Link className={`${styles.link} ${chooseClass === 2 && styles.choose}`} to='/' onClick={() => setChooseClass(2)}>游戏</Link>
+                        <Link className={`${styles.link} ${chooseClass === 3 && styles.choose}`} to='/' onClick={() => setChooseClass(3)}>音乐</Link>
                     </nav>
                     <div className={styles.searchInput}>
                         <input type="text" placeholder="请输入搜索关键词" value={search} onChange={(e) => { setSearch(e.target.value) }} onKeyDown={handleKeydown} />

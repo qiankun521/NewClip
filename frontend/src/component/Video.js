@@ -29,6 +29,7 @@ import { useEffect, useRef, useState } from 'react';
  * @returns {JSX.Element} 视频组件
  */
 function Video({ video, isPlaying, handlePlaying, ismuted, handleMuted, volume, handleVolume, showComments, handleComments, handleModal, trueIndex, changeVideos }) {
+    console.log(trueIndex)
     const [played, setPlayed] = useState(0);//播放进度
     const [haveComments, setHaveComments] = useState(false);//是否获取到评论
     const [comments, setComments] = useState([]);//评论
@@ -76,7 +77,7 @@ function Video({ video, isPlaying, handlePlaying, ismuted, handleMuted, volume, 
 
     useEffect(()=>{
         get();// eslint-disable-next-line
-    },[haveComments])
+    },[haveComments,video])
     
     return (
         <div className={styles.outside}>
@@ -114,7 +115,7 @@ function Video({ video, isPlaying, handlePlaying, ismuted, handleMuted, volume, 
                     </Controls>
                 </div>
             </div>
-            {showComments && <CommentArea handleModal={handleModal} update={get} video={video} haveComments={haveComments} comments={comments} handleComments={handleComments}></CommentArea>}
+            {showComments && <CommentArea trueIndex={trueIndex} changeVideos={changeVideos} handleModal={handleModal} update={get} video={video} haveComments={haveComments} comments={comments} handleComments={handleComments}></CommentArea>}
         </div>
     )
 }
