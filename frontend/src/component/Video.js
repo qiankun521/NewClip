@@ -23,7 +23,8 @@ import { useEffect, useRef, useState } from 'react';
  * @param {Function} props.handleVolume - 处理音量大小的函数
  * @param {boolean} props.showComments - 是否显示评论区
  * @param {Function} props.handleComments - 处理评论区显示状态的函数
- * @param {Function} props.handleModal - 处理登录注册模态框显示状态的函数
+ * @param {Function} props.
+ * handleModal - 处理登录注册模态框显示状态的函数
  * @param {number} props.trueIndex - 当前视频在视频列表中的真实索引
  * @param {Function} props.changeVideos - 处理本地视频列表数据的函数
  * @returns {JSX.Element} 视频组件
@@ -75,10 +76,10 @@ function Video({ video, isPlaying, handlePlaying, ismuted, handleMuted, volume, 
         })
     }
 
-    useEffect(()=>{
+    useEffect(() => {
         get();// eslint-disable-next-line
-    },[haveComments,video])
-    
+    }, [haveComments, video])
+
     return (
         <div className={styles.outside}>
             <img src={video?.cover_url} alt="background" />{/*背景模糊图*/}

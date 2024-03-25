@@ -19,28 +19,24 @@ import styles from '../../assets/styles/Mainpage.module.css';
  * @returns {JSX.Element} - 返回主页面组件的JSX元素
  */
 function Mainpage({ handleModal, videos, changeVideos, updateVideos }) {
-
     /**
      * 上一次播放视频的swiper的真正index
      * @type {Object} useRef
      * @property {number} current - 上一次播放视频的swiper的indexref
      */
     const realPrevIndex = useRef(0);
-
     /**
      * 用于获取swiper的ref
      * @type {Object} useRef
      * @property {Object} current - 当前播放视频的swiper的ref
      */
     const swiperRef = useRef(null);
-
     /**
      * 用于获取当前swiper的真正index
      * @type {Object} useRef
      * @property {number} current - 当前swiper的真正index
      */
     const trueIndex = useRef(0);
-
     /**
      * 用于设置三个swiper的实际加载的视频
      * @type {Array} useState
@@ -48,7 +44,6 @@ function Mainpage({ handleModal, videos, changeVideos, updateVideos }) {
      * @property {Function} 1 - 设置三个swiper的实际加载的视频的函数
      */
     const [swiper, setSwiper] = useState(videos ? [0, 1, 2] : []);
-
     /**
      * 用于设置是否播放，仅当前视频自动播放
      * @type {Array} useState
@@ -56,7 +51,6 @@ function Mainpage({ handleModal, videos, changeVideos, updateVideos }) {
      * @property {Function} 1 - 设置是否播放的函数
      */
     const [isPlaying, setIsPlaying] = useState([true, false, false]);
-
     /**
      * 用于设置是否静音，状态提升全局通用
      * @type {Array} useState
@@ -64,7 +58,6 @@ function Mainpage({ handleModal, videos, changeVideos, updateVideos }) {
      * @property {Function} 1 - 设置是否静音的函数
      */
     const [ismuted, setIsmuted] = useState(true);
-
     /**
      * 用于设置是否可以滑动，适用于第一个和最后一个视频,0:上滑,1:下滑
      * @type {Array} useState
@@ -72,7 +65,6 @@ function Mainpage({ handleModal, videos, changeVideos, updateVideos }) {
      * @property {Function} 1 - 设置是否可以滑动的函数
      */
     const [canSLide, setCanSlide] = useState([false, true]);
-
     /**
      * 用于设置音量，全局通用
      * @type {Array} useState
@@ -80,7 +72,6 @@ function Mainpage({ handleModal, videos, changeVideos, updateVideos }) {
      * @property {Function} 1 - 设置音量的函数
      */
     const [volume, setVolume] = useState(0);
-
     /**
      * 用于设置是否显示评论区，全局通用
      * @type {Array} useState
@@ -88,7 +79,6 @@ function Mainpage({ handleModal, videos, changeVideos, updateVideos }) {
      * @property {Function} 1 - 设置是否显示评论区的函数
      */
     const [showComments, setShowComments] = useState(false);
-
     /**
      * useEffect钩子，用于添加滚轮和按键事件监听器
      */
