@@ -1,0 +1,33 @@
+name: Frontend CI
+on:
+  push:
+    branches: [ master ]
+  pull_request:
+    branches: [ master ]
+jobs:
+  build:
+    runs-on: ubuntu-latest
+    steps:
+    - uses: actions/checkout@v2 
+
+    - name: Change to frontend directory
+      run: cd frontend
+
+    - name: Setup Node.js environment
+      uses: actions/setup-node@v2.4.0
+      with:
+        node-version: '20' # 你可以修改这里的版本号，根据你的实际需求
+
+    - name: Cache dependencies
+      uses: actions/cache@v2
+      with:
+        path: ~/.npm
+        key: ${{ runner.OS }}-node-${{ hashFiles('**/package-lock.json') }}
+        restore-keys: |
+          ${{ runner.OS }}-node-
+
+    - name: Install dependencies
+      run: npm ci 
+
+    - name: Build and Test
+      run: npm run start #根据你的npm scripts修改，比如可能是 npm start 或者 npm test
