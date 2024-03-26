@@ -2,7 +2,7 @@
  * @file 用于展示关注以及粉丝列表的组件
  * @module FollowPopover
  */
-import styles from '../assets/styles/FollowPopover.module.less';
+import styles from '../assets/styles/FollowPopover.module.scss';
 import { useNavigate } from 'react-router';
 /**
  * FollowPopover组件

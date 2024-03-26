@@ -2,7 +2,7 @@
  * @file 单个评论组件
  * @module SingleComment
  */
-import styles from '../assets/styles/SingleComment.module.less';
+import styles from '../assets/styles/SingleComment.module.scss';
 import {AiOutlineMessage} from 'react-icons/ai';
 import {AiOutlineLike} from 'react-icons/ai';
 import {AiOutlineDislike} from 'react-icons/ai';

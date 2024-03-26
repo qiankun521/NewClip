@@ -2,7 +2,7 @@
  * @file 个人弹出框组件
  * @module PersonalPopover
  */
-import styles from '../assets/styles/PersonalPopover.module.less';
+import styles from '../assets/styles/PersonalPopover.module.scss';
 import { BsPersonHeart,BsPersonHearts } from 'react-icons/bs';
 import { AiFillHeart } from 'react-icons/ai';
 import { AiFillVideoCamera } from 'react-icons/ai';

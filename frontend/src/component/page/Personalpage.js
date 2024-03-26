@@ -2,7 +2,7 @@
  * @file 个人主页及用户主页组件
  * @module Personalpage
  */
-import styles from '../../assets/styles/Personalpage.module.less';
+import styles from '../../assets/styles/Personalpage.module.scss';
 import { useEffect, useState } from 'react';
 import getPersonalInfo from '../../utils/getPersonalInfo';
 import getPersonalLike from '../../utils/getPersonalLike';

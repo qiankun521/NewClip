@@ -2,7 +2,7 @@
  * @file 分享弹窗组件
  * @module SharePopover
  */
-import styles from '../assets/styles/SharePopover.module.less';
+import styles from '../assets/styles/SharePopover.module.scss';
 import { useSelector } from 'react-redux';
 import { useState } from 'react';
 import { AiOutlineQrcode } from 'react-icons/ai';

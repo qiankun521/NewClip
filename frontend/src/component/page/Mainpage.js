@@ -8,7 +8,7 @@ import { useRef, useEffect, useState } from "react";
 import 'swiper/css';
 import 'swiper/css/pagination'
 import 'swiper/css/navigation'
-import styles from '../../assets/styles/Mainpage.module.less';
+import styles from '../../assets/styles/Mainpage.module.scss';
 /**
  * 主页面组件
  * @param {Object} props - 组件属性

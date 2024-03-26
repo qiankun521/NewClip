@@ -2,7 +2,7 @@
  * @file 视频描述组件
  * @module Describe
  */
-import styles from '../assets/styles/Describe.module.less';
+import styles from '../assets/styles/Describe.module.scss';
 /**
  * @description 视频描述组件，用于展示用户名称和视频标题
  * @param {Object} props - 组件属性

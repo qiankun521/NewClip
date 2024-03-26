@@ -2,7 +2,7 @@
  * @file 视频播放器组件
  * @module Controls
  */
-import styles from '../assets/styles/Controls.module.less';
+import styles from '../assets/styles/Controls.module.scss';
 import { CaretRightOutlined } from '@ant-design/icons';
 import { PauseOutlined } from '@ant-design/icons';
 import formatSeconds from '../utils/formatSeconds';

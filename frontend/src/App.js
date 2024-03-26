@@ -1,4 +1,4 @@
-import './App.less';
+import './App.scss';
 import { useState, useEffect } from 'react';
 import { BrowserRouter as Router, Route, Routes } from 'react-router-dom';
 import Mainpage from './component/page/Mainpage';

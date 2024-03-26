@@ -2,7 +2,7 @@
  * @file 消息弹窗组件
  * @module MessagePopover
  */
-import styles from '../assets/styles/MessagePopover.module.less';
+import styles from '../assets/styles/MessagePopover.module.scss';
 import { useEffect, useState,useRef } from 'react';
 import { useSelector } from 'react-redux';
 import { getFriendList, getMessages, sendMessage } from '../utils/getMessage';
