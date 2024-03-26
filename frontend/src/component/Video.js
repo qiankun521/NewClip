@@ -2,7 +2,7 @@
  * @file 视频组件
  * @module Video
  */
-import styles from '../assets/styles/Video.module.css';
+import styles from '../assets/styles/Video.module.less';
 import ReactPlayer from 'react-player';
 import Controls from './Controls';
 import Describe from './Describe';

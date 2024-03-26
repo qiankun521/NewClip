@@ -2,7 +2,7 @@
  * @file 单个视频组件
  * @module SingleVideo
  */
-import styles from '../assets/styles/SingleVideo.module.css';
+import styles from '../assets/styles/SingleVideo.module.less';
 import { AiOutlineHeart } from 'react-icons/ai';
 
 /**

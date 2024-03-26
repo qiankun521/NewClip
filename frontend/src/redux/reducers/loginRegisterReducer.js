@@ -2,9 +2,8 @@
  * @file
  * 这个文件包含了处理用户登录和注册的 reducer 函数
  */
-const savedState = localStorage.getItem("loginRegisterState");//用于页面刷新后从本地存储中读取状态，只有在页面刷新时才会使用，初始状态在下面定义
 const initState = { logout: true, username: "", token: "", user_id: "", error: "", loginWaiting: false, registerWaiting: false };
-const loginState = savedState ? JSON.parse(savedState) : initState;
+const loginState = initState;
 /**
  * @function loginRegisterReducer
  * @description 处理登录和注册的 reducer 函数
@@ -46,7 +45,6 @@ const loginRegisterReducer = (state = loginState, action) => {
             newState = state;
             break;
     }
-    localStorage.setItem("loginRegisterState", JSON.stringify(newState));//每次dispatch后都会将状态存储到本地
     return newState;
 }
 

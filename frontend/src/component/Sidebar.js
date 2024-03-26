@@ -2,7 +2,7 @@
  * @file 侧边栏组件
  * @module Sidebar
  */
-import styles from '../assets/styles/Sidebar.module.css';
+import styles from '../assets/styles/Sidebar.module.less';
 import { HeartFilled } from '@ant-design/icons';
 import { BiSolidCommentDots } from 'react-icons/bi';
 import { BiSolidShare } from 'react-icons/bi';

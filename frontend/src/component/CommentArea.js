@@ -2,7 +2,7 @@
  * @file 评论区组件
  * @module CommentArea
  */
-import styles from '../assets/styles/CommentArea.module.css';
+import styles from '../assets/styles/CommentArea.module.less';
 import SingleComment from './SingleComment';
 import { TbSend } from 'react-icons/tb';
 import { useState } from 'react';

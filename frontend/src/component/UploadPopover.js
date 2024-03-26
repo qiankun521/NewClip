@@ -2,7 +2,7 @@
  * @file 上传弹出框组件
  * @module UploadPopover
  */
-import styles from '../assets/styles/UploadPopover.module.css';
+import styles from '../assets/styles/UploadPopover.module.less';
 import { Upload, message, Button } from 'antd';
 import { useSelector } from 'react-redux';
 import { UploadOutlined } from '@ant-design/icons';

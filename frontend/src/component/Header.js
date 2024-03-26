@@ -3,7 +3,7 @@
  * @module Header
  */
 import { Link } from 'react-router-dom';
-import styles from '../assets/styles/Header.module.css';
+import styles from '../assets/styles/Header.module.less';
 import { FiUpload } from 'react-icons/fi';
 import { Modal, Form, Input, Button, message, Popover } from 'antd';
 import { useEffect, useState } from 'react';

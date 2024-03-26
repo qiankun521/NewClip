@@ -4,7 +4,7 @@
  */
 import { useSearchParams } from "react-router-dom";
 import { useEffect, useState } from "react";
-import styles from '../../assets/styles/Searchpage.module.css';
+import styles from '../../assets/styles/Searchpage.module.less';
 import getSearchItem from "../../utils/getSearchItem";
 import { useSelector } from "react-redux";
 import { message } from 'antd';
