@@ -11,9 +11,9 @@ const videosReducer = (state = initState, action) => {
         const newVideos = state.videos.map((item, index) => {
           return index === action.trueIndex
             ? {
-                ...item,
-                [action.childName]: { ...item[action.childName], ...newVideos },
-              }
+              ...item,
+              [action.childName]: { ...item[action.childName], ...newVideos },
+            }
             : item;
         });
         return { ...state, videos: newVideos };
@@ -29,7 +29,7 @@ const videosReducer = (state = initState, action) => {
         ismuted: !state.ismuted,
       };
     default:
-      break;
+      return initState;
   }
 };
 export default videosReducer;
