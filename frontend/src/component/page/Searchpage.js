@@ -10,12 +10,8 @@ import { useSelector } from "react-redux";
 import { message } from 'antd';
 import SingleVideo from "../SingleVideo";
 import Video from "../Video";
-/**
- * 搜索页面组件
- * @param {Object} handleModal - 处理登录注册模态框的函数
- * @returns {JSX.Element} 搜索页面组件
- */
-function Searchpage({ handleModal }) {
+
+function Searchpage() {
     /**
      * 获取搜索参数
      */
@@ -125,7 +121,7 @@ function Searchpage({ handleModal }) {
                 <div className={styles.video}>
                     <Video video={data[trueIndex]} isPlaying={isPlaying} handlePlaying={() => setIsPlaying(!isPlaying)} changeVideos={changeVideos}
                         ismuted={ismuted} handleMuted={handleMuted} volume={volume} handleVolume={handleVolume} trueIndex={trueIndex}
-                        showComments={showComments} handleComments={() => setShowComments(!showComments)} handleModal={handleModal}
+                        showComments={showComments} handleComments={() => setShowComments(!showComments)}
                     ></Video>
                 </div>
             }

@@ -13,6 +13,7 @@
     z-index: 1;
     overflow-y: auto;
     overflow-x: hidden;
+    transition: width 0.5s linear;
 }
 .commentTop{
     width: 100%;

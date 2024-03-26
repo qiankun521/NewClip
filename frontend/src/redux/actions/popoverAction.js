@@ -28,3 +28,13 @@ export const hideUpload = () => {
         type: 'HIDE_UPLOAD'
     }
 }
+export const showComments = () => {
+    return {
+        type: 'SHOW_COMMENTS'
+    }
+}
+export const hideComments = () => {
+    return {
+        type: 'HIDE_COMMENTS'
+    }
+}
