@@ -10,7 +10,6 @@
     "@testing-library/user-event": "^13.5.0",
     "@vercel/analytics": "^1.2.2",
     "antd": "^5.10.2",
-    "node-sass": "^7.0.1",
     "rc-queue-anim": "^2.0.0",
     "react": "^18.2.0",
     "react-dom": "^18.2.0",
@@ -21,6 +20,7 @@
     "react-router-dom": "^6.17.0",
     "react-scripts": "5.0.1",
     "redux-persist": "^6.0.0",
+    "sass": "^1.72.0",
     "swiper": "^11.0.3",
     "web-vitals": "^2.1.4"
   },
