@@ -6,7 +6,7 @@
 
 [在线接口文档](https://apifox.com/apidoc/shared-20684cbc-1443-4521-b7cf-10aa0d1b8b23)
 
-[项目线上地址](https://www.newclip.cn/)
+[项目线上地址](https://www.newclip.cn/)：https://www.newclip.cn/
 
 [后端接口地址](http://newclip.cn.:8000/newclip/)
 
