@@ -21,11 +21,7 @@ import { hideComments, showComments, showLogin } from "../redux/actions/popoverA
  * @param {Function} props.changeVideos - 改变本地视频信息的函数
  * @returns {JSX.Element} 侧边栏组件
  */
-function Sidebar({
-  video,
-  trueIndex,
-  changeVideos,
-}) {
+function Sidebar({ video, trueIndex, changeVideos }) {
   const dispatch = useDispatch();
   const navigate = useNavigate();
   const logout = useSelector((state) => state?.loginRegister?.logout);
@@ -39,6 +35,7 @@ function Sidebar({
    * @returns {void}
    */
   function handleLike() {
+    e.stopPropagation();
     if (logout) dispatch(showLogin());
     else {
       if (video?.is_favorite)
@@ -55,27 +52,15 @@ function Sidebar({
                 });
                 break;
               case -1:
-                message.error({
-                  content: res.status_msg,
-                  key: "like",
-                  duration: 1,
-                });
+                message.error(res.status_msg, 1);
                 break;
               default:
-                message.error({
-                  content: "取消点赞失败",
-                  key: "like",
-                  duration: 1,
-                });
+                message.error("取消点赞失败", 1);
                 break;
             }
           })
           .catch((err) => {
-            message.error({
-              content: "取消点赞失败,请检查网络",
-              key: "like",
-              duration: 1,
-            });
+            message.error("取消点赞失败,请检查网络", 1);
             console.log(err);
           });
       else
@@ -83,8 +68,6 @@ function Sidebar({
           .then((res) => {
             switch (res.status_code) {
               case 0:
-                // changeVideos(trueIndex, 'favorite_count', parseInt(video.favorite_count + 1))
-                // changeVideos(trueIndex, "is_favorite", !video.is_favorite);
                 changeVideos(trueIndex, {
                   favorite_count: parseInt(video.favorite_count + 1),
                   is_favorite: !video.is_favorite,
@@ -113,11 +96,6 @@ function Sidebar({
     }
   }
 
-  /**
-   * 处理关注/取消关注事件
-   * @param {Event} e - 事件对象
-   * @returns {void}
-   */
   function handleFollow(e) {
     e.stopPropagation();
     if (logout) dispatch(showLogin());
@@ -139,27 +117,15 @@ function Sidebar({
                 break;
               case -1:
                 console.log(res.status_msg);
-                message.error({
-                  content: res.status_msg,
-                  key: "follow",
-                  duration: 1,
-                });
+                message.error(res.status_msg, 1);
                 break;
               default:
-                message.error({
-                  content: "取消关注失败",
-                  key: "follow",
-                  duration: 1,
-                });
+                message.error("取消关注失败", 1);
                 break;
             }
           })
           .catch((err) => {
-            message.error({
-              content: "取消关注失败,请检查网络",
-              key: "follow",
-              duration: 1,
-            });
+            message.error("取消关注失败,请检查网络", 1);
             console.log(err);
           });
       else
@@ -178,27 +144,15 @@ function Sidebar({
                 );
                 break;
               case -1:
-                message.error({
-                  content: res.status_msg,
-                  key: "follow",
-                  duration: 1,
-                });
+                message.error(res.status_msg, 1);
                 break;
               default:
-                message.error({
-                  content: "关注失败",
-                  key: "follow",
-                  duration: 1,
-                });
+                message.error("关注失败", 1);
                 break;
             }
           })
           .catch((err) => {
-            message.error({
-              content: "取消关注失败,请检查网络",
-              key: "follow",
-              duration: 1,
-            });
+            message.error("取消关注失败,请检查网络", 1);
             console.log(err);
           });
     }
@@ -222,15 +176,11 @@ function Sidebar({
             backgroundImage: `url(${video?.author?.avatar})`,
             backgroundSize: "cover",
           }}
-          onClick={handleUserpage}
-        >
+          onClick={handleUserpage}>
           {id !== video?.author?.id && (
             <div
-              className={
-                video?.author?.is_follow ? styles.followed : styles.follow
-              }
-              onClick={(e) => handleFollow(e)}
-            >
+              className={video?.author?.is_follow ? styles.followed : styles.follow}
+              onClick={(e) => handleFollow(e)}>
               {video?.author?.is_follow ? "✔" : "+"}
             </div>
           )}
@@ -246,18 +196,14 @@ function Sidebar({
         </div>
         <div className={styles.comment}>
           <div>
-            <BiSolidCommentDots
-              className={styles.icon}
-              onClick={handleComments}
-            />
+            <BiSolidCommentDots className={styles.icon} onClick={handleComments} />
           </div>
           <div className={styles.number}>{video?.comment_count}</div>
         </div>
         <Popover
           content={<SharePopover video={video}></SharePopover>}
           trigger="hover"
-          placement="right"
-        >
+          placement="right">
           <div className={styles.share}>
             <div>
               <BiSolidShare className={styles.icon} />

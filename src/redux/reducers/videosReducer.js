@@ -9,9 +9,11 @@ const initState = {
 const videosReducer = (state = initState, action) => {
   let newVideosOBJ = {};
   let newVideosArr = [];
+  let videoId;
   switch (action.type) {
     case "CHANGE_VIDEOS":
       newVideosOBJ = { ...state.videosObj };
+      videoId = state.videosArr[action.trueIndex];
       if (!action.isChild) {
         newVideosOBJ[state.videosArr[action.trueIndex]] = {
           ...newVideosOBJ[state.videosArr[action.trueIndex]],
