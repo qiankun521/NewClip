@@ -8,11 +8,7 @@ import { FiUpload } from "react-icons/fi";
 import { Modal, Form, Input, Button, message, Popover } from "antd";
 import { useEffect, useState } from "react";
 import { BiShare, BiSearchAlt2 } from "react-icons/bi";
-import {
-  AiOutlineHeart,
-  AiOutlineMessage,
-  AiOutlineMore,
-} from "react-icons/ai";
+import { AiOutlineHeart, AiOutlineMessage, AiOutlineMore } from "react-icons/ai";
 import { useDispatch } from "react-redux";
 import { useSelector } from "react-redux/es/hooks/useSelector";
 import { login, register } from "../utils/loginRegister";
@@ -24,55 +20,49 @@ import {
   loginFailure,
   loginRequest,
   loginSuccess,
-  logOut,
   registerFailure,
   registerRequest,
   registerSuccess,
 } from "../redux/actions/loginRegisterAction";
 import { getFriendList, getMessages } from "../utils/getMessage";
 import UploadPopover from "./UploadPopover";
-import { hideLogin, showLogin } from "../redux/actions/popoverAction";
-/**
- * Header组件
- * @param {Object} props - 组件属性
- * @param {function} props.setChooseClass - 设置主页视频的类别
- * @param {string} props.chooseClass - 视频选择的类别
- * @returns {JSX.Element} Header组件
- */
-function Header({ setChooseClass, chooseClass }) {
-  const [choose, setChoose] = useState([true, false]);
-  const [search, setSearch] = useState("");
-  const [info, setInfo] = useState(
-    localStorage.getItem("info")
-      ? JSON.parse(localStorage.getItem("info"))
-      : null
-  );
-  const logout = useSelector((state) => state?.loginRegister?.logout);
-  const loginWaiting = useSelector(
-    (state) => state?.loginRegister?.loginWaiting
-  );
-  const registerWaiting = useSelector(
-    (state) => state?.loginRegister?.registerWaiting
-  );
-  const [visiblePopover, setVisiblePopover] = useState(false);
-  const id = useSelector((state) => state?.loginRegister?.user_id);
-  const token = useSelector((state) => state?.loginRegister?.token);
-  const isShowLogin = useSelector((state) => state?.popover?.isShowLogin);
-  const [messageVisible, setMessageVisible] = useState(false);
-  const [uploadVisible, setUploadVisible] = useState(false);
+import {
+  hideLogin,
+  hidePersonal,
+  showLogin,
+  showMessages,
+  showPersonal,
+  showUpload,
+} from "../redux/actions/popoverAction";
+import { changeInfo, changeMessages } from "../redux/actions/personalAction";
+import { changeChooseClass } from "../redux/actions/videosAction";
+
+function Header() {
   const navigate = useNavigate();
   const dispatch = useDispatch();
-
+  const [search, setSearch] = useState(""); //搜索框的值
+  const [choose, setChoose] = useState([true, false]); //登录注册选择
+  const id = useSelector((state) => state?.loginRegister?.user_id);
+  const token = useSelector((state) => state?.loginRegister?.token);
+  const info = useSelector((state) => state?.personal?.info);
+  const friendList = useSelector((state) => state?.personal?.friendList);
+  const logout = useSelector((state) => state?.loginRegister?.logout);
+  const loginWaiting = useSelector((state) => state?.loginRegister?.loginWaiting);
+  const registerWaiting = useSelector((state) => state?.loginRegister?.registerWaiting);
+  const isShowLogin = useSelector((state) => state?.popover?.isShowLogin);
+  const isShowMessage = useSelector((state) => state?.popover?.isShowMessage);
+  const isShowUpload = useSelector((state) => state?.popover?.isShowUpload);
+  const isShowPersonal = useSelector((state) => state?.popover?.isShowPersonal);
+  const chooseClass = useSelector((state) => state?.videos?.chooseClass);
   useEffect(() => {
     getPersonalInfo(id, token)
       .then((res) => {
         switch (res.status_code) {
           case 0:
-            localStorage.setItem("info", JSON.stringify(res.user));
-            setInfo(res.user);
+            dispatch(changeInfo(res.user));
             break;
           case -1:
-            console.log(res.status_msg);
+            message.error(res.status_msg);
             break;
           default:
             break;
@@ -81,61 +71,36 @@ function Header({ setChooseClass, chooseClass }) {
       .catch((err) => {
         console.log(err);
       });
-    const friendList = localStorage.getItem("friend_list")
-      ? JSON.parse(localStorage.getItem("friend_list"))
-      : undefined;
-    if (friendList) {
-      for (let i = 0; i < friendList.length; i++) {
-        getMessages(token, friendList[i].id).then((res) => {
-          switch (res.status_code) {
-            case 0:
-              let messages =
-                localStorage.getItem("messages") === undefined
-                  ? JSON.parse(localStorage.getItem("messages"))
-                  : {};
-              messages[friendList[i].id] = res.message_list;
-              localStorage.setItem("messages", JSON.stringify(messages));
-              break;
-            case -1:
-              console.log(res.status_msg);
-              break;
-            default:
-              break;
-          }
-        });
-      }
+    for (const item of friendList) {
+      getMessages(token, item.id).then((res) => {
+        switch (res.status_code) {
+          case 0:
+            dispatch(changeMessages(item.id, res.message_list));
+            break;
+          case -1:
+            console.log(res.status_msg);
+            break;
+          default:
+            break;
+        }
+      });
     }
-  }, [id, token, visiblePopover]);
+  }, [id, token, isShowPersonal, isShowMessage, friendList]);
 
   function onFinishLogin(values) {
     dispatch(loginRequest());
-    message.loading({
-      content: "登录中...",
-      key: "loginWaiting",
-      duration: 0,
-    });
+    message.loading("登录中...", 0);
     login(values.username, values.password)
       .then((res) => {
         message.destroy();
         switch (res.status_code) {
           case 0:
             message.success(res.status_msg);
-            dispatch(
-              loginSuccess(
-                values.username,
-                res.token,
-                res.status_msg,
-                res.user_id
-              )
-            );
-            localStorage.setItem("token", res.token);
+            dispatch(loginSuccess(values.username, res.token, res.status_msg, res.user_id));
             getFriendList(res.user_id, res.token).then((res) => {
               switch (res.status_code) {
                 case 0:
-                  localStorage.setItem(
-                    "friend_list",
-                    JSON.stringify(res.user_list)
-                  );
+                  localStorage.setItem("friend_list", JSON.stringify(res.user_list));
                   break;
                 case -1:
                   console.log(res.status_msg);
@@ -147,12 +112,8 @@ function Header({ setChooseClass, chooseClass }) {
             dispatch(hideLogin());
             break;
           case -1:
-            message.error({
-              content: res.status_msg,
-              key: "loginFailure",
-              duration: 2,
-            });
-            dispatch(loginFailure(res.status_msg));
+            message.error(res.status_msg, 2);
+            dispatch(loginFailure(res?.status_msg));
             break;
           default:
             break;
@@ -161,41 +122,23 @@ function Header({ setChooseClass, chooseClass }) {
       .catch((err) => {
         message.destroy();
         message.error("登录失败，请检查网络连接");
-        console.log(err);
         dispatch(loginFailure(err));
       });
   }
-  /**
-   * 注册表单提交函数
-   * @param {Object} values - 表单值
-   * @param {string} values.username - 用户名
-   * @param {string} values.password - 密码
-   */
+
   function onFinishRegister(values) {
     dispatch(registerRequest());
-    message.loading({
-      content: "注册中...",
-      key: "registerWaiting",
-      duration: 0,
-    });
+    message.loading("注册中...", 0);
     register(values.username, values.password)
       .then((res) => {
         message.destroy();
         switch (res.status_code) {
           case 0:
-            message.success({
-              content: res.status_msg,
-              key: "registerSuccess",
-              duration: 2,
-            });
+            message.success(res.status_msg);
             dispatch(registerSuccess(res.status_msg));
             break;
           case -1:
-            message.error({
-              content: res.status_msg,
-              key: "registerFailure",
-              duration: 2,
-            });
+            message.error(res.status_msg);
             dispatch(registerFailure(res.status_msg));
             break;
           default:
@@ -205,15 +148,11 @@ function Header({ setChooseClass, chooseClass }) {
       .catch((err) => {
         message.destroy();
         message.error("注册失败，请检查网络连接");
-        console.log(err);
         dispatch(registerFailure(err));
       });
   }
   function onFinishFailed(errorInfo) {
     console.log("Failed:", errorInfo);
-  }
-  function handleLogout() {
-    dispatch(logOut());
   }
   function handleSearch() {
     if (search !== "") {
@@ -231,64 +170,52 @@ function Header({ setChooseClass, chooseClass }) {
     }
   }
   function handleFileChange() {
-    //控制开启关闭上传popover
     if (logout) {
       message.error("请先登录");
       dispatch(showLogin());
-      setUploadVisible(false);
-      return;
-    }
-    setUploadVisible(!uploadVisible);
+    } else dispatch(showUpload()); //控制开启关闭上传popover
   }
   function handleMessage() {
-    //控制开启关闭私信popover
     if (logout) {
       message.error("请先登录");
       dispatch(showLogin());
-      setMessageVisible(false);
-      return;
-    }
-    setMessageVisible(!messageVisible);
+    } else dispatch(showMessages()); //控制开启关闭私信popover
+  }
+  function handlePersonal() {
+    isShowPersonal ? dispatch(hidePersonal()) : dispatch(showPersonal()); //控制开启关闭个人信息popover
   }
   return (
     <header>
       <div className={styles.headerContainer}>
         <div className={styles.header}>
           <div className={styles.brand}>
-            <Link
-              className={styles.link}
-              to="https://github.com/chenxi393/NewClip"
-            >
+            <Link className={styles.link} to="https://github.com/qiankun521/NewClip">
               NewClip
             </Link>
           </div>
           <nav className={styles.navlinks}>
             <Link
-              className={`${styles.link} ${chooseClass === 0 && styles.choose}`}
-              to="/"
-              onClick={() => setChooseClass(0)}
-            >
-              首页
-            </Link>
-            <Link
               className={`${styles.link} ${chooseClass === 1 && styles.choose}`}
               to="/"
-              onClick={() => setChooseClass(1)}
-            >
-              体育
+              onClick={() => dispatch(changeChooseClass(1))}>
+              首页
             </Link>
             <Link
               className={`${styles.link} ${chooseClass === 2 && styles.choose}`}
               to="/"
-              onClick={() => setChooseClass(2)}
-            >
-              游戏
+              onClick={() => dispatch(changeChooseClass(2))}>
+              体育
             </Link>
             <Link
               className={`${styles.link} ${chooseClass === 3 && styles.choose}`}
               to="/"
-              onClick={() => setChooseClass(3)}
-            >
+              onClick={() => dispatch(changeChooseClass(3))}>
+              游戏
+            </Link>
+            <Link
+              className={`${styles.link} ${chooseClass === 4 && styles.choose}`}
+              to="/"
+              onClick={() => dispatch(changeChooseClass(4))}>
               音乐
             </Link>
           </nav>
@@ -308,13 +235,10 @@ function Header({ setChooseClass, chooseClass }) {
           </div>
           <div className={styles.personalbar}>
             <Popover
-              open={uploadVisible}
+              open={isShowUpload}
               onClick={() => handleFileChange()}
-              content={
-                <UploadPopover handleUpload={handleFileChange}></UploadPopover>
-              }
-            >
-              <div className={styles.upload} onClick={handleFileChange}>
+              content={<UploadPopover></UploadPopover>}>
+              <div className={styles.upload}>
                 <div>
                   <FiUpload></FiUpload>
                 </div>
@@ -322,12 +246,9 @@ function Header({ setChooseClass, chooseClass }) {
               </div>
             </Popover>
             <Popover
-              content={
-                <MessagePopover handleMessage={handleMessage}></MessagePopover>
-              }
-              open={messageVisible}
-              onClick={() => handleMessage()}
-            >
+              content={<MessagePopover handleMessage={handleMessage}></MessagePopover>}
+              open={isShowMessage}
+              onClick={() => handleMessage()}>
               <div className={styles.message}>
                 <div>
                   <AiOutlineMessage></AiOutlineMessage>
@@ -345,33 +266,25 @@ function Header({ setChooseClass, chooseClass }) {
           <div className={styles.person}>
             {logout ? (
               <div className={styles.personal}>
-                <div
-                  className={styles.login}
-                  onClick={() => dispatch(showLogin())}
-                >
+                <div className={styles.login} onClick={() => dispatch(showLogin())}>
                   登录
                 </div>
               </div>
             ) : (
               info && (
                 <Popover
-                  content={
-                    <PersonalPopover info={info} handleLogout={handleLogout} />
-                  }
+                  content={<PersonalPopover info={info} />}
                   placement="bottomRight"
-                  trigger="hover"
-                  onOpenChange={() => setVisiblePopover(!visiblePopover)}
-                >
+                  trigger="click"
+                  open={isShowPersonal}
+                  onOpenChange={handlePersonal}>
                   <div
                     className={styles.avatar}
                     style={{
                       backgroundImage: `url(${info.avatar})`,
                       backgroundSize: "cover",
                     }}
-                    onClick={() => {
-                      navigate("/personal");
-                    }}
-                  ></div>
+                    onClick={() => navigate("/personal")}></div>
                 </Popover>
               )
             )}
@@ -382,8 +295,7 @@ function Header({ setChooseClass, chooseClass }) {
         open={isShowLogin}
         onCancel={() => dispatch(hideLogin())}
         footer={null}
-        className={styles.modal}
-      >
+        className={styles.modal}>
         <div className={styles.modalContainer}>
           <div className={styles.titleContainer}>
             <div className={styles.modalTitle}>登录后畅享更多精彩</div>
@@ -407,16 +319,14 @@ function Header({ setChooseClass, chooseClass }) {
               className={`${styles.chooseItem} ${choose[0] && styles.choosed}`}
               onClick={() => {
                 setChoose([true, false]);
-              }}
-            >
+              }}>
               登录
             </div>
             <div
               className={`${styles.chooseItem} ${choose[1] && styles.choosed}`}
               onClick={() => {
                 setChoose([false, true]);
-              }}
-            >
+              }}>
               注册
             </div>
           </div>
@@ -432,8 +342,7 @@ function Header({ setChooseClass, chooseClass }) {
                 flexDirection: "column",
                 alignItems: "center",
                 marginTop: "20px",
-              }}
-            >
+              }}>
               <Form.Item
                 label={<span style={{ color: "#C9C9CA" }}>用户名</span>}
                 name="username"
@@ -442,8 +351,7 @@ function Header({ setChooseClass, chooseClass }) {
                     required: true,
                     message: "请输入用户名!",
                   },
-                ]}
-              >
+                ]}>
                 <Input className={styles.input} />
               </Form.Item>
 
@@ -455,8 +363,7 @@ function Header({ setChooseClass, chooseClass }) {
                     required: true,
                     message: "请输入用户密码!",
                   },
-                ]}
-              >
+                ]}>
                 <Input.Password className={styles.input} />
               </Form.Item>
 
@@ -467,13 +374,8 @@ function Header({ setChooseClass, chooseClass }) {
                 }}
                 style={{
                   width: "100%",
-                }}
-              >
-                <Button
-                  type="primary"
-                  htmlType="submit"
-                  disabled={loginWaiting}
-                >
+                }}>
+                <Button type="primary" htmlType="submit" disabled={loginWaiting}>
                   登录
                 </Button>
               </Form.Item>
@@ -490,8 +392,7 @@ function Header({ setChooseClass, chooseClass }) {
                 flexDirection: "column",
                 alignItems: "center",
                 marginTop: "20px",
-              }}
-            >
+              }}>
               <Form.Item
                 label={<span style={{ color: "#C9C9CA" }}>用户名</span>}
                 name="username"
@@ -504,8 +405,7 @@ function Header({ setChooseClass, chooseClass }) {
                     max: 32,
                     message: "用户名长度不能超过32位",
                   },
-                ]}
-              >
+                ]}>
                 <Input className={styles.input} />
               </Form.Item>
 
@@ -521,8 +421,7 @@ function Header({ setChooseClass, chooseClass }) {
                     min: 6,
                     message: "密码长度不能小于6位",
                   },
-                ]}
-              >
+                ]}>
                 <Input.Password className={styles.input} />
               </Form.Item>
 
@@ -533,8 +432,7 @@ function Header({ setChooseClass, chooseClass }) {
                 }}
                 style={{
                   width: "100%",
-                }}
-              >
+                }}>
                 <Button htmlType="submit" disabled={registerWaiting}>
                   注册
                 </Button>

@@ -3,6 +3,7 @@ const initState = {
   isShowLogin: false,
   isShowUpload: false,
   isShowComments: false,
+  isShowPersonal: false,
 };
 const popoverReducer = (state = initState, action) => {
   switch (action.type) {
@@ -22,6 +23,12 @@ const popoverReducer = (state = initState, action) => {
       return { ...state, isShowComments: true };
     case "HIDE_COMMENTS":
       return { ...state, isShowComments: false };
+    case "SHOW_PERSONAL":
+      return { ...state, isShowPersonal: true };
+    case "HIDE_PERSONAL":
+      return { ...state, isShowPersonal: false };
+    case "CLOSE_ALL":
+      return { ...initState };
     default:
       return state;
   }

@@ -18,77 +18,23 @@ import { getFollow, getFollower } from "../../utils/getFollow";
 import FollowPopover from "../FollowPopover";
 import { showLogin } from "../../redux/actions/popoverAction";
 
-
 function Personalpage() {
-  /**
-   * 获取url中的searchParams
-   */
-  const [searchParams] = useSearchParams();
-  /**
-   * 搜索参数用户id
-   */
-  const user_id = searchParams.get("user_id");
-  /**
-   * 用户登录id
-   */
-  const id = useSelector((state) => state?.loginRegister?.user_id);
-  /**
-   * 下面将要使用的id，判断是否为用户自己的主页，如果是用户主页，使用user_id，否则使用id
-   */
-  const trueId = user_id ? user_id : id;
-  /**
-   * 用户token
-   */
-  const token = useSelector((state) => state?.loginRegister?.token);
-  /**
-   * 用户信息
-   */
-  const [info, setInfo] = useState(
-    JSON.parse(localStorage.getItem("info")) || null
-  );
-  /**
-   * 用户喜欢的视频列表
-   */
-  const [like, setLike] = useState(null);
-  /**
-   * 用户作品列表
-   */
-  const [work, setWork] = useState(null);
-  /**
-   * 当前活跃的tab，0为用户主页作品栏，1为用户作品喜欢栏
-   */
-  const [active, setActive] = useState(0);
-  /**
-   * 用户是否登出
-   */
-  const logout = useSelector((state) => state?.loginRegister?.logout);
-  /**
-   * 视频是否可见
-   */
-  const [visible, setVisible] = useState(false);
-  /**
-   * 视频是否正在播放
-   */
-  const [isPlaying, setIsPlaying] = useState(true);
-  /**
-   * 视频是否静音
-   */
-  const [ismuted, setIsmuted] = useState(true);
-  /**
-   * 视频音量
-   */
-  const [volume, setVolume] = useState(0);
-  /**
-   * 是否显示评论区
-   */
-  const [showComments, setShowComments] = useState(false);
-  /**
-   * 在个人主页的视频真实下标，因为作品和喜欢互斥，trueindex可以复用
-   */
-  const [trueIndex, setTrueIndex] = useState(0);
-  /**
-   * 路由导航
-   */
+  const [searchParams] = useSearchParams(); //获取searchParams
+  const user_id = searchParams.get("user_id"); //获取url中的user_id
+  const id = useSelector((state) => state?.loginRegister?.user_id); //用户登录id
+  const trueId = user_id ? user_id : id; //用户id
+  const token = useSelector((state) => state?.loginRegister?.token); //用户token
+  const [info, setInfo] = useState(JSON.parse(localStorage.getItem("info")) || null); //用户信息
+  const [like, setLike] = useState(null); //用户喜欢的视频列表
+  const [work, setWork] = useState(null); //用户作品列表
+  const [active, setActive] = useState(0); //当前活跃的tab，0为用户主页作品栏，1为用户作品喜欢栏
+  const logout = useSelector((state) => state?.loginRegister?.logout); //用户是否登出
+  const [visible, setVisible] = useState(false); //视频是否可见
+  const [isPlaying, setIsPlaying] = useState(true); //视频是否正在播放
+  const [ismuted, setIsmuted] = useState(true); //视频是否静音
+  const [volume, setVolume] = useState(0); //视频音量
+  const [showComments, setShowComments] = useState(false); //是否显示评论区
+  const [trueIndex, setTrueIndex] = useState(0); //在个人主页的视频真实下标
   const navigate = useNavigate();
   const dispatch = useDispatch();
   const [follow, setFollow] = useState([]);
@@ -106,8 +52,7 @@ function Personalpage() {
       .then((res) => {
         switch (res.status_code) {
           case 0:
-            if (trueId === id)
-              localStorage.setItem("info", JSON.stringify(res.user));
+            if (trueId === id) localStorage.setItem("info", JSON.stringify(res.user));
             setInfo(res.user);
             break;
           case -1:
@@ -193,27 +138,15 @@ function Personalpage() {
                 break;
               case -1:
                 console.log(res.status_msg);
-                message.error({
-                  content: res.status_msg,
-                  key: "follow",
-                  duration: 1,
-                });
+                message.error(res.status_msg, 1);
                 break;
               default:
-                message.error({
-                  content: "取消关注失败",
-                  key: "follow",
-                  duration: 1,
-                });
+                message.error("取消关注失败", 1);
                 break;
             }
           })
           .catch((err) => {
-            message.error({
-              content: "取消关注失败,请检查网络",
-              key: "follow",
-              duration: 1,
-            });
+            message.error("取消关注失败,请检查网络", 1);
             console.log(err);
           });
       else
@@ -224,27 +157,15 @@ function Personalpage() {
                 setInfo({ ...info, is_follow: !info.is_follow });
                 break;
               case -1:
-                message.error({
-                  content: res.status_msg,
-                  key: "follow",
-                  duration: 1,
-                });
+                message.error(res.status_msg, 1);
                 break;
               default:
-                message.error({
-                  content: "关注失败",
-                  key: "follow",
-                  duration: 1,
-                });
+                message.error("关注失败", 1);
                 break;
             }
           })
           .catch((err) => {
-            message.error({
-              content: "取消关注失败,请检查网络",
-              key: "follow",
-              duration: 1,
-            });
+            message.error("取消关注失败,请检查网络", 1);
             console.log(err);
           });
     }
@@ -330,13 +251,6 @@ function Personalpage() {
       setLike(newVideos);
     }
   }
-  /**
-   * 判断修改哪个个人主页数据的函数
-   * @param {number} trueIndex - 真实下标
-   * @param {Object} newState - 新状态
-   * @param {boolean} isChild - 是否为嵌套子元素
-   * @param {string} childName - 嵌套子元素名称
-   */
   function changeVideos(trueIndex, newState, isChild = false, childName = "") {
     //修改本地数据
     if (active === 0) changeVideos0(trueIndex, newState, isChild, childName);
@@ -353,8 +267,7 @@ function Personalpage() {
                 style={{
                   backgroundImage: `url(${info?.avatar})`,
                   backgroundSize: "cover",
-                }}
-              ></div>
+                }}></div>
             </div>
             <div className={styles.info}>
               <div className={styles.name}>{info?.name}</div>
@@ -364,8 +277,7 @@ function Personalpage() {
                   <Popover
                     content={<FollowPopover info={follow}></FollowPopover>}
                     trigger="hover"
-                    placement="bottom"
-                  >
+                    placement="bottom">
                     <div>{info?.follow_count}</div>
                   </Popover>
                 </div>
@@ -374,8 +286,7 @@ function Personalpage() {
                   <Popover
                     content={<FollowPopover info={follower}></FollowPopover>}
                     trigger="hover"
-                    placement="bottom"
-                  >
+                    placement="bottom">
                     <div>{info?.follower_count}</div>
                   </Popover>
                 </div>
@@ -395,11 +306,8 @@ function Personalpage() {
             ) : (
               <div className={styles.buttonContainer}>
                 <div
-                  className={`${styles.button} ${
-                    !info?.is_follow && styles.notfollow
-                  }`}
-                  onClick={handleFollow}
-                >
+                  className={`${styles.button} ${!info?.is_follow && styles.notfollow}`}
+                  onClick={handleFollow}>
                   {info?.is_follow ? "取消关注" : "关注"}
                 </div>
                 <div className={styles.button} onClick={handleMessage}>
@@ -411,23 +319,17 @@ function Personalpage() {
         </div>
         <div className={styles.classify}>
           <div
-            className={`${styles.classifyTitle} ${
-              active === 0 && styles.classifyTitleActive
-            }`}
+            className={`${styles.classifyTitle} ${active === 0 && styles.classifyTitleActive}`}
             onClick={() => {
               setActive(0);
-            }}
-          >
+            }}>
             作品
           </div>
           <div
-            className={`${styles.classifyTitle} ${
-              active === 1 && styles.classifyTitleActive
-            }`}
+            className={`${styles.classifyTitle} ${active === 1 && styles.classifyTitleActive}`}
             onClick={() => {
               setActive(1);
-            }}
-          >
+            }}>
             喜欢
           </div>
         </div>
@@ -439,8 +341,7 @@ function Personalpage() {
                     key={item.id}
                     data={item}
                     handleClick={handleClick}
-                    trueIndex={index}
-                  ></SingleVideo>
+                    trueIndex={index}></SingleVideo>
                 );
               })
             : like?.map((item, index) => {
@@ -449,8 +350,7 @@ function Personalpage() {
                     key={item.id}
                     data={item}
                     handleClick={handleClick}
-                    trueIndex={index}
-                  ></SingleVideo>
+                    trueIndex={index}></SingleVideo>
                 );
               })}
         </div>
@@ -468,8 +368,7 @@ function Personalpage() {
             handleVolume={handleVolume}
             trueIndex={trueIndex}
             showComments={showComments}
-            handleComments={() => setShowComments(!showComments)}
-          ></Video>
+            handleComments={() => setShowComments(!showComments)}></Video>
         </div>
       )}
       {visible && (
@@ -477,8 +376,7 @@ function Personalpage() {
           className={styles.closeVideo}
           onClick={() => {
             setVisible(false);
-          }}
-        >
+          }}>
           ✖
         </div>
       )}

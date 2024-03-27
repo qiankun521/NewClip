@@ -1,23 +1,53 @@
-const initState = { videos: [], next_time: {}, volume: 0.5, ismuted: true };
+const initState = {
+  videosArr: [],
+  videosObj: {},
+  nextTime: { 1: 0, 2: 0, 3: 0, 4: 0 },
+  volume: 0.5,
+  ismuted: true,
+  chooseClass: 1,
+};
 const videosReducer = (state = initState, action) => {
+  let newVideosOBJ = {};
+  let newVideosArr = [];
   switch (action.type) {
     case "CHANGE_VIDEOS":
+      newVideosOBJ = { ...state.videosObj };
       if (!action.isChild) {
-        const newVideos = state?.videos?.map((item, index) => {
-          return index === action?.trueIndex ? { ...item, ...newVideos } : item;
-        });
-        return { ...state, videos: newVideos };
+        newVideosOBJ[state.videosArr[action.trueIndex]] = {
+          ...newVideosOBJ[state.videosArr[action.trueIndex]],
+          ...action.newState,
+        };
       } else {
-        const newVideos = state.videos.map((item, index) => {
-          return index === action.trueIndex
-            ? {
-              ...item,
-              [action.childName]: { ...item[action.childName], ...newVideos },
-            }
-            : item;
-        });
-        return { ...state, videos: newVideos };
+        newVideosOBJ[state.videosArr[action.trueIndex]] = {
+          ...newVideosOBJ[state.videosArr[action.trueIndex]],
+          [action.childName]: {
+            ...newVideosOBJ[state.videosArr[action.trueIndex]][action.childName],
+            ...action.newState,
+          },
+        };
       }
+      return { ...state, videosObj: newVideosOBJ };
+    case "UPDATE_VIDEOS":
+      newVideosArr = [...state.videosArr];
+      newVideosOBJ = { ...state.videosObj };
+      for (const video of action.videos) {
+        newVideosArr.push(video.id);
+        newVideosOBJ[video.id] = video;
+      }
+      return { ...state, videosArr: newVideosArr, videosObj: newVideosOBJ };
+    case "RESET_VIDEOS":
+      newVideosArr = [];
+      newVideosOBJ = {};
+      for (const video of action.videos) {
+        newVideosArr.push(video.id);
+        newVideosOBJ[video.id] = video;
+      }
+      return { ...state, videosArr: newVideosArr, videosObj: newVideosOBJ };
+    case "CHANGE_NEXT_TIME":
+      return {
+        ...state,
+        nextTime: { ...state.nextTime, [state.chooseClass]: action.nextTime },
+      };
     case "CHANGE_VOLUME":
       return {
         ...state,
@@ -27,6 +57,11 @@ const videosReducer = (state = initState, action) => {
       return {
         ...state,
         ismuted: !state.ismuted,
+      };
+    case "CHANGE_CHOOSE_CLASS":
+      return {
+        ...state,
+        chooseClass: action.chooseClass,
       };
     default:
       return initState;

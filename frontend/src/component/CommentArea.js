@@ -9,37 +9,15 @@ import { useState } from "react";
 import postComment from "../utils/postComment";
 import { useDispatch, useSelector } from "react-redux";
 import { message } from "antd";
-import {
-  hideComments,
-  showComments,
-  showLogin,
-} from "../redux/actions/popoverAction";
-/**
- * 评论区组件
- * @param {Object} props - 组件属性
- * @param {boolean} props.haveComments - 是否获取到评论
- * @param {Array} props.comments - 评论列表
- * @param {Object} props.video - 视频信息
- * @param {Function} props.handleComments - 关闭评论区的回调函数
- * @param {Function} props.update - 更新评论列表的回调函数
- * @returns {JSX.Element} - 评论区组件
- */
-function CommentArea({
-  haveComments,
-  comments,
-  video,
-  update,
-  trueIndex,
-  changeVideos,
-}) {
+import { hideComments, showComments, showLogin } from "../redux/actions/popoverAction";
+
+function CommentArea({ haveComments, comments, video, update, trueIndex, changeVideos }) {
   const dispatch = useDispatch();
   const [commentValue, setCommentValue] = useState(""); // 评论输入框的值
   const isShowComments = useSelector((state) => state?.popover?.isShowComments);
   const logout = useSelector((state) => state?.loginRegister?.logout); // 是否已注销
   const token = useSelector((state) => state?.loginRegister?.token); // 用户 token
-  /**
-   * 发送评论的回调函数
-   */
+
   function handleSendMessage() {
     if (logout) dispatch(showLogin()); // 如果已注销，打开登录/注册模态框
     else {
@@ -71,13 +49,12 @@ function CommentArea({
     }
   }
   function handleComments() {
-    if (!isShowComments) dispatch(showComments());
-    else dispatch(hideComments());
+    !isShowComments ? dispatch(showComments()) : dispatch(hideComments());
   }
 
   return (
     <div className={styles.commentArea} onWheel={(e) => e.stopPropagation()}>
-      <div className={styles.commentTop}>
+      <section className={styles.commentTop}>
         <div className={styles.topAreaLeft}>
           <div className={styles.commentTitle}>评论区</div>
           <div className={styles.commentCount}>共{comments?.length || 0}条</div>
@@ -87,15 +64,17 @@ function CommentArea({
             ╳
           </div>
         </div>
-      </div>
-      <div className={styles.commentList}>
+      </section>
+
+      <section className={styles.commentList}>
         {haveComments &&
           comments.map((comment) => {
             return <SingleComment key={comment?.id} comment={comment} />;
           })}
         <div className={styles.empty}>评论到底了~</div>
-      </div>
-      <div className={styles.sendArea}>
+      </section>
+
+      <section className={styles.sendArea}>
         <input
           className={styles.sendInput}
           type="text"
@@ -106,7 +85,7 @@ function CommentArea({
         <div className={styles.sendIcon} onClick={handleSendMessage}>
           <TbSend></TbSend>
         </div>
-      </div>
+      </section>
     </div>
   );
 }
