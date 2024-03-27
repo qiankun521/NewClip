@@ -12,13 +12,12 @@ import styles from "../../assets/styles/Mainpage.module.scss";
 /**
  * 主页面组件
  * @param {Object} props - 组件属性
- * @param {Function} props.handleModal - 处理登录模态框的函数
  * @param {Array} props.videos - 视频列表
  * @param {Function} props.changeVideos - 改变本地储存的视频信息的函数
  * @param {Function} props.updateVideos - 动态更新主页面播放视频列表的函数
  * @returns {JSX.Element} - 返回主页面组件的JSX元素
  */
-function Mainpage({ handleModal, videos, changeVideos, updateVideos }) {
+function Mainpage({  videos, changeVideos, updateVideos }) {
   const realPrevIndex = useRef(0); // 上一次播放视频的swiper的真正index
   const swiperRef = useRef(null); // 用于获取swiper的ref
   const trueIndex = useRef(0); // 用于获取当前swiper的真正index
@@ -206,7 +205,6 @@ function Mainpage({ handleModal, videos, changeVideos, updateVideos }) {
               video={videos[swiper[0]]}
               changeVideos={changeVideos}
               trueIndex={trueIndex.current}
-              handleModal={handleModal}
               isPlaying={isPlaying[0]}
               handlePlaying={handlePlaying}
               ismuted={ismuted}
@@ -222,7 +220,6 @@ function Mainpage({ handleModal, videos, changeVideos, updateVideos }) {
               video={videos[swiper[1]]}
               changeVideos={changeVideos}
               trueIndex={trueIndex.current}
-              handleModal={handleModal}
               isPlaying={isPlaying[1]}
               handlePlaying={handlePlaying}
               ismuted={ismuted}
@@ -238,7 +235,7 @@ function Mainpage({ handleModal, videos, changeVideos, updateVideos }) {
               video={videos[swiper[2]]}
               changeVideos={changeVideos}
               trueIndex={trueIndex.current}
-              handleModal={handleModal}
+   
               isPlaying={isPlaying[2]}
               handlePlaying={handlePlaying}
               ismuted={ismuted}

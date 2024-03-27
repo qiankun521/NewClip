@@ -18,7 +18,6 @@ import Personalpage from "./component/page/Personalpage";
  */
 function App() {
   const [haveVideo, setHaveVideo] = useState(false);
-  const [visible, setVisible] = useState(false);
   const dispatch = useDispatch();
   /**
    * 是否已经登出
@@ -111,12 +110,6 @@ function App() {
       });
   }
   /**
-   * 处理modal的显示/隐藏
-   */
-  function handleModal() {
-    setVisible(!visible);
-  }
-  /**
    * 修改本地视频列表中的数据
    * @param {number} trueIndex 视频的真实索引
    * @param {object} newState 新状态
@@ -173,7 +166,6 @@ function App() {
               element={
                 haveVideo ? (
                   <Mainpage
-                    handleModal={handleModal}
                     videos={videos}
                     changeVideos={changeVideos}
                     updateVideos={updateVideos}
@@ -183,11 +175,11 @@ function App() {
             ></Route>
             <Route
               path="/search"
-              element={<Searchpage handleModal={handleModal}></Searchpage>}
+              element={<Searchpage ></Searchpage>}
             ></Route>
             <Route
               path="/personal"
-              element={<Personalpage handleModal={handleModal}></Personalpage>}
+              element={<Personalpage ></Personalpage>}
             ></Route>
             <Route path="*" element={<Page404></Page404>}></Route>
           </Routes>

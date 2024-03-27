@@ -9,6 +9,7 @@
     "@testing-library/react": "^13.4.0",
     "@testing-library/user-event": "^13.5.0",
     "@vercel/analytics": "^1.2.2",
+    "@vercel/speed-insights": "^1.0.10",
     "antd": "^5.10.2",
     "node-sass": "^7.0.3",
     "rc-queue-anim": "^2.0.0",
