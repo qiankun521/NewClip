@@ -12,10 +12,6 @@ import { ConfigProvider, message } from "antd";
 import Page404 from "./component/page/Page404";
 import Personalpage from "./component/page/Personalpage";
 import { changeNextTime, resetVideos } from "./redux/actions/videosAction";
-/**
- * 应用程序入口组件
- * @returns {JSX.Element} 应用程序组件
- */
 function App() {
   const dispatch = useDispatch();
   const logout = useSelector((state) => state?.loginRegister?.logout); // 是否已经登出
@@ -25,7 +21,7 @@ function App() {
   const videoClass = ["不选择任何类别", "", "体育", "游戏", "音乐"]; // 视频类别列表
 
   useEffect(() => {
-    function get() {
+    function refreshVideos() {
       const latest_time = nextTime[chooseClass] || undefined;
       getVideo(latest_time, token, videoClass[chooseClass])
         .then((res) => {
@@ -33,7 +29,7 @@ function App() {
             case 0:
               if (!res.video_list) {
                 dispatch(changeNextTime(res.next_time));
-                get(); //当前类别没有更多的视频，重新请求之后后端从头开始返回
+                refreshVideos(); //当前类别没有更多的视频，重新请求之后后端从头开始返回
                 break;
               }
               dispatch(resetVideos(res.video_list));
@@ -51,7 +47,7 @@ function App() {
           console.log(err);
         });
     }
-    get(); // eslint-disable-next-line
+    refreshVideos(); // eslint-disable-next-line
   }, [logout, chooseClass]); //登录状态改变、视频类别改变时重新获取视频
 
   function updateVideos() {

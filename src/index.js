@@ -19,4 +19,4 @@ root.render(
   </Provider>
 );
 
-reportWebVitals();
+reportWebVitals(console.log);

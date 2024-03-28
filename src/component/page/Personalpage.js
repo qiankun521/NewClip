@@ -8,7 +8,7 @@ import getPersonalInfo from "../../utils/getPersonalInfo";
 import getPersonalLike from "../../utils/getPersonalLike";
 import getPersonalWork from "../../utils/getPersonalWork";
 import { useDispatch, useSelector } from "react-redux";
-import { useSearchParams,useNavigate } from "react-router-dom";
+import { useSearchParams, useNavigate } from "react-router-dom";
 import SingleVideo from "../SingleVideo";
 import { Popover, message } from "antd";
 import { postFollow, postCancelFollow } from "../../utils/postFollow";
@@ -16,34 +16,31 @@ import Video from "../Video";
 import { getFollow, getFollower } from "../../utils/getFollow";
 import FollowPopover from "../FollowPopover";
 import { showLogin } from "../../redux/actions/popoverAction";
-
+import { changeInfo } from "../../redux/actions/personalAction";
 function Personalpage() {
+  const navigate = useNavigate();
+  const dispatch = useDispatch();
   const [searchParams] = useSearchParams(); //获取searchParams
   const user_id = searchParams.get("user_id"); //获取url中的user_id
   const id = useSelector((state) => state?.loginRegister?.user_id); //用户登录id
   const trueId = user_id ? user_id : id; //用户id
   const token = useSelector((state) => state?.loginRegister?.token); //用户token
-  const [info, setInfo] = useState(JSON.parse(localStorage.getItem("info")) || null); //用户信息
+  const logout = useSelector((state) => state?.loginRegister?.logout); //用户是否登出
+  const selfInfo = useSelector((state) => state?.loginRegister?.info); //用户信息
+  const videosObj = useSelector((state) => state?.videos?.videosObj);
+  const [videoId, setVideoId] = useState(1);
+  const [info, setInfo] = useState(trueId === id ? selfInfo : null); //用户信息
   const [like, setLike] = useState(null); //用户喜欢的视频列表
   const [work, setWork] = useState(null); //用户作品列表
   const [active, setActive] = useState(0); //当前活跃的tab，0为用户主页作品栏，1为用户作品喜欢栏
-  const logout = useSelector((state) => state?.loginRegister?.logout); //用户是否登出
   const [visible, setVisible] = useState(false); //视频是否可见
   const [isPlaying, setIsPlaying] = useState(true); //视频是否正在播放
-  const [ismuted, setIsmuted] = useState(true); //视频是否静音
-  const [volume, setVolume] = useState(0); //视频音量
-  const [showComments, setShowComments] = useState(false); //是否显示评论区
-  const [trueIndex, setTrueIndex] = useState(0); //在个人主页的视频真实下标
-  const navigate = useNavigate();
-  const dispatch = useDispatch();
   const [follow, setFollow] = useState([]);
   const [follower, setFollower] = useState([]);
 
-  /**
-   * 获取个人信息，作品列表、喜欢列表
-   */
   useEffect(() => {
     if (logout && user_id === null) {
+      //TODO 是否限制用户登录才能查看
       navigate("/");
       return;
     }
@@ -51,7 +48,7 @@ function Personalpage() {
       .then((res) => {
         switch (res.status_code) {
           case 0:
-            if (trueId === id) localStorage.setItem("info", JSON.stringify(res.user));
+            if (trueId === id) dispatch(changeInfo(res.user));
             setInfo(res.user);
             break;
           case -1:
@@ -122,139 +119,43 @@ function Personalpage() {
     });
   }, [trueId, token, id, logout, navigate, user_id, visible]);
 
-  /**
-   * 处理关注/取消关注
-   */
   function handleFollow() {
-    if (logout) dispatch(showLogin());
-    else {
-      if (info?.is_follow)
-        postCancelFollow(info?.id, token)
-          .then((res) => {
-            switch (res.status_code) {
-              case 0:
-                setInfo({ ...info, is_follow: !info.is_follow });
-                break;
-              case -1:
-                console.log(res.status_msg);
-                message.error(res.status_msg, 1);
-                break;
-              default:
-                message.error("取消关注失败", 1);
-                break;
-            }
-          })
-          .catch((err) => {
-            message.error("取消关注失败,请检查网络", 1);
-            console.log(err);
-          });
-      else
-        postFollow(info?.id, token)
-          .then((res) => {
-            switch (res.status_code) {
-              case 0:
-                setInfo({ ...info, is_follow: !info.is_follow });
-                break;
-              case -1:
-                message.error(res.status_msg, 1);
-                break;
-              default:
-                message.error("关注失败", 1);
-                break;
-            }
-          })
-          .catch((err) => {
-            message.error("取消关注失败,请检查网络", 1);
-            console.log(err);
-          });
+    if (logout) {
+      message.error("请先登录", 1);
+      dispatch(showLogin());
+      return;
     }
+    info?.is_follow
+      ? postCancelFollow(info?.id, token)
+      : postFollow(info?.id, token)
+          .then((res) => {
+            switch (res.status_code) {
+              case 0:
+                setInfo({ ...info, is_follow: !info.is_follow });
+                break;
+              case -1:
+                message.error(res.status_msg, 1);
+                break;
+              default:
+                message.error("操作失败", 1);
+                break;
+            }
+          })
+          .catch((err) => {
+            message.error("操作失败,请检查网络", 1);
+            console.log(err);
+          });
   }
 
-  /**
-   * 处理私信
-   */
   function handleMessage() {
     //TODO 私信
   }
 
-  /**
-   * 对于个人页点击视频的处理，将视频组件设置为可见，设置视频组件的所需要视频资源的真实下标
-   * @param {number} trueIndex - 真实下标
-   */
-  function handleClick(trueIndex) {
-    setTrueIndex(trueIndex);
+  function handleFullScreen(videoId) {
+    setVideoId(videoId);
     setVisible(true);
   }
 
-  /**
-   * 处理静音
-   */
-  function handleMuted() {
-    if (ismuted) setVolume(0.5);
-    else setVolume(0);
-    setIsmuted(!ismuted);
-  }
-
-  /**
-   * 处理音量
-   * @param {number} state - 音量值
-   */
-  function handleVolume(state) {
-    setVolume(parseFloat(state));
-    if (parseFloat(state) === 0) setIsmuted(true);
-    else setIsmuted(false);
-  }
-
-  /**
-   * 修改本地个人作品数据work
-   * @param {number} trueIndex - 真实下标
-   * @param {Object} newState - 新状态
-   * @param {boolean} isChild - 是否为状态的嵌套子元素
-   * @param {string} childName - 嵌套子元素名称
-   */
-  function changeVideos0(trueIndex, newState, isChild = false, childName = "") {
-    if (!isChild) {
-      const newVideos = work.map((item, index) => {
-        return index === trueIndex ? { ...item, ...newState } : item;
-      });
-      setWork(newVideos);
-    } else {
-      const newVideos = work.map((item, index) => {
-        return index === trueIndex
-          ? { ...item, [childName]: { ...item[childName], ...newState } }
-          : item;
-      });
-      setWork(newVideos);
-    }
-  }
-  /**
-   * 修改本地个人喜欢数据like
-   * @param {number} trueIndex - 真实下标
-   * @param {Object} newState - 新状态
-   * @param {boolean} isChild - 是否为嵌套子元素
-   * @param {string} childName - 嵌套子元素名称
-   */
-  function changeVideos1(trueIndex, newState, isChild = false, childName = "") {
-    //修改本地个人喜欢数据like
-    if (!isChild) {
-      const newVideos = like.map((item, index) => {
-        return index === trueIndex ? { ...item, ...newState } : item;
-      });
-      setLike(newVideos);
-    } else {
-      const newVideos = like.map((item, index) => {
-        return index === trueIndex
-          ? { ...item, [childName]: { ...item[childName], ...newState } }
-          : item;
-      });
-      setLike(newVideos);
-    }
-  }
-  function changeVideos(trueIndex, newState, isChild = false, childName = "") {
-    //修改本地数据
-    if (active === 0) changeVideos0(trueIndex, newState, isChild, childName);
-    else changeVideos1(trueIndex, newState, isChild, childName);
-  }
   return (
     <div className={styles.personal}>
       <div className={styles.personalPage}>
@@ -298,7 +199,7 @@ function Personalpage() {
             </div>
           </div>
           <div className={styles.personalRight}>
-            {trueId == id || user_id === null ? (
+            {trueId === id || user_id === null ? (
               <div className={styles.buttonContainer}>
                 <div className={styles.button}>编辑资料</div>
               </div>
@@ -319,63 +220,45 @@ function Personalpage() {
         <div className={styles.classify}>
           <div
             className={`${styles.classifyTitle} ${active === 0 && styles.classifyTitleActive}`}
-            onClick={() => {
-              setActive(0);
-            }}>
+            onClick={() => setActive(0)}>
             作品
           </div>
           <div
             className={`${styles.classifyTitle} ${active === 1 && styles.classifyTitleActive}`}
-            onClick={() => {
-              setActive(1);
-            }}>
+            onClick={() => setActive(1)}>
             喜欢
           </div>
         </div>
         <div className={styles.videoContainer}>
           {active === 0
-            ? work?.map((item, index) => {
+            ? work?.map((item) => {
                 return (
                   <SingleVideo
                     key={item.id}
-                    data={item}
-                    handleClick={handleClick}
-                    trueIndex={index}></SingleVideo>
+                    video={item}
+                    handleFullScreen={handleFullScreen}></SingleVideo>
                 );
               })
-            : like?.map((item, index) => {
+            : like?.map((item) => {
                 return (
                   <SingleVideo
                     key={item.id}
-                    data={item}
-                    handleClick={handleClick}
-                    trueIndex={index}></SingleVideo>
+                    video={item}
+                    handleFullScreen={handleFullScreen}></SingleVideo>
                 );
               })}
         </div>
       </div>
-      {visible && like && work && (
+      {visible && (
         <div className={styles.video}>
           <Video
-            video={active === 0 ? work[trueIndex] : like[trueIndex]}
+            video={videosObj[videoId]}
             isPlaying={isPlaying}
-            handlePlaying={() => setIsPlaying(!isPlaying)}
-            changeVideos={changeVideos}
-            ismuted={ismuted}
-            handleMuted={handleMuted}
-            volume={volume}
-            handleVolume={handleVolume}
-            trueIndex={trueIndex}
-            showComments={showComments}
-            handleComments={() => setShowComments(!showComments)}></Video>
+            handlePlaying={() => setIsPlaying(!isPlaying)}></Video>
         </div>
       )}
       {visible && (
-        <div
-          className={styles.closeVideo}
-          onClick={() => {
-            setVisible(false);
-          }}>
+        <div className={styles.closeVideo} onClick={() => setVisible(false)}>
           ✖
         </div>
       )}

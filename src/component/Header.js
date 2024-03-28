@@ -224,9 +224,7 @@ function Header() {
               type="text"
               placeholder="请输入搜索关键词"
               value={search}
-              onChange={(e) => {
-                setSearch(e.target.value);
-              }}
+              onChange={(e) => setSearch(e.target.value)}
               onKeyDown={handleKeydown}
             />
             <div className={styles.searchIcon} onClick={handleSearch}>

@@ -19,8 +19,9 @@ function Searchpage() {
   const token = useSelector((state) => state?.loginRegister?.token);
   const [visible, setVisible] = useState(false); //视频是否可见
   const [videos, setVideos] = useState([]);
+  const videosObj = useSelector((state) => state?.videos?.videosObj);
   const [isPlaying, setIsPlaying] = useState(true); //是否播放
-  const [videoId, setVideoId] = useState(0); //点开的视频的id
+  const [videoId, setVideoId] = useState(1); //点开的视频的id
 
   useEffect(() => {
     message.loading("搜索中...", 0);
@@ -50,7 +51,7 @@ function Searchpage() {
 
   return (
     <div className={styles.Searchpage}>
-      {videos && videos.length !== 0 ? (
+      {videos.length !== 0 ? (
         <div className={styles.search}>
           {videos.map((item) => {
             return (
@@ -71,7 +72,7 @@ function Searchpage() {
       {visible && (
         <div className={styles.video}>
           <Video
-            video={videos[videoId]}
+            video={videosObj[videoId]}
             isPlaying={isPlaying}
             handlePlaying={() => setIsPlaying(!isPlaying)}></Video>
         </div>

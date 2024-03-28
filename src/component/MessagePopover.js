@@ -9,57 +9,17 @@ import { getFriendList, getMessages, sendMessage } from '../utils/getMessage';
 import { BsSendFill } from 'react-icons/bs';
 import { AiFillCloseCircle } from 'react-icons/ai';
 import transfromTime from '../utils/transformTime';
-/**
- * 消息弹窗组件
- * @param {Object} props - 组件属性
- * @param {Function} props.handleMessage - 关闭消息弹窗的回调函数
- * @returns {JSX.Element} 消息弹窗组件
- */
+
 function MessagePopover({handleMessage}) {
-    /**
-     * 用户登录token
-     * @type {string}
-     */
-    const token = useSelector(state => state?.loginRegister?.token);
-    /**
-     * 用户id
-     * @type {string}
-     */
-    const user_id = useSelector(state => state?.loginRegister?.user_id);
-    /**
-     * 好友的消息列表
-     * @type {Object}
-     */
+    const token = useSelector(state => state?.loginRegister?.token);//获取登录状态
+    const user_id = useSelector(state => state?.loginRegister?.user_id);//获取用户id
     const [messages, setMessages] = useState(localStorage.getItem('messages')?JSON.parse(localStorage.getItem('messages')):{});
-    /**
-     * 好友列表
-     * @type {Array}
-     */
     const [list, setList] = useState(localStorage.getItem('friend_list')?JSON.parse(localStorage.getItem('friend_list')):[]);
-    /**
-     * 当前聊天好友的索引
-     * @type {number}
-     */
     const [friendIndex, setFriendIndex] = useState(0);
-    /**
-     * 用户信息
-     * @type {Object|undefined}
-     */
     const info = localStorage.getItem("info") ? JSON.parse(localStorage.getItem("info")) : undefined;
-    /**
-     * 输入框的值
-     * @type {string}
-     */
     const [inputValue, setInputValue] = useState("");
-    /**
-     * 消息列表的滚动条
-     * @type {Object}
-     */
     const scrollRef = useRef(null);
 
-    /**
-     * 组件挂载时，滚动到消息列表的底部
-     */
     useEffect(() => {
         if (scrollRef.current) {
             scrollRef.current.scrollTop = scrollRef.current.scrollHeight;
@@ -85,7 +45,7 @@ function MessagePopover({handleMessage}) {
                 }
             })
 
-        }, 1000);
+        }, 3000);
         return () => clearInterval(intervalId);
     }, [token, user_id])
 
@@ -117,16 +77,10 @@ function MessagePopover({handleMessage}) {
         }, 1000);
     },[list, token])
 
-    /**
-     * 监听消息列表的变化，更新本地存储
-     */
     useEffect(() => {
         localStorage.setItem('messages', JSON.stringify(messages));
     }, [messages]);    
 
-    /**
-     * 处理发送消息的函数
-     */
     function handleSendMessage() {
         setInputValue("");
         sendMessage(token, list[friendIndex].id, inputValue).then(res => {
