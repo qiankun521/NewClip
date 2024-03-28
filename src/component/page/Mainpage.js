@@ -10,33 +10,18 @@ import "swiper/css/pagination";
 import "swiper/css/navigation";
 import styles from "../../assets/styles/Mainpage.module.scss";
 import { useSelector } from "react-redux";
+import debounce from "../../utils/debounce";
 function Mainpage({ updateVideos }) {
   const realPrevIndex = useRef(0); // 上一次播放视频的swiper的真正index
   const swiperRef = useRef(null); // 用于获取swiper的ref
   const trueIndex = useRef(0); // 用于获取当前swiper的真正index
   const videosArr = useSelector((state) => state?.videos?.videosArr);
+  const videosObj = useSelector((state) => state?.videos?.videosObj);
   const [swiper, setSwiper] = useState(videosArr ? [0, 1, 2] : []); //用于设置三个swiper的实际加载的视频
   const [isPlaying, setIsPlaying] = useState([true, false, false]); //用于设置是否播放，仅当前视频自动播放
   const [canSLide, setCanSlide] = useState([false, true]); //用于设置是否可以滑动，适用于第一个和最后一个视频,0:上滑,1:下滑
-  const [ismuted, setIsmuted] = useState(true); // 用于设置是否静音，状态提升全局通用
-  const [volume, setVolume] = useState(0); //用于设置音量，全局通用
-  /**
-   * useEffect钩子，用于添加滚轮和按键事件监听器
-   */
   useEffect(() => {
-    function debounce(fn, delay) {
-      let timer = null;
-      return function () {
-        if (timer) {
-          clearTimeout(timer);
-        }
-        timer = setTimeout(() => {
-          fn.apply(this, arguments);
-          timer = null;
-        }, delay);
-      };
-    }
-
+    if (!swiperRef.current) return;
     function handleWheel(e) {
       if (e.deltaY > 0) {
         if (trueIndex.current !== videosArr.length - 1) swiperRef.current.slideNext();
@@ -44,8 +29,6 @@ function Mainpage({ updateVideos }) {
         if (trueIndex.current !== 0) swiperRef.current.slidePrev();
       }
     }
-
-    const debouncedHandleWheel = debounce(handleWheel, 100);
 
     function handleKeydown(e) {
       if (e.key === "ArrowDown") {
@@ -57,19 +40,20 @@ function Mainpage({ updateVideos }) {
       }
     }
 
-    window.addEventListener("keydown", handleKeydown);
-    window.addEventListener("wheel", debouncedHandleWheel);
+    const debouncedHandleWheel = debounce(handleWheel, 100);
+    const debouncedHandleKeydown = debounce(handleKeydown, 100);
 
+    swiperRef.current.addEventListener("keydown", debouncedHandleKeydown);
+    swiperRef.current.addEventListener("wheel", debouncedHandleWheel);
     return () => {
-      window.removeEventListener("keydown", handleKeydown);
-      window.removeEventListener("wheel", debouncedHandleWheel);
+      swiperRef.current.removeEventListener("keydown", debouncedHandleKeydown);
+      swiperRef.current.removeEventListener("wheel", debouncedHandleWheel);
     };
-  }, []); // eslint-disable-line
+  }, [swiperRef.current]); // eslint-disable-line
 
   // swiper滑动事件处理函数，判断是上滑还是下滑，更新swiper的实际加载的视频
-
   function handleSlideChange(swiper) {
-    if (videosArr && trueIndex.current >= videosArr.length / 2) {
+    if (videosArr.length !== 0 && trueIndex.current >= videosArr.length / 2) {
       updateVideos();
     }
     if (videosArr.length === 0 || swiper.realIndex === realPrevIndex.current) return;
@@ -117,9 +101,7 @@ function Mainpage({ updateVideos }) {
     realPrevIndex.current = swiper.realIndex;
   }
 
-  /**
-   * 控制视频播放的函数
-   */
+  //控制视频播放的函数
   function handlePlaying() {
     switch (swiperRef.current.realIndex) {
       case 0:
@@ -136,25 +118,6 @@ function Mainpage({ updateVideos }) {
     }
   }
 
-  /**
-   * 控制静音的函数
-   */
-  function handleMuted() {
-    if (ismuted) setVolume(0.5);
-    else setVolume(0);
-    setIsmuted(!ismuted);
-  }
-
-  /**
-   * 控制音量的函数
-   * @param {number} state - 音量值
-   */
-  function handleVolume(state) {
-    setVolume(parseFloat(state));
-    if (parseFloat(state) === 0) setIsmuted(true);
-    else setIsmuted(false);
-  }
-
   return (
     <div className={styles.mainpage}>
       <Swiper
@@ -162,46 +125,32 @@ function Mainpage({ updateVideos }) {
         direction="vertical"
         onSlideChange={handleSlideChange}
         onSwiper={(swiper) => (swiperRef.current = swiper)}
-        style={{
-          height: "100%",
-        }}
+        style={{ height: "100%" }}
         allowSlidePrev={canSLide[0]}
         allowSlideNext={canSLide[1]}
         loop>
         {videosArr[swiper[0]] && (
           <SwiperSlide key="0">
             <Video
-              trueIndex={trueIndex.current}
+              video={videosObj[videosArr[swiper[0]]]}
               isPlaying={isPlaying[0]}
-              handlePlaying={handlePlaying}
-              ismuted={ismuted}
-              handleMuted={handleMuted}
-              volume={volume}
-              handleVolume={handleVolume}></Video>
+              handlePlaying={handlePlaying}></Video>
           </SwiperSlide>
         )}
         {videosArr[swiper[1]] && (
           <SwiperSlide key="1">
             <Video
-              trueIndex={trueIndex.current}
+              video={videosObj[videosArr[swiper[1]]]}
               isPlaying={isPlaying[1]}
-              handlePlaying={handlePlaying}
-              ismuted={ismuted}
-              handleMuted={handleMuted}
-              volume={volume}
-              handleVolume={handleVolume}></Video>
+              handlePlaying={handlePlaying}></Video>
           </SwiperSlide>
         )}
         {videosArr[swiper[2]] && (
           <SwiperSlide key="2">
             <Video
-              trueIndex={trueIndex.current}
+              video={videosObj[videosArr[swiper[2]]]}
               isPlaying={isPlaying[2]}
-              handlePlaying={handlePlaying}
-              ismuted={ismuted}
-              handleMuted={handleMuted}
-              volume={volume}
-              handleVolume={handleVolume}></Video>
+              handlePlaying={handlePlaying}></Video>
           </SwiperSlide>
         )}
       </Swiper>

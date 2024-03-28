@@ -19,7 +19,8 @@ NewClip 是一款基于七牛云存储和七牛相关视频产品（如视频截
 一旦 Node.js 和 npm 安装完毕，通过以下步骤启动我们的项目：
 
 1. 克隆本仓库到你的本地存储位置。
-2. 在项目文件夹以管理员权限运行终端，输入以下命令安装所需依赖：
+2. 根据.env.example文件在根目录创建一个新的.env文件。将.env.example文件中的相关设置（例如，REACT_APP_API_URL, REACT_APP_API_PORT, REACT_APP_API_PATH等）复制到新的.env文件中，并修改成适应你环境的设置。
+3. 在项目文件夹以管理员权限运行终端，输入以下命令安装所需依赖：
 
 ```bash
 npm install
@@ -57,5 +58,5 @@ npm start
 
 ## 团队与分工
 
-- qiankun51：负责了整个前端界面的开发工作。
+- qiankun521：负责了整个前端界面的开发工作。
 - [chenxi393](https://github.com/chenxi393/)：全权负责了后端相关的开发工作。

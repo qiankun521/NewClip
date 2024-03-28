@@ -8,36 +8,40 @@ import { PauseOutlined } from "@ant-design/icons";
 import formatSeconds from "../utils/formatSeconds";
 import { BiSolidVolumeFull as SoundOn } from "react-icons/bi";
 import { BiSolidVolumeMute as SoundOff } from "react-icons/bi";
-
+import { useDispatch } from "react-redux";
+import { changeMute, changeVolume } from "../redux/actions/videosAction";
+import { Slider } from "antd";
+import debounce from "../utils/debounce";
 function Controls({
-  videoRef,//正在播放的视频的引用
-  isPlaying,//视频是否正在播放
-  handlePlaying,//处理视频播放/暂停的函数
-  played,//视频已播放的进度
-  handlePlayed,//处理视频播放进度的函数
-  playedSeconds,//视频已播放的秒数
-  ismuted,//视频是否静音
-  handleMuted,//处理视频静音/取消静音的函数
-  volume,//视频的音量
-  handleVolume,//处理视频音量的函数
+  videoRef, //正在播放的视频的引用
+  isPlaying, //视频是否正在播放
+  handlePlaying, //处理视频播放/暂停的函数
+  playedSeconds, //视频已播放的秒数
+  ismuted, //视频是否静音
+  volume, //视频的音量
 }) {
   const totalSeconds = videoRef.current
     ? formatSeconds(Math.floor(videoRef.current.getDuration()))
     : "00:00";
+  const dispatch = useDispatch();
+  const handleVolumeChange = (e) => {
+    dispatch(changeVolume(e.target.value / 100));
+  };
+  const handleVideoProgress = (e) => {
+    videoRef.current.seekTo(e.target.value);
+  };
+  const debouncedHandleVolumeChange = debounce(handleVolumeChange, 100);
+  const debouncedHandleVideoProgress = debounce(handleVideoProgress, 100);
   return (
     <div className={styles.controlContainer}>
       <div className={styles.topContainer}>
-        <input
+        <Slider
           className={styles.progress}
-          type="range"
-          step="any"
           min={0}
-          max={1}
-          value={played ? played : 0}
-          onChange={(e) => {
-            handlePlayed(e.target.value);
-            videoRef.current.seekTo(e.target.value);
-          }}
+          max={videoRef.current.getDuration()}
+          value={playedSeconds || 0}
+          onChange={debouncedHandleVideoProgress}
+          onChangeComplete={handleVideoProgress}
         />
       </div>
       <div className={styles.bottomContainer}>
@@ -51,19 +55,16 @@ function Controls({
         </div>
         <div className={styles.rightContainer}>
           <div>
-            <input
+            <Slider
               className={styles.volume}
-              type="range"
-              step="any"
               min={0}
-              max={1}
+              max={100}
               value={volume ? volume : 0}
-              onChange={(e) => {
-                handleVolume(e.target.value);
-              }}
+              onChange={debouncedHandleVolumeChange}
+              onChangeComplete={handleVolumeChange}
             />
           </div>
-          <div id="muted" className={styles.button} onClick={handleMuted}>
+          <div id="muted" className={styles.button} onClick={() => dispatch(changeMute())}>
             {!ismuted ? <SoundOn /> : <SoundOff />}
           </div>
         </div>

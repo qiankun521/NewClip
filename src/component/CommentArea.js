@@ -11,7 +11,7 @@ import { useDispatch, useSelector } from "react-redux";
 import { message } from "antd";
 import { hideComments, showComments, showLogin } from "../redux/actions/popoverAction";
 
-function CommentArea({ haveComments, comments, video, update, trueIndex, changeVideos }) {
+function CommentArea({ comments, video, refreshComments }) {
   const dispatch = useDispatch();
   const [commentValue, setCommentValue] = useState(""); // 评论输入框的值
   const isShowComments = useSelector((state) => state?.popover?.isShowComments);
@@ -19,34 +19,37 @@ function CommentArea({ haveComments, comments, video, update, trueIndex, changeV
   const token = useSelector((state) => state?.loginRegister?.token); // 用户 token
 
   function handleSendMessage() {
-    if (logout) dispatch(showLogin()); // 如果已注销，打开登录/注册模态框
-    else {
-      message.loading("发送中...", 0); // 显示加载中提示
-      postComment(token, video.id, 1, commentValue)
-        .then((data) => {
-          message.destroy();
-          switch (data.status_code) {
-            case 0:
-              setTimeout(update, 10); // 延迟 10ms 更新评论，后端出现了同步问题返回脏数据
-              setCommentValue(""); // 清空评论输入框的值
-              message.success(data.status_msg);
-              changeVideos(trueIndex, {
+    if (logout) {
+      dispatch(showLogin());
+      return;
+    } // 如果已注销，打开登录/注册模态框
+    message.loading("发送中...", 0); // 显示加载中提示
+    postComment(token, video.id, 1, commentValue)
+      .then((data) => {
+        message.destroy();
+        switch (data.status_code) {
+          case 0:
+            setTimeout(refreshComments, 10); // 延迟 10ms 更新评论，后端出现了同步问题返回脏数据
+            setCommentValue(""); // 清空评论输入框的值
+            message.success(data.status_msg);
+            dispatch(
+              changeVideos(video?.id, {
                 comment_count: parseInt(video.comment_count + 1),
-              });
-              break;
-            case -1:
-              message.error(data.status_msg);
-              break;
-            default:
-              message.error("评论失败");
-              break;
-          }
-        })
-        .catch((err) => {
-          console.log(err);
-          message.error("评论失败,请检查网络");
-        });
-    }
+              })
+            );
+            break;
+          case -1:
+            message.error(data.status_msg);
+            break;
+          default:
+            message.error("评论失败");
+            break;
+        }
+      })
+      .catch((err) => {
+        console.log(err);
+        message.error("评论失败,请检查网络");
+      });
   }
   function handleComments() {
     !isShowComments ? dispatch(showComments()) : dispatch(hideComments());
@@ -65,9 +68,9 @@ function CommentArea({ haveComments, comments, video, update, trueIndex, changeV
           </div>
         </div>
       </section>
-
       <section className={styles.commentList}>
-        {haveComments &&
+        {comments &&
+          comments?.length !== 0 &&
           comments.map((comment) => {
             return <SingleComment key={comment?.id} comment={comment} />;
           })}

@@ -1,7 +1,12 @@
-export const changeVideos = (trueIndex, newState, isChild = false, childName = "") => {
+export const changeVideos = (
+  videoId,
+  newState,
+  isChild = false,
+  childName = ""
+) => {
   return {
     type: "CHANGE_VIDEOS",
-    trueIndex,
+    videoId,
     newState,
     isChild,
     childName,
@@ -14,7 +19,12 @@ export const updateVideos = (videos) => {
     videos,
   };
 };
-
+export const updateVideosObj = (videos) => { 
+  return {
+    type: "UPDATE_VIDEOS_OBJ",
+    videos,
+  };
+}
 export const resetVideos = (videos) => {
   return {
     type: "RESET_VIDEOS",

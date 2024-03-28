@@ -13,110 +13,78 @@ import { Popover, message } from "antd";
 import { useNavigate } from "react-router";
 import SharePopover from "./SharePopover";
 import { hideComments, showComments, showLogin } from "../redux/actions/popoverAction";
-/**
- * 侧边栏组件
- * @param {Object} props - 组件属性
- * @param {Object} props.video - 当前播放的视频信息
- * @param {number} props.trueIndex - 视频在列表中的真实索引
- * @param {Function} props.changeVideos - 改变本地视频信息的函数
- * @returns {JSX.Element} 侧边栏组件
- */
-function Sidebar({ video, trueIndex, changeVideos }) {
+import { changeVideos } from "../redux/actions/videosAction";
+
+function Sidebar({ video }) {
   const dispatch = useDispatch();
   const navigate = useNavigate();
   const logout = useSelector((state) => state?.loginRegister?.logout);
   const token = useSelector((state) => state?.loginRegister?.token);
   const id = useSelector((state) => state?.loginRegister?.user_id);
   const isShowComments = useSelector((state) => state?.popover?.isShowComments);
-  /**
-   * 处理点赞事件
-   * @function
-   * @memberof module:Sidebar
-   * @returns {void}
-   */
-  function handleLike() {
+
+  function handleLike(e) {
     e.stopPropagation();
-    if (logout) dispatch(showLogin());
-    else {
-      if (video?.is_favorite)
-        postCancelLike(video?.id, token)
+    if (logout) {
+      dispatch(showLogin());
+      return;
+    }
+    video?.is_favorite
+      ? postCancelLike(video?.id, token)
+      : postLike(video?.id, token)
           .then((res) => {
             switch (res.status_code) {
               case 0:
-                // changeVideos(trueIndex, 'favorite_count', parseInt(video.favorite_count - 1))
-                // changeVideos(trueIndex, "is_favorite", !video.is_favorite);
-                // react中设置状态为异步，连续设置状态时，会出现问题
-                changeVideos(trueIndex, {
-                  favorite_count: parseInt(video.favorite_count - 1),
-                  is_favorite: !video.is_favorite,
-                });
+                dispatch(
+                  changeVideos(video?.id, {
+                    favorite_count: video?.is_favorite
+                      ? parseInt(video.favorite_count - 1)
+                      : parseInt(video.favorite_count + 1),
+                    is_favorite: !video.is_favorite,
+                  })
+                );
                 break;
               case -1:
                 message.error(res.status_msg, 1);
                 break;
               default:
-                message.error("取消点赞失败", 1);
+                message.error("操作失败", 1);
                 break;
             }
           })
           .catch((err) => {
-            message.error("取消点赞失败,请检查网络", 1);
+            message.error("操作失败,请检查网络", 1);
             console.log(err);
           });
-      else
-        postLike(video?.id, token)
-          .then((res) => {
-            switch (res.status_code) {
-              case 0:
-                changeVideos(trueIndex, {
-                  favorite_count: parseInt(video.favorite_count + 1),
-                  is_favorite: !video.is_favorite,
-                });
-                break;
-              case -1:
-                console.log(res.status_msg);
-                message.error({
-                  content: res.status_msg,
-                  key: "like",
-                  duration: 1,
-                });
-                break;
-              default:
-                message.error({
-                  content: "点赞失败",
-                  key: "like",
-                  duration: 1,
-                });
-                break;
-            }
-          })
-          .catch((err) => {
-            console.log(err);
-          });
-    }
   }
 
   function handleFollow(e) {
     e.stopPropagation();
-    if (logout) dispatch(showLogin());
-    else {
-      if (video.author.is_follow)
-        postCancelFollow(video.author.id, token)
+    if (logout) {
+      dispatch(showLogin());
+      return;
+    }
+    video?.author?.is_follow
+      ? postCancelFollow(video.author.id, token)
+      : postFollow(video.author.id, token)
           .then((res) => {
             switch (res.status_code) {
               case 0:
-                changeVideos(
-                  trueIndex,
-                  {
-                    follower_count: parseInt(video.author.follower_count - 1),
-                    is_follow: !video.author.is_follow,
-                  },
-                  true,
-                  "author"
+                dispatch(
+                  changeVideos(
+                    video?.id,
+                    {
+                      follower_count: video?.author?.is_follow
+                        ? parseInt(video?.author?.follower_count - 1)
+                        : parseInt(video?.author?.follower_count + 1),
+                      is_follow: !video?.author?.is_follow,
+                    },
+                    true,
+                    "author"
+                  )
                 );
                 break;
               case -1:
-                console.log(res.status_msg);
                 message.error(res.status_msg, 1);
                 break;
               default:
@@ -128,43 +96,10 @@ function Sidebar({ video, trueIndex, changeVideos }) {
             message.error("取消关注失败,请检查网络", 1);
             console.log(err);
           });
-      else
-        postFollow(video.author.id, token)
-          .then((res) => {
-            switch (res.status_code) {
-              case 0:
-                changeVideos(
-                  trueIndex,
-                  {
-                    follower_count: parseInt(video.author.follower_count + 1),
-                    is_follow: !video.author.is_follow,
-                  },
-                  true,
-                  "author"
-                );
-                break;
-              case -1:
-                message.error(res.status_msg, 1);
-                break;
-              default:
-                message.error("关注失败", 1);
-                break;
-            }
-          })
-          .catch((err) => {
-            message.error("取消关注失败,请检查网络", 1);
-            console.log(err);
-          });
-    }
-  }
-
-  function handleUserpage() {
-    navigate(`/personal/?user_id=${video?.author?.id}`);
   }
 
   function handleComments() {
-    if (!isShowComments) dispatch(showComments());
-    else dispatch(hideComments());
+    !isShowComments ? dispatch(showComments()) : dispatch(hideComments());
   }
 
   return (
@@ -176,11 +111,11 @@ function Sidebar({ video, trueIndex, changeVideos }) {
             backgroundImage: `url(${video?.author?.avatar})`,
             backgroundSize: "cover",
           }}
-          onClick={handleUserpage}>
+          onClick={() => navigate(`/personal/?user_id=${video?.author?.id}`)}>
           {id !== video?.author?.id && (
             <div
               className={video?.author?.is_follow ? styles.followed : styles.follow}
-              onClick={(e) => handleFollow(e)}>
+              onClick={handleFollow}>
               {video?.author?.is_follow ? "✔" : "+"}
             </div>
           )}
