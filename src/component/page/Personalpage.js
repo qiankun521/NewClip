@@ -143,7 +143,6 @@ function Personalpage() {
           })
           .catch((err) => {
             message.error("操作失败,请检查网络", 1);
-            console.log(err);
           });
   }
 

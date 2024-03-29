@@ -9,11 +9,13 @@ import { AiFillVideoCamera } from "react-icons/ai";
 import { useNavigate } from "react-router";
 import { logOut } from "../redux/actions/loginRegisterAction";
 import { useDispatch } from "react-redux";
+import { hideAll } from "../redux/actions/popoverAction";
 
 function PersonalPopover({ info }) {
   const dispatch = useDispatch();
   const navigate = useNavigate();
   function handlePersonal() {
+    dispatch(hideAll());
     navigate("/personal");
   }
   return (
@@ -26,8 +28,7 @@ function PersonalPopover({ info }) {
               className={styles.icon}
               style={{
                 color: "rgb(85, 190, 255)",
-              }}
-            ></BsPersonHeart>
+              }}></BsPersonHeart>
           </div>
           <div>我的粉丝</div>
           <div>{info.follower_count}</div>
@@ -38,8 +39,7 @@ function PersonalPopover({ info }) {
               className={styles.icon}
               style={{
                 color: "rgb(255, 251, 5)",
-              }}
-            ></BsPersonHearts>
+              }}></BsPersonHearts>
           </div>
           <div>我的关注</div>
           <div>{info.follow_count}</div>
@@ -50,8 +50,7 @@ function PersonalPopover({ info }) {
               className={styles.icon}
               style={{
                 color: "rgb(255, 5, 5)",
-              }}
-            ></AiFillHeart>
+              }}></AiFillHeart>
           </div>
           <div>我的喜欢</div>
           <div>{info.favorite_count}</div>
@@ -62,8 +61,7 @@ function PersonalPopover({ info }) {
               className={styles.icon}
               style={{
                 color: "rgb(0, 255, 187)",
-              }}
-            ></AiFillVideoCamera>
+              }}></AiFillVideoCamera>
           </div>
           <div>我的视频</div>
           <div>{info?.work_count || 0}</div>

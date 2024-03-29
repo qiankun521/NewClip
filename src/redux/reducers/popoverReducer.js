@@ -27,7 +27,7 @@ const popoverReducer = (state = initState, action) => {
       return { ...state, isShowPersonal: true };
     case "HIDE_PERSONAL":
       return { ...state, isShowPersonal: false };
-    case "CLOSE_ALL":
+    case "HIDE_ALL":
       return { ...initState };
     default:
       return state;

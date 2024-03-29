@@ -48,8 +48,8 @@ export const hidePersonal = () => {
     type: "HIDE_PERSONAL",
   };
 };
-export const closeAll = () => {
+export const hideAll = () => {
   return {
-    type: "CLOSE_ALL",
+    type: "HIDE_ALL",
   };
 };

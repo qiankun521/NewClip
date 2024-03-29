@@ -21,7 +21,6 @@ function Video({
   const playedSeconds = useRef(0);
   const [comments, setComments] = useState([]); //评论
   const isShowComments = useSelector((state) => state?.popover?.isShowComments);
-  const videosArr = useSelector((state) => state?.videos?.videosArr);
   const ismuted = useSelector((state) => state?.videos?.ismuted);
   const volume = useSelector((state) => state?.videos?.volume);
   //TODO 视频未加载完成时使用封面cover
@@ -46,6 +45,7 @@ function Video({
 
   useEffect(() => {
     refreshComments();
+  // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [video]);
 
   return (

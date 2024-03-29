@@ -36,7 +36,7 @@ import {
 } from "../redux/actions/popoverAction";
 import { changeInfo, changeMessages } from "../redux/actions/personalAction";
 import { changeChooseClass } from "../redux/actions/videosAction";
-import {changeFriendList} from "../redux/actions/personalAction";
+import { changeFriendList } from "../redux/actions/personalAction";
 function Header() {
   const navigate = useNavigate();
   const dispatch = useDispatch();
@@ -84,7 +84,7 @@ function Header() {
           break;
       }
     });
-  }, [id, token, isShowPersonal, isShowMessage]);
+  }, [id, token, isShowPersonal, isShowMessage, logout, dispatch]);
   useEffect(() => {
     if (logout || !id || !token) return;
     for (const item of friendList) {
@@ -101,7 +101,7 @@ function Header() {
         }
       });
     }
-  }, [friendList]);
+  }, [dispatch, friendList, id, logout, token]);
   function onFinishLogin(values) {
     dispatch(loginRequest());
     message.loading("登录中...", 0);
