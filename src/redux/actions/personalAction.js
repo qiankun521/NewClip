@@ -17,3 +17,9 @@ export const changeMessages = (id, messages) => {
     messages,
   };
 };
+export const changeChattingFriendId = (id) => {
+  return {
+    type: "CHANGE_CHATTING_FRIEND_ID",
+    id,
+  };
+};

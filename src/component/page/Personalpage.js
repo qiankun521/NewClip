@@ -15,8 +15,8 @@ import { postFollow, postCancelFollow } from "../../utils/postFollow";
 import Video from "../Video";
 import { getFollow, getFollower } from "../../utils/getFollow";
 import FollowPopover from "../FollowPopover";
-import { showLogin } from "../../redux/actions/popoverAction";
-import { changeInfo } from "../../redux/actions/personalAction";
+import { showLogin, showMessages } from "../../redux/actions/popoverAction";
+import { changeChattingFriendId, changeInfo } from "../../redux/actions/personalAction";
 function Personalpage() {
   const navigate = useNavigate();
   const dispatch = useDispatch();
@@ -28,6 +28,7 @@ function Personalpage() {
   const logout = useSelector((state) => state?.loginRegister?.logout); //用户是否登出
   const selfInfo = useSelector((state) => state?.loginRegister?.info); //用户信息
   const videosObj = useSelector((state) => state?.videos?.videosObj);
+  const friendList = useSelector((state) => state?.personal?.friendList);
   const [videoId, setVideoId] = useState(1);
   const [info, setInfo] = useState(trueId === id ? selfInfo : null); //用户信息
   const [like, setLike] = useState(null); //用户喜欢的视频列表
@@ -39,8 +40,7 @@ function Personalpage() {
   const [follower, setFollower] = useState([]);
 
   useEffect(() => {
-    if (logout && user_id === null) {
-      //TODO 是否限制用户登录才能查看
+    if (logout && !trueId) {
       navigate("/");
       return;
     }
@@ -117,7 +117,7 @@ function Personalpage() {
           break;
       }
     });
-  }, [trueId, token, id, logout, navigate, user_id, visible]);
+  }, [trueId, token, id, logout, navigate, user_id, visible, dispatch]);
 
   function handleFollow() {
     if (logout) {
@@ -148,7 +148,16 @@ function Personalpage() {
   }
 
   function handleMessage() {
-    //TODO 私信
+    if (logout) {
+      message.error("请先登录", 1);
+      dispatch(showLogin());
+      return;
+    } else if (!friendList(trueId)) {
+      message.error("对方不是您的好友，请互相关注后使用私信功能", 1);
+      return;
+    }
+    dispatch(changeChattingFriendId(trueId));
+    dispatch(showMessages());
   }
 
   function handleFullScreen(videoId) {

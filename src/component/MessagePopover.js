@@ -10,22 +10,27 @@ import { BsSendFill } from "react-icons/bs";
 import { AiFillCloseCircle } from "react-icons/ai";
 import transfromTime from "../utils/transformTime";
 import { useDispatch } from "react-redux";
-import { changeMessages, changeFriendList } from "../redux/actions/personalAction";
+import {
+  changeMessages,
+  changeFriendList,
+  changeChattingFriendId,
+} from "../redux/actions/personalAction";
 import { message } from "antd";
 function MessagePopover({ handleMessage }) {
   const dispatch = useDispatch();
   const token = useSelector((state) => state?.loginRegister?.token); //获取登录状态
   const user_id = useSelector((state) => state?.loginRegister?.user_id); //获取用户id
   const messages = useSelector((state) => state?.personal?.messages);
+  const friendListArr = useSelector((state) => Object.values(state?.personal?.friendList));
   const friendList = useSelector((state) => state?.personal?.friendList);
   const info = useSelector((state) => state?.personal?.info);
-  const [friendIndex, setFriendIndex] = useState(0);
+  const chattingFriendId = useSelector((state) => state?.personal?.chattingFriendId);
   const [inputValue, setInputValue] = useState("");
   const scrollRef = useRef(null);
   const messageEndRef = useRef(null);
 
   function handleSendMessage() {
-    sendMessage(token, friendList[friendIndex].id, inputValue)
+    sendMessage(token, chattingFriendId, inputValue)
       .then((res) => {
         switch (res.status_code) {
           case 0:
@@ -43,11 +48,12 @@ function MessagePopover({ handleMessage }) {
         console.log(err);
       });
   }
+
   useEffect(() => {
     if (messageEndRef.current) {
       messageEndRef.current.scrollIntoView({ behavior: "smooth" });
     }
-  }, [friendIndex]);
+  }, [chattingFriendId]);
 
   useEffect(() => {
     if (scrollRef.current && messageEndRef.current) {
@@ -56,7 +62,8 @@ function MessagePopover({ handleMessage }) {
         scrollRef.current.scrollHeight - 50;
       if (isNearBottom) messageEndRef.current.scrollIntoView({ behavior: "smooth" });
     }
-  }, [messages?.[friendList?.[friendIndex]?.id]]);
+    // eslint-disable-next-line react-hooks/exhaustive-deps
+  }, [messages[chattingFriendId]]);
 
   useEffect(() => {
     if (!token || !user_id) return;
@@ -75,12 +82,12 @@ function MessagePopover({ handleMessage }) {
       });
     }, 3000);
     return () => clearInterval(intervalId);
-  }, [token, user_id]);
+  }, [dispatch, token, user_id]);
 
   useEffect(() => {
     if (!token || !user_id) return;
     const intervalId = setInterval(() => {
-      for (const item of friendList) {
+      for (const item of friendListArr) {
         getMessages(token, item.id).then((res) => {
           switch (res.status_code) {
             case 0:
@@ -96,17 +103,17 @@ function MessagePopover({ handleMessage }) {
       }
     }, 3000);
     return () => clearInterval(intervalId);
-  }, [friendList, token]);
+  }, [dispatch, friendListArr, token, user_id]);
 
   return (
     <div className={styles.messageContainer} onWheel={(e) => e.stopPropagation()}>
       <div className={styles.left}>
-        {friendList.map((item, index) => {
+        {friendListArr.map((item) => {
           return (
             <div
               key={item.id}
-              className={`${styles.person} ${index === friendIndex && styles.selected}`}
-              onClick={() => setFriendIndex(index)}>
+              className={`${styles.person} ${item.id === chattingFriendId && styles.selected}`}
+              onClick={() => dispatch(changeChattingFriendId(item.id))}>
               <div>
                 <div
                   className={styles.avatar}
@@ -128,8 +135,8 @@ function MessagePopover({ handleMessage }) {
       <div className={styles.rightContainer}>
         <div className={styles.right} ref={scrollRef}>
           <div className={styles.messageArea}>
-            {messages &&
-              messages[friendList[friendIndex]?.id]?.map((item, index) => {
+            {messages[chattingFriendId] &&
+              messages[chattingFriendId]?.map((item, index) => {
                 return (
                   <div key={index} className={styles.message}>
                     <div className={styles.time}>{transfromTime(item?.create_time)}</div>
@@ -138,9 +145,7 @@ function MessagePopover({ handleMessage }) {
                         <div
                           className={styles.avatarSmall}
                           style={{
-                            backgroundImage: `url(${
-                              friendList && friendList[friendIndex]?.avatar
-                            })`,
+                            backgroundImage: `url(${friendList[chattingFriendId]?.avatar})`,
                             backgroundSize: "cover",
                           }}></div>
                         <div className={styles.content}>{item?.content}</div>
