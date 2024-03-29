@@ -36,7 +36,7 @@ import {
 } from "../redux/actions/popoverAction";
 import { changeInfo, changeMessages } from "../redux/actions/personalAction";
 import { changeChooseClass } from "../redux/actions/videosAction";
-
+import {changeFriendList} from "../redux/actions/personalAction";
 function Header() {
   const navigate = useNavigate();
   const dispatch = useDispatch();
@@ -55,6 +55,7 @@ function Header() {
   const isShowPersonal = useSelector((state) => state?.popover?.isShowPersonal);
   const chooseClass = useSelector((state) => state?.videos?.chooseClass);
   useEffect(() => {
+    if (logout || !id || !token) return;
     getPersonalInfo(id, token)
       .then((res) => {
         switch (res.status_code) {
@@ -71,6 +72,21 @@ function Header() {
       .catch((err) => {
         console.log(err);
       });
+    getFriendList(id, token).then((res) => {
+      switch (res.status_code) {
+        case 0:
+          dispatch(changeFriendList(res.user_list));
+          break;
+        case -1:
+          message.error(res.status_msg);
+          break;
+        default:
+          break;
+      }
+    });
+  }, [id, token, isShowPersonal, isShowMessage]);
+  useEffect(() => {
+    if (logout || !id || !token) return;
     for (const item of friendList) {
       getMessages(token, item.id).then((res) => {
         switch (res.status_code) {
@@ -85,8 +101,7 @@ function Header() {
         }
       });
     }
-  }, [id, token, isShowPersonal, isShowMessage, friendList]);
-
+  }, [friendList]);
   function onFinishLogin(values) {
     dispatch(loginRequest());
     message.loading("登录中...", 0);
@@ -97,18 +112,6 @@ function Header() {
           case 0:
             message.success(res.status_msg);
             dispatch(loginSuccess(values.username, res.token, res.status_msg, res.user_id));
-            getFriendList(res.user_id, res.token).then((res) => {
-              switch (res.status_code) {
-                case 0:
-                  localStorage.setItem("friend_list", JSON.stringify(res.user_list));
-                  break;
-                case -1:
-                  console.log(res.status_msg);
-                  break;
-                default:
-                  break;
-              }
-            });
             dispatch(hideLogin());
             break;
           case -1:
@@ -234,7 +237,7 @@ function Header() {
           <div className={styles.personalbar}>
             <Popover
               open={isShowUpload}
-              onClick={() => handleFileChange()}
+              onClick={handleFileChange}
               content={<UploadPopover></UploadPopover>}>
               <div className={styles.upload}>
                 <div>
@@ -246,7 +249,7 @@ function Header() {
             <Popover
               content={<MessagePopover handleMessage={handleMessage}></MessagePopover>}
               open={isShowMessage}
-              onClick={() => handleMessage()}>
+              onClick={handleMessage}>
               <div className={styles.message}>
                 <div>
                   <AiOutlineMessage></AiOutlineMessage>
@@ -315,16 +318,12 @@ function Header() {
           <div className={styles.choose}>
             <div
               className={`${styles.chooseItem} ${choose[0] && styles.choosed}`}
-              onClick={() => {
-                setChoose([true, false]);
-              }}>
+              onClick={() => setChoose([true, false])}>
               登录
             </div>
             <div
               className={`${styles.chooseItem} ${choose[1] && styles.choosed}`}
-              onClick={() => {
-                setChoose([false, true]);
-              }}>
+              onClick={() => setChoose([false, true])}>
               注册
             </div>
           </div>
@@ -344,24 +343,14 @@ function Header() {
               <Form.Item
                 label={<span style={{ color: "#C9C9CA" }}>用户名</span>}
                 name="username"
-                rules={[
-                  {
-                    required: true,
-                    message: "请输入用户名!",
-                  },
-                ]}>
+                rules={[{ required: true, message: "请输入用户名!" }]}>
                 <Input className={styles.input} />
               </Form.Item>
 
               <Form.Item
                 label={<span style={{ color: "#C9C9CA" }}>用户密码</span>}
                 name="password"
-                rules={[
-                  {
-                    required: true,
-                    message: "请输入用户密码!",
-                  },
-                ]}>
+                rules={[{ required: true, message: "请输入用户密码!" }]}>
                 <Input.Password className={styles.input} />
               </Form.Item>
 
@@ -383,6 +372,7 @@ function Header() {
             <Form
               name="complex-form"
               onFinish={onFinishRegister}
+              onFinishFailed={onFinishFailed}
               labelCol={{ span: 8 }}
               wrapperCol={{ span: 16 }}
               style={{

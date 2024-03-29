@@ -43,11 +43,11 @@ function Mainpage({ updateVideos }) {
     const debouncedHandleWheel = debounce(handleWheel, 100);
     const debouncedHandleKeydown = debounce(handleKeydown, 100);
 
-    swiperRef.current.addEventListener("keydown", debouncedHandleKeydown);
-    swiperRef.current.addEventListener("wheel", debouncedHandleWheel);
+    window.addEventListener("keydown", debouncedHandleKeydown);
+    window.addEventListener("wheel", debouncedHandleWheel);
     return () => {
-      swiperRef.current.removeEventListener("keydown", debouncedHandleKeydown);
-      swiperRef.current.removeEventListener("wheel", debouncedHandleWheel);
+      window.removeEventListener("keydown", debouncedHandleKeydown);
+      window.removeEventListener("wheel", debouncedHandleWheel);
     };
   }, [swiperRef.current]); // eslint-disable-line
 

@@ -42,7 +42,7 @@ function Searchpage() {
         message.destroy();
         message.error("搜索失败");
       });
-  }, [keyword, token]);
+  }, [dispatch, keyword, token]);
 
   function handleFullScreen(videoId) {
     setVisible(true);

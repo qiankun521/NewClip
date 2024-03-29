@@ -10,7 +10,7 @@ import postComment from "../utils/postComment";
 import { useDispatch, useSelector } from "react-redux";
 import { message } from "antd";
 import { hideComments, showComments, showLogin } from "../redux/actions/popoverAction";
-
+import { changeVideos } from "../redux/actions/videosAction";
 function CommentArea({ comments, video, refreshComments }) {
   const dispatch = useDispatch();
   const [commentValue, setCommentValue] = useState(""); // 评论输入框的值

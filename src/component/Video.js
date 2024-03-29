@@ -30,7 +30,7 @@ function Video({
   }
   function refreshComments() {
     //获取评论的函数，也用于发布评论后刷新评论区
-    getComments(videosArr[trueIndex]).then((res) => {
+    getComments(video?.id).then((res) => {
       switch (res.status_code) {
         case 0:
           setComments(res.comment_list);

@@ -13,7 +13,7 @@ import { hideUpload } from "../redux/actions/popoverAction";
 import { useDispatch } from "react-redux";
 
 function UploadPopover() {
-    const dispatch = useDispatch(); //派发函数
+  const dispatch = useDispatch(); //派发函数
   const { TextArea } = Input; //输入框组件实例
   const [title, setTitle] = useState("默认标题"); //视频标题
   const [topic, setTopic] = useState("其它"); //视频分类
@@ -116,8 +116,7 @@ function UploadPopover() {
       </div>
       <AiFillCloseCircle
         className={styles.close}
-        onClick={() => dispatch(hideUpload())}
-      ></AiFillCloseCircle>
+        onClick={() => dispatch(hideUpload())}></AiFillCloseCircle>
     </div>
   );
 }
