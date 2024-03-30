@@ -12,46 +12,46 @@ jobs:
     env:
       CI: false
     steps:
-    - name: Checkout code
-      uses: actions/checkout@v2
+      - name: Checkout code
+        uses: actions/checkout@v2
 
-    - name: Install Node.js
-      uses: actions/setup-node@v2
-      with:
-        node-version: 18
+      - name: Install Node.js
+        uses: actions/setup-node@v2
+        with:
+          node-version: 18
 
-    - name: Install dependencies
-      run: npm ci
+      - name: Install dependencies
+        run: npm ci
 
-    - name: Build app
-      run: npm run build
+      - name: Build app
+        run: npm run build
 
-    - name: Archive production artifacts
-      uses: actions/upload-artifact@v2
-      with:
-        name: build
-        path: build/
-  
+      - name: Archive production artifacts
+        uses: actions/upload-artifact@v2
+        with:
+          name: build
+          path: build/
+
   # Job for deployment
   deploy:
     needs: [build] # This job needs to be run after the build job is completed
     runs-on: self-hosted
     steps:
-    - name: Checkout code
-      uses: actions/checkout@v2
+      - name: Checkout code
+        uses: actions/checkout@v2
 
-    - name: Download artifacts
-      uses: actions/download-artifact@v2
-      with:
-        name: build
+      - name: Download artifacts
+        uses: actions/download-artifact@v2
+        with:
+          name: build
 
-    - name: Remove unnecessary files and directories
-      run: |
-        rm -rf ./ Docs public src .env .env.example .gitignore Dockerfile README.md nginx.conf package-lock.json package.json
+      - name: Remove unnecessary files and directories
+        run: |
+          rm -rf .github/workflows Docs public src .env .env.example .gitignore Dockerfile README.md nginx.conf package-lock.json package.json
 
-    - name: Deploy app
-      run: |
-        rsync -av ./ /var/www/newclip
-        sudo systemctl reload nginx
-    - name: Clean Up
-      run: rm -rf build/
+      - name: Deploy app
+        run: |
+          rsync -av ./ /var/www/newclip
+          sudo systemctl reload nginx
+      - name: Clean Up
+        run: rm -rf build/
