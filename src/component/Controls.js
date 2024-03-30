@@ -38,7 +38,7 @@ function Controls({
         <Slider
           className={styles.progress}
           min={0}
-          max={videoRef.current?.getDuration()||100}
+          max={videoRef.current?.getDuration() || 100}
           value={playedSeconds || 0}
           onChange={debouncedHandleVideoProgress}
           onChangeComplete={handleVideoProgress}
@@ -54,17 +54,19 @@ function Controls({
           </div>
         </div>
         <div className={styles.rightContainer}>
-          <div>
-            <Slider
-              className={styles.volume}
-              min={0}
-              max={100}
-              value={volume ? volume : 0}
-              onChange={debouncedHandleVolumeChange}
-              onChangeComplete={handleVolumeChange}
-            />
-          </div>
-          <div id="muted" className={styles.button} onClick={() => dispatch(changeMute())}>
+          <Slider
+            className={styles.volume}
+            min={0}
+            max={100}
+            value={volume ? volume : 0}
+            onChange={debouncedHandleVolumeChange}
+            onChangeComplete={handleVolumeChange}
+          />
+          <div
+            id="muted"
+            className={styles.button}
+            onClick={() => dispatch(changeMute())}
+          >
             {!ismuted ? <SoundOn /> : <SoundOff />}
           </div>
         </div>
