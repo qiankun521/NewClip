@@ -47,11 +47,11 @@ jobs:
 
       - name: Remove unnecessary files and directories
         run: |
-          rm -rf .github/workflows Docs public src .env .env.example .gitignore Dockerfile README.md nginx.conf package-lock.json package.json
+          rm -rf .github .git Docs public src .env .env.example .gitignore Dockerfile README.md nginx.conf package-lock.json package.json
 
       - name: Deploy app
         run: |
           rsync -av ./ /var/www/newclip
           sudo systemctl reload nginx
       - name: Clean Up
-        run: rm -rf build/
+        run: rm -rf ./*
