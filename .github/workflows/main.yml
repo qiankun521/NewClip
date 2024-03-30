@@ -3,7 +3,7 @@ name: Build and Deploy
 on:
   push:
     branches:
-      - master # 或者你希望部署的分支
+      - main # 或者你希望部署的分支
 
 jobs:
   # Job for building
