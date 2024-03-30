@@ -35,7 +35,7 @@ jobs:
   # Job for deployment
   deploy:
     needs: [build] # This job needs to be run after the build job is completed
-    runs-on: C20240324138135
+    runs-on: self-hosted
     steps:
     - name: Checkout code
       uses: actions/checkout@v2
