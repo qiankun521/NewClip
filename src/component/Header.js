@@ -45,7 +45,7 @@ function Header() {
   const id = useSelector((state) => state?.loginRegister?.user_id);
   const token = useSelector((state) => state?.loginRegister?.token);
   const info = useSelector((state) => state?.personal?.info);
-  const friendList = useSelector((state) => state?.personal?.friendList);
+  const friendListArr = useSelector((state) => Object.values(state?.personal?.friendList));
   const logout = useSelector((state) => state?.loginRegister?.logout);
   const loginWaiting = useSelector((state) => state?.loginRegister?.loginWaiting);
   const registerWaiting = useSelector((state) => state?.loginRegister?.registerWaiting);
@@ -87,7 +87,7 @@ function Header() {
   }, [id, token, isShowPersonal, isShowMessage, logout, dispatch]);
   useEffect(() => {
     if (logout || !id || !token) return;
-    for (const item of friendList) {
+    for (const item of friendListArr) {
       getMessages(token, item.id).then((res) => {
         switch (res.status_code) {
           case 0:
@@ -101,7 +101,7 @@ function Header() {
         }
       });
     }
-  }, [dispatch, friendList, id, logout, token]);
+  }, [dispatch, friendListArr, id, logout, token]);
   function onFinishLogin(values) {
     dispatch(loginRequest());
     message.loading("登录中...", 0);
