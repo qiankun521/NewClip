@@ -21,14 +21,14 @@ function Controls({
   volume, //视频的音量
 }) {
   const totalSeconds = videoRef.current
-    ? formatSeconds(Math.floor(videoRef.current.getDuration()))
+    ? formatSeconds(Math.floor(videoRef.current?.getDuration()))
     : "00:00";
   const dispatch = useDispatch();
   const handleVolumeChange = (e) => {
     dispatch(changeVolume(e.target.value / 100));
   };
   const handleVideoProgress = (e) => {
-    videoRef.current.seekTo(e.target.value);
+    videoRef.current?.seekTo(e.target.value);
   };
   const debouncedHandleVolumeChange = debounce(handleVolumeChange, 100);
   const debouncedHandleVideoProgress = debounce(handleVideoProgress, 100);
@@ -38,7 +38,7 @@ function Controls({
         <Slider
           className={styles.progress}
           min={0}
-          max={videoRef.current.getDuration()}
+          max={videoRef.current?.getDuration()||100}
           value={playedSeconds || 0}
           onChange={debouncedHandleVideoProgress}
           onChangeComplete={handleVideoProgress}
