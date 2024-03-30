@@ -47,7 +47,7 @@ jobs:
 
     - name: Deploy app
       run: |
-        rsync -av build/ /var/www/newclip
+        rsync -av / /var/www/newclip
         sudo systemctl reload nginx
     - name: Clean Up
-      run: rm -rf build/
+      run: rm -rf /
