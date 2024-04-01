@@ -53,6 +53,7 @@ function Personalpage() {
             break;
           case -1:
             console.log(res.status_msg);
+            navigate("/");
             break;
           default:
             break;
@@ -131,7 +132,7 @@ function Personalpage() {
           .then((res) => {
             switch (res.status_code) {
               case 0:
-                setInfo({ ...info, is_follow: !info.is_follow });
+                setInfo((prevState) => ({ ...prevState, is_follow: !info.is_follow }));
                 break;
               case -1:
                 message.error(res.status_msg, 1);

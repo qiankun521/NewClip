@@ -28,7 +28,9 @@ import { getFriendList, getMessages } from "../utils/getMessage";
 import UploadPopover from "./UploadPopover";
 import {
   hideLogin,
+  hideMessages,
   hidePersonal,
+  hideUpload,
   showLogin,
   showMessages,
   showPersonal,
@@ -176,13 +178,13 @@ function Header() {
     if (logout) {
       message.error("请先登录");
       dispatch(showLogin());
-    } else dispatch(showUpload()); //控制开启关闭上传popover
+    } else isShowUpload ? dispatch(hideUpload()) : dispatch(showUpload()); //控制开启关闭上传popover
   }
   function handleMessage() {
     if (logout) {
       message.error("请先登录");
       dispatch(showLogin());
-    } else dispatch(showMessages()); //控制开启关闭私信popover
+    } else isShowMessage ? dispatch(hideMessages()) : dispatch(showMessages()); //控制开启关闭私信popover
   }
   function handlePersonal() {
     isShowPersonal ? dispatch(hidePersonal()) : dispatch(showPersonal()); //控制开启关闭个人信息popover
