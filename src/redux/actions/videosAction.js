@@ -46,9 +46,10 @@ export const changeVolume = (volume) => {
   };
 };
 
-export const changeMute = () => {
+export const changeMute = (ismuted) => {
   return {
     type: "CHANGE_MUTE",
+    ismuted,
   };
 };
 

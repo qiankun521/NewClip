@@ -11,7 +11,7 @@ import { logOut } from "./redux/actions/loginRegisterAction";
 import { ConfigProvider, message } from "antd";
 import Page404 from "./component/page/Page404";
 import Personalpage from "./component/page/Personalpage";
-import { changeNextTime, resetVideos } from "./redux/actions/videosAction";
+import { changeMute, changeNextTime, resetVideos } from "./redux/actions/videosAction";
 import { hideAll, showLogin } from "./redux/actions/popoverAction";
 function App() {
   const dispatch = useDispatch();
@@ -22,6 +22,7 @@ function App() {
   const videoClass = ["不选择任何类别", "", "体育", "游戏", "音乐"]; // 视频类别列表
 
   useEffect(() => {
+    dispatch(changeMute(true)); //每次刷新页面都将视频静音
     function refreshVideos() {
       const latest_time = nextTime[chooseClass] || undefined;
       getVideo(latest_time, token, videoClass[chooseClass])
@@ -35,6 +36,7 @@ function App() {
               }
               dispatch(resetVideos(res.video_list));
               dispatch(changeNextTime(res.next_time));
+              message.info("已自动静音，请手动取消");
               break;
             case -1:
               message.error(res.status_msg);
@@ -84,7 +86,7 @@ function App() {
             colorBgElevated: "#252632",
             colorText: "#C9C9CA",
             colorTextHeading: "#C9C9CA",
-          }
+          },
         },
       }}>
       <Router>

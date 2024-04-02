@@ -65,7 +65,7 @@ const videosReducer = (state = initState, action) => {
     case "CHANGE_MUTE":
       return {
         ...state,
-        ismuted: !state.ismuted,
+        ismuted: action.ismuted,
       };
     case "CHANGE_CHOOSE_CLASS":
       return {
