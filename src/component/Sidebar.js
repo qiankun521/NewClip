@@ -1,7 +1,3 @@
-/**
- * @file 侧边栏组件
- * @module Sidebar
- */
 import styles from "../assets/styles/Sidebar.module.scss";
 import { HeartFilled } from "@ant-design/icons";
 import { BiSolidCommentDots } from "react-icons/bi";
@@ -24,7 +20,6 @@ function Sidebar({ video }) {
   const isShowComments = useSelector((state) => state?.popover?.isShowComments);
 
   function handleLike(e) {
-    e.stopPropagation();
     if (logout) {
       dispatch(showLogin());
       return;

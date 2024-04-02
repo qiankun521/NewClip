@@ -16,7 +16,11 @@ import Video from "../Video";
 import { getFollow, getFollower } from "../../utils/getFollow";
 import FollowPopover from "../FollowPopover";
 import { showLogin, showMessages } from "../../redux/actions/popoverAction";
-import { changeChattingFriendId, changeInfo } from "../../redux/actions/personalAction";
+import {
+  changeChattingFriendId,
+  changeInfo,
+} from "../../redux/actions/personalAction";
+import { updateVideosObj } from "../../redux/actions/videosAction";
 function Personalpage() {
   const navigate = useNavigate();
   const dispatch = useDispatch();
@@ -40,7 +44,7 @@ function Personalpage() {
   const [follower, setFollower] = useState([]);
 
   useEffect(() => {
-    if (logout && !trueId) {
+    if (!trueId) {
       navigate("/");
       return;
     }
@@ -67,6 +71,7 @@ function Personalpage() {
         switch (res.status_code) {
           case 0:
             setLike(res.video_list);
+            dispatch(updateVideosObj(res.video_list));
             break;
           case -1:
             console.log(res.status_msg);
@@ -83,6 +88,7 @@ function Personalpage() {
         switch (res.status_code) {
           case 0:
             setWork(res.video_list);
+            dispatch(updateVideosObj(res.video_list));
             break;
           case -1:
             console.log(res.status_msg);
@@ -132,7 +138,10 @@ function Personalpage() {
           .then((res) => {
             switch (res.status_code) {
               case 0:
-                setInfo((prevState) => ({ ...prevState, is_follow: !info.is_follow }));
+                setInfo((prevState) => ({
+                  ...prevState,
+                  is_follow: !info.is_follow,
+                }));
                 break;
               case -1:
                 message.error(res.status_msg, 1);
@@ -176,7 +185,8 @@ function Personalpage() {
                 style={{
                   backgroundImage: `url(${info?.avatar})`,
                   backgroundSize: "cover",
-                }}></div>
+                }}
+              ></div>
             </div>
             <div className={styles.info}>
               <div className={styles.name}>{info?.name}</div>
@@ -186,7 +196,8 @@ function Personalpage() {
                   <Popover
                     content={<FollowPopover info={follow}></FollowPopover>}
                     trigger="hover"
-                    placement="bottom">
+                    placement="bottom"
+                  >
                     <div>{info?.follow_count}</div>
                   </Popover>
                 </div>
@@ -195,7 +206,8 @@ function Personalpage() {
                   <Popover
                     content={<FollowPopover info={follower}></FollowPopover>}
                     trigger="hover"
-                    placement="bottom">
+                    placement="bottom"
+                  >
                     <div>{info?.follower_count}</div>
                   </Popover>
                 </div>
@@ -215,8 +227,11 @@ function Personalpage() {
             ) : (
               <div className={styles.buttonContainer}>
                 <div
-                  className={`${styles.button} ${!info?.is_follow && styles.notfollow}`}
-                  onClick={handleFollow}>
+                  className={`${styles.button} ${
+                    !info?.is_follow && styles.notfollow
+                  }`}
+                  onClick={handleFollow}
+                >
                   {info?.is_follow ? "取消关注" : "关注"}
                 </div>
                 <div className={styles.button} onClick={handleMessage}>
@@ -228,13 +243,19 @@ function Personalpage() {
         </div>
         <div className={styles.classify}>
           <div
-            className={`${styles.classifyTitle} ${active === 0 && styles.classifyTitleActive}`}
-            onClick={() => setActive(0)}>
+            className={`${styles.classifyTitle} ${
+              active === 0 && styles.classifyTitleActive
+            }`}
+            onClick={() => setActive(0)}
+          >
             作品
           </div>
           <div
-            className={`${styles.classifyTitle} ${active === 1 && styles.classifyTitleActive}`}
-            onClick={() => setActive(1)}>
+            className={`${styles.classifyTitle} ${
+              active === 1 && styles.classifyTitleActive
+            }`}
+            onClick={() => setActive(1)}
+          >
             喜欢
           </div>
         </div>
@@ -245,7 +266,8 @@ function Personalpage() {
                   <SingleVideo
                     key={item.id}
                     video={item}
-                    handleFullScreen={handleFullScreen}></SingleVideo>
+                    handleFullScreen={handleFullScreen}
+                  ></SingleVideo>
                 );
               })
             : like?.map((item) => {
@@ -253,7 +275,8 @@ function Personalpage() {
                   <SingleVideo
                     key={item.id}
                     video={item}
-                    handleFullScreen={handleFullScreen}></SingleVideo>
+                    handleFullScreen={handleFullScreen}
+                  ></SingleVideo>
                 );
               })}
         </div>
@@ -263,7 +286,8 @@ function Personalpage() {
           <Video
             video={videosObj[videoId]}
             isPlaying={isPlaying}
-            handlePlaying={() => setIsPlaying(!isPlaying)}></Video>
+            handlePlaying={() => setIsPlaying(!isPlaying)}
+          ></Video>
         </div>
       )}
       {visible && (

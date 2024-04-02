@@ -29,6 +29,7 @@ function Video({
   }
   function refreshComments() {
     //获取评论的函数，也用于发布评论后刷新评论区
+    if (!video?.id) return;
     getComments(video?.id).then((res) => {
       switch (res.status_code) {
         case 0:
@@ -64,8 +65,12 @@ function Video({
             height="100%"
             loop={true}
             progressInterval={500}
-            onProgress={handleProgress}></ReactPlayer>
-          <Describe name={video?.author?.name || "未知"} title={video?.title || "未知"}></Describe>
+            onProgress={handleProgress}
+          ></ReactPlayer>
+          <Describe
+            name={video?.author?.name || "未知"}
+            title={video?.title || "未知"}
+          ></Describe>
         </div>
         <Sidebar video={video}></Sidebar>
         <div className={styles.controlContainer}>
@@ -76,14 +81,16 @@ function Video({
             playedSeconds={playedSeconds}
             setPlayedSeconds={setPlayedSeconds}
             ismuted={ismuted}
-            volume={volume}></Controls>
+            volume={volume}
+          ></Controls>
         </div>
       </div>
       {isShowComments && (
         <CommentArea
           refreshComments={refreshComments}
           comments={comments}
-          video={video}></CommentArea>
+          video={video}
+        ></CommentArea>
       )}
     </div>
   );

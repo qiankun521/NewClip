@@ -21,19 +21,19 @@ function Controls({
   const totalSeconds = videoRef.current
     ? formatSeconds(Math.floor(videoRef.current.getDuration()))
     : "00:00";
-  const [localPlaySeconds, setLocalPlaySeconds] = useState(playedSeconds?.toFixed(2));
+  const [localPlaySeconds, setLocalPlaySeconds] = useState(
+    playedSeconds?.toFixed(2)
+  );
   const dispatch = useDispatch();
-  const handleVolumeChange = (e) => {
-    console.log("volume", e.target.value);
-    dispatch(changeVolume(e.target.value));
+  const handleVolumeChange = (value) => {
+    dispatch(changeVolume(value));
   };
-  const handleVideoProgress = (e) => {
-    console.log("progress", e.target.value);
-    setLocalPlaySeconds(e.target.value);
-    videoRef.current?.seekTo(e.target.value, "seconds");
+  const handleVideoProgress = (value) => {
+    setLocalPlaySeconds(value);
+    videoRef.current?.seekTo(value, "seconds");
   };
-  const throttleHandleVolumeChange = throttle(handleVolumeChange, 100);
-  const throttleHandleVideoProgress = throttle(handleVideoProgress, 100);
+  const throttleHandleVolumeChange = throttle(handleVolumeChange, 20);
+  const throttleHandleVideoProgress = throttle(handleVideoProgress, 50);
   useEffect(() => {
     setLocalPlaySeconds(Number(playedSeconds.toFixed(2)));
   }, [playedSeconds]);
@@ -46,7 +46,12 @@ function Controls({
           min={0}
           max={Number(videoRef.current?.getDuration()?.toFixed(2)) || 1}
           value={localPlaySeconds || 0}
-          onChange={handleVideoProgress}
+          onChange={throttleHandleVideoProgress}
+          onChangeComplete={handleVideoProgress}
+          tooltip={{
+            autoAdjustOverflow: true,
+            formatter: (value) => formatSeconds(Math.floor(value)),
+          }}
         />
       </div>
       <div className={styles.bottomContainer}>
@@ -64,11 +69,15 @@ function Controls({
             min={0}
             max={100}
             step={1}
-            dots={true}
             value={volume ? volume : 0}
-            onChange={handleVolumeChange}
+            onChange={throttleHandleVolumeChange}
+            onChangeComplete={handleVolumeChange}
           />
-          <div id="muted" className={styles.button} onClick={() => dispatch(changeMute(!ismuted))}>
+          <div
+            id="muted"
+            className={styles.button}
+            onClick={() => dispatch(changeMute(!ismuted))}
+          >
             {!ismuted ? <SoundOn /> : <SoundOff />}
           </div>
         </div>

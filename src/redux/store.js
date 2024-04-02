@@ -4,9 +4,8 @@ import storage from "redux-persist/lib/storage";
 import { persistStore, persistReducer } from "redux-persist";
 
 const persistConfig = {
-  key: "root",
+  key: "rootStore",
   storage,
-  blacklist: ["popover"],
 };
 
 const persistedReducer = persistReducer(persistConfig, rootReducer);
