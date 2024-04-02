@@ -18,9 +18,8 @@ function Video({
   video, //当前视频
 }) {
   const videoRef = useRef(null);
-  const [playedSeconds,setPlayedSeconds] = useState(0);
+  const [playedSeconds, setPlayedSeconds] = useState(0);
   const [comments, setComments] = useState([]); //评论
-  const isShowComments = useSelector((state) => state?.popover?.isShowComments);
   const ismuted = useSelector((state) => state?.videos?.ismuted);
   const volume = useSelector((state) => state?.videos?.volume);
   //TODO 视频未加载完成时使用封面cover
@@ -59,11 +58,11 @@ function Video({
             url={video?.play_url}
             playing={isPlaying}
             muted={ismuted}
-            volume={volume/100}
+            volume={volume / 100}
             width="100%"
             height="100%"
             loop={true}
-            progressInterval={1000}
+            progressInterval={500}
             onProgress={handleProgress}></ReactPlayer>
           <Describe name={video?.author?.name || "未知"} title={video?.title || "未知"}></Describe>
         </div>
@@ -79,12 +78,10 @@ function Video({
             volume={volume}></Controls>
         </div>
       </div>
-      {isShowComments && (
-        <CommentArea
-          refreshComments={refreshComments}
-          comments={comments}
-          video={video}></CommentArea>
-      )}
+      <CommentArea
+        refreshComments={refreshComments}
+        comments={comments}
+        video={video}></CommentArea>
     </div>
   );
 }

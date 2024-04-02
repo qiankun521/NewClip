@@ -39,7 +39,6 @@ function Mainpage({ updateVideos }) {
         handlePlaying();
       }
     }
-
     const debouncedHandleWheel = debounce(handleWheel, 100);
     const debouncedHandleKeydown = debounce(handleKeydown, 100);
 

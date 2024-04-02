@@ -56,16 +56,20 @@ function CommentArea({ comments, video, refreshComments }) {
   }
 
   return (
-    <div className={styles.commentArea} onWheel={(e) => e.stopPropagation()}>
+    <div
+      className={`${styles.commentArea} ${isShowComments && styles.commentAreaActive}`}
+      onWheel={(e) => e.stopPropagation()}>
       <section className={styles.commentTop}>
         <div className={styles.topAreaLeft}>
           <div className={styles.commentTitle}>评论区</div>
           <div className={styles.commentCount}>共{comments?.length || 0}条</div>
         </div>
         <div className={styles.topAreaRight}>
-          <div className={styles.close} onClick={handleComments}>
-            ╳
-          </div>
+          {isShowComments && (
+            <div className={styles.close} onClick={handleComments}>
+              ╳
+            </div>
+          )}
         </div>
       </section>
       <section className={styles.commentList}>
@@ -77,18 +81,20 @@ function CommentArea({ comments, video, refreshComments }) {
         <div className={styles.empty}>评论到底了~</div>
       </section>
 
-      <section className={styles.sendArea}>
-        <input
-          className={styles.sendInput}
-          type="text"
-          placeholder="请输入你想说的话"
-          value={commentValue}
-          onChange={(e) => setCommentValue(e.target.value)}
-        />
-        <div className={styles.sendIcon} onClick={handleSendMessage}>
-          <TbSend></TbSend>
-        </div>
-      </section>
+      {isShowComments && (
+        <section className={styles.sendArea}>
+          <input
+            className={styles.sendInput}
+            type="text"
+            placeholder="请输入你想说的话"
+            value={commentValue}
+            onChange={(e) => setCommentValue(e.target.value)}
+          />
+          <div className={styles.sendIcon} onClick={handleSendMessage}>
+            <TbSend></TbSend>
+          </div>
+        </section>
+      )}
     </div>
   );
 }

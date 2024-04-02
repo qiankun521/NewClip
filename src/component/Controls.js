@@ -1,7 +1,3 @@
-/**
- * @file 视频播放器组件
- * @module Controls
- */
 import styles from "../assets/styles/Controls.module.scss";
 import { CaretRightOutlined } from "@ant-design/icons";
 import { PauseOutlined } from "@ant-design/icons";
@@ -12,6 +8,7 @@ import { useDispatch } from "react-redux";
 import { changeMute, changeVolume } from "../redux/actions/videosAction";
 import { Slider } from "antd";
 import throttle from "../utils/throttle";
+import { useState, useEffect } from "react";
 function Controls({
   videoRef, //正在播放的视频的引用
   isPlaying, //视频是否正在播放
@@ -24,15 +21,22 @@ function Controls({
   const totalSeconds = videoRef.current
     ? formatSeconds(Math.floor(videoRef.current.getDuration()))
     : "00:00";
+  const [localPlaySeconds, setLocalPlaySeconds] = useState(playedSeconds?.toFixed(2));
   const dispatch = useDispatch();
   const handleVolumeChange = (e) => {
+    console.log("volume", e.target.value);
     dispatch(changeVolume(e.target.value));
   };
   const handleVideoProgress = (e) => {
-    setPlayedSeconds(e.target.value);
+    console.log("progress", e.target.value);
+    setLocalPlaySeconds(e.target.value);
+    videoRef.current?.seekTo(e.target.value, "seconds");
   };
   const throttleHandleVolumeChange = throttle(handleVolumeChange, 100);
   const throttleHandleVideoProgress = throttle(handleVideoProgress, 100);
+  useEffect(() => {
+    setLocalPlaySeconds(Number(playedSeconds.toFixed(2)));
+  }, [playedSeconds]);
   return (
     <div className={styles.controlContainer}>
       <div className={styles.topContainer}>
@@ -41,9 +45,8 @@ function Controls({
           step={0.01}
           min={0}
           max={Number(videoRef.current?.getDuration()?.toFixed(2)) || 1}
-          value={Number(playedSeconds.toFixed(2)) || 0}
+          value={localPlaySeconds || 0}
           onChange={handleVideoProgress}
-          onChangeComplete={(e)=>videoRef.current?.seekTo(e.target.value, "seconds")}
         />
       </div>
       <div className={styles.bottomContainer}>
@@ -52,7 +55,7 @@ function Controls({
             {isPlaying ? <PauseOutlined /> : <CaretRightOutlined />}
           </div>
           <div className={styles.playedTime}>
-            {formatSeconds(Math.floor(playedSeconds))}/{totalSeconds}
+            {formatSeconds(Math.floor(localPlaySeconds))}/{totalSeconds}
           </div>
         </div>
         <div className={styles.rightContainer}>
@@ -63,8 +66,7 @@ function Controls({
             step={1}
             dots={true}
             value={volume ? volume : 0}
-            onChange={throttleHandleVolumeChange}
-            onChangeComplete={handleVolumeChange}
+            onChange={handleVolumeChange}
           />
           <div id="muted" className={styles.button} onClick={() => dispatch(changeMute(!ismuted))}>
             {!ismuted ? <SoundOn /> : <SoundOff />}

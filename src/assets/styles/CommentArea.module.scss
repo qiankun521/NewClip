@@ -1,113 +1,119 @@
-.commentArea{
-    width: 25vw;
-    min-width: 400px;
-    flex-shrink: 1;
-    height: 90vh;
-    background-color: rgba(0,0,0,0.5);
-    color: #ccc;
-    font-size: 1rem;
-    display: flex;
-    flex-direction: column;
-    align-items: center;
-    position: relative;
-    z-index: 1;
-    overflow-y: auto;
-    overflow-x: hidden;
-    transition: width 0.5s linear;
+.commentArea {
+  width: 0;
+  height: 90vh;
+  background-color: rgba(0, 0, 0, 0.5);
+  color: #ccc;
+  font-size: 1rem;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  position: relative;
+  z-index: 1;
+  overflow-y: auto;
+  overflow-x: hidden;
+  transition: width 0.8s ease;
 }
-.commentTop{
-    width: 100%;
-    height: 10%;
-    display: flex;
-    align-items: center;
-    padding-top: 5%;
+.commentAreaActive {
+  width: 25vw;
+  min-width: 400px;
+  flex-shrink: 1;
 }
-.topAreaLeft{
-    width: 50%;
-    height: 100%;
-    display: flex;
-    justify-content: space-around;
-    align-items: center;
+.commentTop {
+  width: 100%;
+  height: 10%;
+  display: flex;
+  align-items: center;
+  padding-top: 5%;
 }
-.commentTitle{
-    font-size: 1.5rem;
+.topAreaLeft {
+  width: 50%;
+  height: 100%;
+  display: flex;
+  justify-content: space-around;
+  align-items: center;
 }
-.close{
-    font-size: 2rem;
-    height: 100%;
-    display: flex;
-    flex-direction: column;
-    align-items: center;
-    justify-content: center;
-    position: fixed;
-    z-index: 1000;
+.commentTitle {
+  font-size: 1.5rem;
 }
-.close:hover{
-    cursor: pointer;
+.close {
+  font-size: 2rem;
+  height: 100%;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  position: fixed;
+  z-index: 1000;
 }
-.topAreaRight{
-    width: 50%;
-    height: 100%;
-    display: flex;
-    justify-content: flex-end;
-    align-items: center;
-    padding-right: 5%;
+.close:hover {
+  cursor: pointer;
 }
-.commentList{
-    width: 100%;
-    z-index: 1;
-    position: relative;
-    display: flex;
-    flex-direction: column;
-    justify-content: space-around;
+.topAreaRight {
+  width: 50%;
+  height: 100%;
+  display: flex;
+  justify-content: flex-end;
+  align-items: center;
+  padding-right: 5%;
 }
-
-.commentArea::-webkit-scrollbar{
-    width: 10px;
+.commentList {
+  width: 100%;
+  z-index: 1;
+  position: relative;
+  display: flex;
+  flex-direction: column;
+  justify-content: space-around;
 }
-.commentArea::-webkit-scrollbar-track{
-    background-color: transparent;
+.commentArea::-webkit-scrollbar {
+  width: 10px;
 }
-.commentArea::-webkit-scrollbar-thumb{
-    background-color: rgba(204, 204, 204,0.3);
-    border-radius: 10px;
+.commentArea::-webkit-scrollbar-track {
+  background-color: transparent;
 }
-.commentArea::-webkit-scrollbar-thumb:hover{
-    background-color: rgba(204, 204, 204,0.3);
+.commentArea::-webkit-scrollbar-thumb {
+  background-color: rgba(204, 204, 204, 0.3);
+  border-radius: 10px;
 }
-.sendArea{
-    height: 8vh;
-    width: 25vw;
-    min-width: 400px;
-    background-color: transparent;
-    position: fixed;
-    bottom: 0;
-    right: 0;
-    z-index: 1000;
-    display: flex;
-    justify-content: space-around;
-    align-items: center;
+.commentArea::-webkit-scrollbar-thumb:hover {
+  background-color: rgba(204, 204, 204, 0.3);
 }
-.sendInput{
-    width: 80%;
-    min-height: 50%;
-    border-radius: 0.5rem;
-    border: 1px solid #ffffff;
-    outline: none;
-    padding: 0.5rem;
-    font-size: 1rem;
-    background-color: rgba(255,255,255,0.9);
-    word-wrap: break-word;
+.sendArea {
+  height: 8vh;
+  width: 0;
+  background-color: transparent;
+  position: fixed;
+  bottom: 0;
+  right: 0;
+  z-index: 1000;
+  display: flex;
+  justify-content: space-around;
+  align-items: center;
+  transition: width 0.8s ease;
 }
-.sendIcon{
-    position: absolute;
-    right:10%;
-    font-size: 1.5rem;
-    color: red;
-    display: flex;
-    align-items: center;
+.sendAreaActive {
+  width: 25vw;
+  min-width: 400px;
 }
-.empty{
-    width: auto;
-    height: 11vh;
+.sendInput {
+  width: 80%;
+  min-height: 50%;
+  border-radius: 0.5rem;
+  border: 1px solid #ffffff;
+  outline: none;
+  padding: 0.5rem;
+  font-size: 1rem;
+  background-color: rgba(255, 255, 255, 0.9);
+  word-wrap: break-word;
+}
+.sendIcon {
+  position: absolute;
+  right: 10%;
+  font-size: 1.5rem;
+  color: red;
+  display: flex;
+  align-items: center;
+}
+.empty {
+  width: auto;
+  height: 11vh;
 }

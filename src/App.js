@@ -36,7 +36,6 @@ function App() {
               }
               dispatch(resetVideos(res.video_list));
               dispatch(changeNextTime(res.next_time));
-              message.info("已自动静音，请手动取消");
               break;
             case -1:
               message.error(res.status_msg);
@@ -54,6 +53,10 @@ function App() {
     }
     refreshVideos(); // eslint-disable-next-line
   }, [logout, chooseClass]); //登录状态改变、视频类别改变时重新获取视频
+
+  useEffect(() => {
+    message.info("已自动静音，请手动取消");
+  }, []);
 
   function updateVideos() {
     const latest_time = nextTime[chooseClass] || undefined; //更新视频列表
