@@ -12,6 +12,7 @@ import { ConfigProvider, message } from "antd";
 import Page404 from "./component/page/Page404";
 import Personalpage from "./component/page/Personalpage";
 import { changeNextTime, resetVideos } from "./redux/actions/videosAction";
+import { hideAll, showLogin } from "./redux/actions/popoverAction";
 function App() {
   const dispatch = useDispatch();
   const logout = useSelector((state) => state?.loginRegister?.logout); // 是否已经登出
@@ -38,6 +39,8 @@ function App() {
             case -1:
               message.error(res.status_msg);
               dispatch(logOut()); //token过期，踢出重新登录
+              dispatch(hideAll());
+              dispatch(showLogin());
               break;
             default:
               break;
@@ -62,6 +65,8 @@ function App() {
           case -1:
             message.error(res.status_msg);
             dispatch(logOut());
+            dispatch(hideAll());
+            dispatch(showLogin());
             break;
           default:
             break;
@@ -79,18 +84,7 @@ function App() {
             colorBgElevated: "#252632",
             colorText: "#C9C9CA",
             colorTextHeading: "#C9C9CA",
-          },
-          Modal: {
-            colorBgElevated: "#252632",
-            colorText: "#C9C9CA",
-            colorTextHeading: "#C9C9CA",
-          },
-          Input: {
-            colorBgContainer: "#252632",
-            colorText: "rgb(255, 255, 255)",
-            colorTextDescription: "#C9C9CA",
-            colorTextPlaceholder: "#C9C9CA",
-          },
+          }
         },
       }}>
       <Router>

@@ -36,7 +36,7 @@ import {
   showPersonal,
   showUpload,
 } from "../redux/actions/popoverAction";
-import { changeInfo, changeMessages } from "../redux/actions/personalAction";
+import { changeInfo } from "../redux/actions/personalAction";
 import { changeChooseClass } from "../redux/actions/videosAction";
 import { changeFriendList } from "../redux/actions/personalAction";
 function Header() {
@@ -47,7 +47,6 @@ function Header() {
   const id = useSelector((state) => state?.loginRegister?.user_id);
   const token = useSelector((state) => state?.loginRegister?.token);
   const info = useSelector((state) => state?.personal?.info);
-  const friendListArr = useSelector((state) => Object.values(state?.personal?.friendList));
   const logout = useSelector((state) => state?.loginRegister?.logout);
   const loginWaiting = useSelector((state) => state?.loginRegister?.loginWaiting);
   const registerWaiting = useSelector((state) => state?.loginRegister?.registerWaiting);
@@ -87,23 +86,7 @@ function Header() {
       }
     });
   }, [id, token, isShowPersonal, isShowMessage, logout, dispatch]);
-  useEffect(() => {
-    if (logout || !id || !token) return;
-    for (const item of friendListArr) {
-      getMessages(token, item.id).then((res) => {
-        switch (res.status_code) {
-          case 0:
-            dispatch(changeMessages(item.id, res.message_list));
-            break;
-          case -1:
-            console.log(res.status_msg);
-            break;
-          default:
-            break;
-        }
-      });
-    }
-  }, [dispatch, friendListArr, id, logout, token]);
+
   function onFinishLogin(values) {
     dispatch(loginRequest());
     message.loading("登录中...", 0);
@@ -181,13 +164,16 @@ function Header() {
     } else isShowUpload ? dispatch(hideUpload()) : dispatch(showUpload()); //控制开启关闭上传popover
   }
   function handleMessage() {
+    console.log("handleMessage");
     if (logout) {
       message.error("请先登录");
       dispatch(showLogin());
-    } else isShowMessage ? dispatch(hideMessages()) : dispatch(showMessages()); //控制开启关闭私信popover
+    } else {
+      isShowMessage ? dispatch(hideMessages()) : dispatch(showMessages());
+    } //控制开启关闭私信popover
   }
   function handlePersonal() {
-    isShowPersonal ? dispatch(hidePersonal()) : dispatch(showPersonal()); //控制开启关闭个人信息popover
+    !isShowPersonal ? dispatch(showPersonal()) : dispatch(hidePersonal()); //控制开启关闭个人信息popover
   }
   return (
     <header>
@@ -249,9 +235,9 @@ function Header() {
               </div>
             </Popover>
             <Popover
-              content={<MessagePopover handleMessage={handleMessage}></MessagePopover>}
               open={isShowMessage}
-              onClick={handleMessage}>
+              onClick={handleMessage}
+              content={<MessagePopover handleMessage={handleMessage}></MessagePopover>}>
               <div className={styles.message}>
                 <div>
                   <AiOutlineMessage></AiOutlineMessage>
@@ -278,7 +264,7 @@ function Header() {
                 <Popover
                   content={<PersonalPopover info={info} />}
                   placement="bottomRight"
-                  trigger="click"
+                  trigger={["hover", "click"]}
                   open={isShowPersonal}
                   onOpenChange={handlePersonal}>
                   <div
@@ -287,7 +273,10 @@ function Header() {
                       backgroundImage: `url(${info.avatar})`,
                       backgroundSize: "cover",
                     }}
-                    onClick={() => navigate("/personal")}></div>
+                    onClick={() => {
+                      navigate("/personal");
+                      dispatch(hidePersonal());
+                    }}></div>
                 </Popover>
               )
             )}
@@ -300,23 +289,21 @@ function Header() {
         footer={null}
         className={styles.modal}>
         <div className={styles.modalContainer}>
-          <div className={styles.titleContainer}>
-            <div className={styles.modalTitle}>登录后畅享更多精彩</div>
-            <div>
-              <div className={styles.modalTitleSmall}>
-                <div className={styles.icon}>
-                  <BiShare />
-                </div>
-                一键分享视频给好友
+          <div className={styles.modalTitle}>登录后畅享更多精彩</div>
+          <>
+            <div className={styles.modalTitleSmall}>
+              <div className={styles.icon}>
+                <BiShare />
               </div>
-              <div className={styles.modalTitleSmall}>
-                <div className={styles.icon}>
-                  <AiOutlineHeart />
-                </div>
-                点赞评论随心发
-              </div>
+              一键分享视频给好友
             </div>
-          </div>
+            <div className={styles.modalTitleSmall}>
+              <div className={styles.icon}>
+                <AiOutlineHeart />
+              </div>
+              点赞评论随心发
+            </div>
+          </>
           <div className={styles.choose}>
             <div
               className={`${styles.chooseItem} ${choose[0] && styles.choosed}`}

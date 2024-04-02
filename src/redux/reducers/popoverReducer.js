@@ -7,7 +7,7 @@ const initState = {
 };
 const popoverReducer = (state = initState, action) => {
   switch (action.type) {
-    case "CHANGE_MESSAGES":
+    case "SHOW_MESSAGES":
       return { ...state, isShowMessage: true };
     case "HIDE_MESSAGES":
       return { ...state, isShowMessage: false };

@@ -69,7 +69,13 @@ function PersonalPopover({ info }) {
       </div>
       <div className={styles.option}>
         <div>我的好友</div>
-        <div onClick={() => dispatch(logOut())}>退出登录</div>
+        <div
+          onClick={() => {
+            dispatch(logOut());
+            dispatch(hideAll());
+          }}>
+          退出登录
+        </div>
       </div>
     </div>
   );

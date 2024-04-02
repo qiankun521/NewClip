@@ -86,6 +86,7 @@ function MessagePopover({ handleMessage }) {
 
   useEffect(() => {
     if (!token || !user_id) return;
+    const friendListArr = Object.values(friendList);
     const intervalId = setInterval(() => {
       for (const item of friendListArr) {
         getMessages(token, item.id).then((res) => {
@@ -103,7 +104,7 @@ function MessagePopover({ handleMessage }) {
       }
     }, 3000);
     return () => clearInterval(intervalId);
-  }, [dispatch, friendListArr, token, user_id]);
+  }, [dispatch, friendList, token, user_id]);
 
   return (
     <div className={styles.messageContainer} onWheel={(e) => e.stopPropagation()}>

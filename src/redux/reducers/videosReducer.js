@@ -55,10 +55,13 @@ const videosReducer = (state = initState, action) => {
         nextTime: { ...state.nextTime, [state.chooseClass]: action.nextTime },
       };
     case "CHANGE_VOLUME":
+      const isZero = action.volume === 0;
       return {
         ...state,
         volume: action.volume,
+        ismuted: isZero,
       };
+
     case "CHANGE_MUTE":
       return {
         ...state,
