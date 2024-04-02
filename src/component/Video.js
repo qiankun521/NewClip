@@ -22,6 +22,7 @@ function Video({
   const [comments, setComments] = useState([]); //评论
   const ismuted = useSelector((state) => state?.videos?.ismuted);
   const volume = useSelector((state) => state?.videos?.volume);
+  const isShowComments = useSelector((state) => state?.popover?.isShowComments);
   //TODO 视频未加载完成时使用封面cover
   function handleProgress(state) {
     setPlayedSeconds(state.playedSeconds);
@@ -78,10 +79,12 @@ function Video({
             volume={volume}></Controls>
         </div>
       </div>
-      <CommentArea
-        refreshComments={refreshComments}
-        comments={comments}
-        video={video}></CommentArea>
+      {isShowComments && (
+        <CommentArea
+          refreshComments={refreshComments}
+          comments={comments}
+          video={video}></CommentArea>
+      )}
     </div>
   );
 }

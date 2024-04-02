@@ -94,11 +94,12 @@ function App() {
       }}>
       <Router>
         <div className="App">
-          <Header></Header>
           <Routes>
-            <Route path="/" element={<Mainpage updateVideos={updateVideos}></Mainpage>}></Route>
-            <Route path="/search" element={<Searchpage></Searchpage>}></Route>
-            <Route path="/personal" element={<Personalpage></Personalpage>}></Route>
+            <Route path="/" element={<Header></Header>}>
+              <Route index element={<Mainpage updateVideos={updateVideos}></Mainpage>}></Route>
+              <Route path="search" element={<Searchpage></Searchpage>}></Route>
+              <Route path="personal" element={<Personalpage></Personalpage>}></Route>
+            </Route>
             <Route path="*" element={<Page404></Page404>}></Route>
           </Routes>
         </div>

@@ -1,266 +1,270 @@
+.App {
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+  text-align: center;
+}
 .headerContainer {
-    display: flex;
-    align-items: center;
-    width: 100%;
-    height: 10vh;
-    background: linear-gradient(to right, #1A1823, #2D2A3E);
-    justify-content: center;
-    align-items: center;
+  display: flex;
+  align-items: center;
+  width: 100%;
+  height: 10vh;
+  background: linear-gradient(to right, #1a1823, #2d2a3e);
+  justify-content: center;
+  align-items: center;
 }
 
 .header {
-    width: 100%;
-    height: 100%;
-    display: flex;
-    justify-content: space-around;
-    align-items: center;
+  width: 100%;
+  height: 100%;
+  display: flex;
+  justify-content: space-around;
+  align-items: center;
 }
 
 .brand {
-    width: 10%;
-    min-width: 107px;
-    display: flex;
-    align-items: center;
-    justify-content: center;
-    
+  width: 10%;
+  min-width: 107px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
 }
 
 .brand .link {
-    font-size: 1.5rem;
-    color: #FFF;
-    font-weight: bold;
-    border: none;
+  font-size: 1.5rem;
+  color: #fff;
+  font-weight: bold;
+  border: none;
 }
 
 .navlinks {
-    width: 30%;
-    display: flex;
-    justify-content: space-evenly;
-    align-items: center;
+  width: 30%;
+  display: flex;
+  justify-content: space-evenly;
+  align-items: center;
 }
-.choose.link{
-    color: #EB3661;
-    border: 2px solid #595356;
-    padding: 0.5rem 1rem;
-    border-radius: 1rem;
+.choose.link {
+  color: #eb3661;
+  border: 2px solid #595356;
+  padding: 0.5rem 1rem;
+  border-radius: 1rem;
 }
 .searchInput {
-    width: 30%;
-    min-width: 170px;
-    height: 100%;
-    display: flex;
-    justify-content: center;
-    align-items: center;
-    position: relative;
+  width: 30%;
+  min-width: 170px;
+  height: 100%;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  position: relative;
 }
 
 .searchInput input {
-    width: 100%;
-    height: 30%;
-    border: 1px solid #ffffff;
-    outline: none;
-    padding: 0.5rem;
-    border-radius: 0.5rem;
-    font-size: 1rem;
-    background-color: transparent;
-    color: #FFF;
+  width: 100%;
+  height: 30%;
+  border: 1px solid #ffffff;
+  outline: none;
+  padding: 0.5rem;
+  border-radius: 0.5rem;
+  font-size: 1rem;
+  background-color: transparent;
+  color: #fff;
 }
 
 .personalbar {
-    width: 25%;
-    min-width: 100px;
-    height: 100%;
-    display: flex;
-    justify-content: space-evenly;
-    align-items: center;
+  width: 25%;
+  min-width: 100px;
+  height: 100%;
+  display: flex;
+  justify-content: space-evenly;
+  align-items: center;
 }
 
 .personalbar:hover {
-    cursor: pointer;
+  cursor: pointer;
 }
 
 .person {
-    width: 5%;
-    min-width: 100px;
-    display: flex;
-    align-items: center;
-    justify-content: center;
+  width: 5%;
+  min-width: 100px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
 }
 
 .line {
-    text-decoration: none;
+  text-decoration: none;
 }
 
 .link {
-    color: #CCC;
-    text-decoration: none;
-    font-size: 1rem;
+  color: #ccc;
+  text-decoration: none;
+  font-size: 1rem;
 }
 
 .link:hover {
-    color: #FFF;
-    cursor: pointer;
+  color: #fff;
+  cursor: pointer;
 }
 
 .upload {
-    display: flex;
-    height: 100%;
-    flex-direction: column;
-    justify-content: center;
-    font-size: 1.5rem;
-    color: #CCC;
+  display: flex;
+  height: 100%;
+  flex-direction: column;
+  justify-content: center;
+  font-size: 1.5rem;
+  color: #ccc;
 }
 
 .uploadText {
-    font-size: 0.8rem;
-    color: #CCC;
-    text-decoration: none;
+  font-size: 0.8rem;
+  color: #ccc;
+  text-decoration: none;
 }
 
 .upload:hover {
-    color: #FFF;
-    cursor: pointer;
+  color: #fff;
+  cursor: pointer;
 }
 
 .message {
-    display: flex;
-    height: 100%;
-    flex-direction: column;
-    justify-content: center;
-    font-size: 1.5rem;
-    color: #CCC;
+  display: flex;
+  height: 100%;
+  flex-direction: column;
+  justify-content: center;
+  font-size: 1.5rem;
+  color: #ccc;
 }
 
 .messageText {
-    font-size: 0.8rem;
-    color: #CCC;
-    text-decoration: none;
+  font-size: 0.8rem;
+  color: #ccc;
+  text-decoration: none;
 }
 
 .message:hover {
-    color: #FFF;
-    cursor: pointer;
+  color: #fff;
+  cursor: pointer;
 }
 
 .more {
-    display: flex;
-    height: 100%;
-    flex-direction: column;
-    justify-content: center;
-    font-size: 1.5rem;
-    color: #CCC;
+  display: flex;
+  height: 100%;
+  flex-direction: column;
+  justify-content: center;
+  font-size: 1.5rem;
+  color: #ccc;
 }
 
 .moreText {
-    font-size: 0.8rem;
-    color: #CCC;
-    text-decoration: none;
+  font-size: 0.8rem;
+  color: #ccc;
+  text-decoration: none;
 }
 
 .more:hover {
-    color: #FFF;
-    cursor: pointer;
+  color: #fff;
+  cursor: pointer;
 }
 
 .personal {
-    display: flex;
-    min-width: 80px;
-    height: 100%;
-    flex-direction: column;
-    justify-content: center;
-    font-size: 1rem;
-    color: #ffffff;
+  display: flex;
+  min-width: 80px;
+  height: 100%;
+  flex-direction: column;
+  justify-content: center;
+  font-size: 1rem;
+  color: #ffffff;
 }
 
 .personal div {
-    border: 2px solid #ffffff;
-    padding: 0.5rem;
-    border-radius: 2rem;
-    background-color: #EB3661;
+  border: 2px solid #ffffff;
+  padding: 0.5rem;
+  border-radius: 2rem;
+  background-color: #eb3661;
 }
 
 .personal:hover {
-    cursor: pointer;
+  cursor: pointer;
 }
 
 .avatar {
-    width: 2.5rem;
-    height: 2.5rem;
-    border-radius: 50%;
-    background-color: #ffffff;
+  width: 2.5rem;
+  height: 2.5rem;
+  border-radius: 50%;
+  background-color: #ffffff;
 }
 
 .modal {
-    border-radius: 10px;
+  border-radius: 10px;
 }
 .titleContainer {
-    display: flex;
-    flex-direction: column;
-    justify-content: center;
-    align-items: center;
-    padding: 1rem;
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+  align-items: center;
+  padding: 1rem;
 }
 
-.titleContainer>div {
-    display: flex;
+.titleContainer > div {
+  display: flex;
 }
 
 .modalTitle {
-    font-size: 1.5rem;
+  font-size: 1.5rem;
 }
 
 .modalTitleSmall {
-    font-size: 0.8rem;
-    padding: 0 1rem 0 1rem;
-    display: flex;
-    align-items: center;
-    justify-content: center;
+  font-size: 0.8rem;
+  padding: 0 1rem 0 1rem;
+  display: flex;
+  align-items: center;
+  justify-content: center;
 }
 
 .choose {
-    display: flex;
-    justify-content: center;
-    align-items: center;
+  display: flex;
+  justify-content: center;
+  align-items: center;
 }
 
 .chooseItem {
-    padding-left: 10%;
-    padding-right: 10%;
-    padding-bottom: 1%;
-    margin-left: 5%;
-    margin-right: 5%;
-
+  padding-left: 10%;
+  padding-right: 10%;
+  padding-bottom: 1%;
+  margin-left: 5%;
+  margin-right: 5%;
 }
 
 .chooseItem:hover {
-    cursor: pointer;
+  cursor: pointer;
 }
 
 .choosed {
-    border-bottom: 1px solid red;
+  border-bottom: 1px solid red;
 }
 
 .modalInput {
-    display: flex;
-    justify-content: center;
-    align-items: center;
-    padding-top: 1rem;
-    height: 50px;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  padding-top: 1rem;
+  height: 50px;
 }
 
 .input {
-    width: 200px;
-    color: #FFF;
+  width: 200px;
+  color: #fff;
 }
 
 .icon {
-    display: flex;
-    align-items: center;
+  display: flex;
+  align-items: center;
 }
 
 .searchIcon {
-    position: absolute;
-    color: #FFF;
-    right: 2%;
-    font-size: 1.6rem;
+  position: absolute;
+  color: #fff;
+  right: 2%;
+  font-size: 1.6rem;
 }

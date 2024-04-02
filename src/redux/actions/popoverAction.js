@@ -48,6 +48,16 @@ export const hidePersonal = () => {
     type: "HIDE_PERSONAL",
   };
 };
+export const showInfo = () => {
+  return {
+    type: "SHOW_INFO",
+  };
+}
+export const hideInfo = () => {
+  return {
+    type: "HIDE_INFO",
+  };
+}
 export const hideAll = () => {
   return {
     type: "HIDE_ALL",

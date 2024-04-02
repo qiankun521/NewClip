@@ -1,5 +1,7 @@
 .commentArea {
-  width: 0;
+  width: 25vw;
+  min-width: 400px;
+  flex-shrink: 1;
   height: 90vh;
   background-color: rgba(0, 0, 0, 0.5);
   color: #ccc;
@@ -11,12 +13,6 @@
   z-index: 1;
   overflow-y: auto;
   overflow-x: hidden;
-  transition: width 0.8s ease;
-}
-.commentAreaActive {
-  width: 25vw;
-  min-width: 400px;
-  flex-shrink: 1;
 }
 .commentTop {
   width: 100%;
@@ -79,7 +75,8 @@
 }
 .sendArea {
   height: 8vh;
-  width: 0;
+  width: 25vw;
+  min-width: 400px;
   background-color: transparent;
   position: fixed;
   bottom: 0;
@@ -89,10 +86,6 @@
   justify-content: space-around;
   align-items: center;
   transition: width 0.8s ease;
-}
-.sendAreaActive {
-  width: 25vw;
-  min-width: 400px;
 }
 .sendInput {
   width: 80%;
