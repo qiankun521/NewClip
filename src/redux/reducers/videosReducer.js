@@ -73,7 +73,7 @@ const videosReducer = (state = initState, action) => {
         chooseClass: action.chooseClass,
       };
     default:
-      return initState;
+      return state;
   }
 };
 export default videosReducer;

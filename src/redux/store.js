@@ -5,6 +5,7 @@ import { persistStore, persistReducer } from "redux-persist";
 
 const persistConfig = {
   key: "rootStore",
+  version: 1,
   storage,
 };
 

@@ -22,7 +22,7 @@ const personalReducer = (state = initState, action) => {
         chattingFriendId: action.id,
       };
     default:
-      return initState;
+      return state;
   }
 };
 export default personalReducer;

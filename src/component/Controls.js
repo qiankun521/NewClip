@@ -14,7 +14,6 @@ function Controls({
   isPlaying, //视频是否正在播放
   handlePlaying, //处理视频播放/暂停的函数
   playedSeconds, //视频已播放的秒数
-  setPlayedSeconds,
   ismuted, //视频是否静音
   volume, //视频的音量
 }) {

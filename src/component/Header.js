@@ -160,7 +160,6 @@ function Header() {
     } else isShowUpload ? dispatch(hideUpload()) : dispatch(showUpload()); //控制开启关闭上传popover
   }
   function handleMessage() {
-    console.log("handleMessage");
     if (logout) {
       message.error("请先登录");
       dispatch(showLogin());
