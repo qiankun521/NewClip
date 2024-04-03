@@ -5,6 +5,7 @@ const initState = {
   volume: 0.5,
   ismuted: true,
   chooseClass: 1,
+  analysis: {},
 };
 const videosReducer = (state = initState, action) => {
   let newVideosOBJ;
@@ -61,7 +62,6 @@ const videosReducer = (state = initState, action) => {
         volume: action.volume,
         ismuted: isZero,
       };
-
     case "CHANGE_MUTE":
       return {
         ...state,
@@ -71,6 +71,16 @@ const videosReducer = (state = initState, action) => {
       return {
         ...state,
         chooseClass: action.chooseClass,
+      };
+    case "CHANGE_ANALYSIS":
+      return {
+        ...state,
+        [action.videoId]: {
+          completeTimes: action.completeTimes + (state[action.videoId]?.completeTimes || 0),
+          watchedSeconds: action.watchedSeconds,
+          totalSeconds: action.totalSeconds,
+          isFavorite: action.isFavorite,
+        },
       };
     default:
       return state;

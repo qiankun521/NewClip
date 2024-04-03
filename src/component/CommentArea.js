@@ -1,19 +1,17 @@
-/**
- * @file 评论区组件
- * @module CommentArea
- */
 import styles from "../assets/styles/CommentArea.module.scss";
 import SingleComment from "./SingleComment";
 import { TbSend } from "react-icons/tb";
-import { useState } from "react";
+import { useEffect, useState } from "react";
 import postComment from "../utils/postComment";
 import { useDispatch, useSelector } from "react-redux";
 import { message } from "antd";
 import { hideComments, showComments, showLogin } from "../redux/actions/popoverAction";
 import { changeVideos } from "../redux/actions/videosAction";
-function CommentArea({ comments, video, refreshComments }) {
+import getComments from "../utils/getComments";
+function CommentArea({ video }) {
   const dispatch = useDispatch();
   const [commentValue, setCommentValue] = useState(""); // 评论输入框的值
+  const [comments, setComments] = useState([]); //评论
   const isShowComments = useSelector((state) => state?.popover?.isShowComments);
   const logout = useSelector((state) => state?.loginRegister?.logout); // 是否已注销
   const token = useSelector((state) => state?.loginRegister?.token); // 用户 token
@@ -54,7 +52,25 @@ function CommentArea({ comments, video, refreshComments }) {
   function handleComments() {
     !isShowComments ? dispatch(showComments()) : dispatch(hideComments());
   }
-
+  function refreshComments() {
+    if (!video?.id) return;
+    getComments(video?.id).then((res) => {
+      switch (res.status_code) {
+        case 0:
+          setComments(res.comment_list);
+          break;
+        case -1:
+          console.log(res.status_msg);
+          break;
+        default:
+          break;
+      }
+    });
+  }
+  useEffect(() => {
+    refreshComments();
+  // eslint-disable-next-line react-hooks/exhaustive-deps
+  }, [video]);
   return (
     <div className={styles.commentArea} onWheel={(e) => e.stopPropagation()}>
       <section className={styles.commentTop}>

@@ -163,258 +163,258 @@ function Header() {
     if (logout) {
       message.error("请先登录");
       dispatch(showLogin());
-    } else {
-      isShowMessage ? dispatch(hideMessages()) : dispatch(showMessages());
-    } //控制开启关闭私信popover
+    } else isShowMessage ? dispatch(hideMessages()) : dispatch(showMessages());
   }
   function handlePersonal() {
     !isShowPersonal ? dispatch(showPersonal()) : dispatch(hidePersonal()); //控制开启关闭个人信息popover
   }
   return (
-      <header className={styles.app}>
-        <div className={styles.headerContainer}>
-          <div className={styles.header}>
-            <div className={styles.brand}>
-              <Link className={styles.link} to="https://github.com/qiankun521/NewClip">
-                NewClip
-              </Link>
+    <header className={styles.app}>
+      <div className={styles.headerContainer}>
+        <div className={styles.header}>
+          <div className={styles.brand}>
+            <Link className={styles.link} to="https://github.com/qiankun521/NewClip">
+              NewClip
+            </Link>
+          </div>
+          <nav className={styles.navlinks}>
+            <Link
+              className={`${styles.link} ${chooseClass === 1 && styles.choose}`}
+              to="/"
+              onClick={() => dispatch(changeChooseClass(1))}>
+              首页
+            </Link>
+            <Link
+              className={`${styles.link} ${chooseClass === 2 && styles.choose}`}
+              to="/"
+              onClick={() => dispatch(changeChooseClass(2))}>
+              体育
+            </Link>
+            <Link
+              className={`${styles.link} ${chooseClass === 3 && styles.choose}`}
+              to="/"
+              onClick={() => dispatch(changeChooseClass(3))}>
+              游戏
+            </Link>
+            <Link
+              className={`${styles.link} ${chooseClass === 4 && styles.choose}`}
+              to="/"
+              onClick={() => dispatch(changeChooseClass(4))}>
+              音乐
+            </Link>
+          </nav>
+          <div className={styles.searchInput}>
+            <input
+              type="text"
+              placeholder="请输入搜索关键词"
+              value={search}
+              onChange={(e) => setSearch(e.target.value)}
+              onKeyDown={handleKeydown}
+            />
+            <div className={styles.searchIcon} onClick={handleSearch}>
+              <BiSearchAlt2></BiSearchAlt2>
             </div>
-            <nav className={styles.navlinks}>
-              <Link
-                className={`${styles.link} ${chooseClass === 1 && styles.choose}`}
-                to="/"
-                onClick={() => dispatch(changeChooseClass(1))}>
-                首页
-              </Link>
-              <Link
-                className={`${styles.link} ${chooseClass === 2 && styles.choose}`}
-                to="/"
-                onClick={() => dispatch(changeChooseClass(2))}>
-                体育
-              </Link>
-              <Link
-                className={`${styles.link} ${chooseClass === 3 && styles.choose}`}
-                to="/"
-                onClick={() => dispatch(changeChooseClass(3))}>
-                游戏
-              </Link>
-              <Link
-                className={`${styles.link} ${chooseClass === 4 && styles.choose}`}
-                to="/"
-                onClick={() => dispatch(changeChooseClass(4))}>
-                音乐
-              </Link>
-            </nav>
-            <div className={styles.searchInput}>
-              <input
-                type="text"
-                placeholder="请输入搜索关键词"
-                value={search}
-                onChange={(e) => setSearch(e.target.value)}
-                onKeyDown={handleKeydown}
-              />
-              <div className={styles.searchIcon} onClick={handleSearch}>
-                <BiSearchAlt2></BiSearchAlt2>
-              </div>
-            </div>
-            <div className={styles.personalbar}>
-              <Popover
-                open={isShowUpload}
-                onClick={handleFileChange}
-                content={<UploadPopover></UploadPopover>}>
-                <div className={styles.upload}>
-                  <div>
-                    <FiUpload></FiUpload>
-                  </div>
-                  <div className={styles.uploadText}>上传</div>
-                </div>
-              </Popover>
-              <Popover
-                open={isShowMessage}
-                onClick={handleMessage}
-                content={<MessagePopover handleMessage={handleMessage}></MessagePopover>}>
-                <div className={styles.message}>
-                  <div>
-                    <AiOutlineMessage></AiOutlineMessage>
-                  </div>
-                  <div className={styles.messageText}>私信</div>
-                </div>
-              </Popover>
-              <div className={styles.more}>
+          </div>
+          <div className={styles.personalbar}>
+            <Popover
+              open={isShowUpload}
+              onClick={handleFileChange}
+              destroyTooltipOnHide={true}
+              content={<UploadPopover></UploadPopover>}>
+              <div className={styles.upload}>
                 <div>
-                  <AiOutlineMore></AiOutlineMore>
+                  <FiUpload></FiUpload>
                 </div>
-                <div className={styles.moreText}>更多</div>
+                <div className={styles.uploadText}>上传</div>
               </div>
-            </div>
-            <div className={styles.person}>
-              {logout ? (
-                <div className={styles.personal}>
-                  <div className={styles.login} onClick={() => dispatch(showLogin())}>
-                    登录
-                  </div>
+            </Popover>
+            <Popover
+              open={isShowMessage}
+              onClick={handleMessage}
+              destroyTooltipOnHide={true}
+              content={<MessagePopover handleMessage={handleMessage}></MessagePopover>}>
+              <div className={styles.message}>
+                <div>
+                  <AiOutlineMessage></AiOutlineMessage>
                 </div>
-              ) : (
-                info && (
-                  <Popover
-                    content={<PersonalPopover info={info} />}
-                    placement="bottomRight"
-                    trigger={["hover", "click"]}
-                    open={isShowPersonal}
-                    onOpenChange={handlePersonal}>
-                    <div
-                      className={styles.avatar}
-                      style={{
-                        backgroundImage: `url(${info.avatar})`,
-                        backgroundSize: "cover",
-                      }}
-                      onClick={() => {
-                        navigate("/personal");
-                        dispatch(hidePersonal());
-                      }}></div>
-                  </Popover>
-                )
-              )}
+                <div className={styles.messageText}>私信</div>
+              </div>
+            </Popover>
+            <div className={styles.more}>
+              <div>
+                <AiOutlineMore></AiOutlineMore>
+              </div>
+              <div className={styles.moreText}>更多</div>
             </div>
+          </div>
+          <div className={styles.person}>
+            {logout ? (
+              <div className={styles.personal}>
+                <div className={styles.login} onClick={() => dispatch(showLogin())}>
+                  登录
+                </div>
+              </div>
+            ) : (
+              info && (
+                <Popover
+                  content={<PersonalPopover info={info} />}
+                  placement="bottomRight"
+                  trigger={["hover", "click"]}
+                  open={isShowPersonal}
+                  onOpenChange={handlePersonal}>
+                  <div
+                    className={styles.avatar}
+                    style={{
+                      backgroundImage: `url(${info.avatar})`,
+                      backgroundSize: "cover",
+                    }}
+                    onClick={() => {
+                      navigate("/personal");
+                      dispatch(hidePersonal());
+                    }}></div>
+                </Popover>
+              )
+            )}
           </div>
         </div>
-        <Modal
-          open={isShowLogin}
-          onCancel={() => dispatch(hideLogin())}
-          footer={null}
-          className={styles.modal}>
-          <div className={styles.modalContainer}>
-            <div className={styles.modalTitle}>登录后畅享更多精彩</div>
-            <>
-              <div className={styles.modalTitleSmall}>
-                <div className={styles.icon}>
-                  <BiShare />
-                </div>
-                一键分享视频给好友
+      </div>
+      <Modal
+        open={isShowLogin}
+        onCancel={() => dispatch(hideLogin())}
+        footer={null}
+        className={styles.modal}>
+        <div className={styles.modalContainer}>
+          <div className={styles.modalTitle}>登录后畅享更多精彩</div>
+          <>
+            <div className={styles.modalTitleSmall}>
+              <div className={styles.icon}>
+                <BiShare />
               </div>
-              <div className={styles.modalTitleSmall}>
-                <div className={styles.icon}>
-                  <AiOutlineHeart />
-                </div>
-                点赞评论随心发
-              </div>
-            </>
-            <div className={styles.choose}>
-              <div
-                className={`${styles.chooseItem} ${choose[0] && styles.choosed}`}
-                onClick={() => setChoose([true, false])}>
-                登录
-              </div>
-              <div
-                className={`${styles.chooseItem} ${choose[1] && styles.choosed}`}
-                onClick={() => setChoose([false, true])}>
-                注册
-              </div>
+              一键分享视频给好友
             </div>
-            {choose[0] && (
-              <Form
-                name="complex-form"
-                onFinish={onFinishLogin}
-                onFinishFailed={onFinishFailed}
-                labelCol={{ span: 8 }}
-                wrapperCol={{ span: 16 }}
-                style={{
-                  display: "flex",
-                  flexDirection: "column",
-                  alignItems: "center",
-                  marginTop: "20px",
-                }}>
-                <Form.Item
-                  label={<span style={{ color: "#C9C9CA" }}>用户名</span>}
-                  name="username"
-                  rules={[{ required: true, message: "请输入用户名!" }]}>
-                  <Input className={styles.input} />
-                </Form.Item>
-
-                <Form.Item
-                  label={<span style={{ color: "#C9C9CA" }}>用户密码</span>}
-                  name="password"
-                  rules={[{ required: true, message: "请输入用户密码!" }]}>
-                  <Input.Password className={styles.input} />
-                </Form.Item>
-
-                <Form.Item
-                  wrapperCol={{
-                    offset: 8,
-                    span: 16,
-                  }}
-                  style={{
-                    width: "100%",
-                  }}>
-                  <Button type="primary" htmlType="submit" disabled={loginWaiting}>
-                    登录
-                  </Button>
-                </Form.Item>
-              </Form>
-            )}
-            {choose[1] && (
-              <Form
-                name="complex-form"
-                onFinish={onFinishRegister}
-                onFinishFailed={onFinishFailed}
-                labelCol={{ span: 8 }}
-                wrapperCol={{ span: 16 }}
-                style={{
-                  display: "flex",
-                  flexDirection: "column",
-                  alignItems: "center",
-                  marginTop: "20px",
-                }}>
-                <Form.Item
-                  label={<span style={{ color: "#C9C9CA" }}>用户名</span>}
-                  name="username"
-                  rules={[
-                    {
-                      required: true,
-                      message: "请输入用户名!",
-                    },
-                    {
-                      max: 32,
-                      message: "用户名长度不能超过32位",
-                    },
-                  ]}>
-                  <Input className={styles.input} />
-                </Form.Item>
-
-                <Form.Item
-                  label={<span style={{ color: "#C9C9CA" }}>用户密码</span>}
-                  name="password"
-                  rules={[
-                    {
-                      required: true,
-                      message: "请输入用户密码!",
-                    },
-                    {
-                      min: 6,
-                      message: "密码长度不能小于6位",
-                    },
-                  ]}>
-                  <Input.Password className={styles.input} />
-                </Form.Item>
-
-                <Form.Item
-                  wrapperCol={{
-                    offset: 8,
-                    span: 16,
-                  }}
-                  style={{
-                    width: "100%",
-                  }}>
-                  <Button htmlType="submit" disabled={registerWaiting}>
-                    注册
-                  </Button>
-                </Form.Item>
-              </Form>
-            )}
+            <div className={styles.modalTitleSmall}>
+              <div className={styles.icon}>
+                <AiOutlineHeart />
+              </div>
+              点赞评论随心发
+            </div>
+          </>
+          <div className={styles.choose}>
+            <div
+              className={`${styles.chooseItem} ${choose[0] && styles.choosed}`}
+              onClick={() => setChoose([true, false])}>
+              登录
+            </div>
+            <div
+              className={`${styles.chooseItem} ${choose[1] && styles.choosed}`}
+              onClick={() => setChoose([false, true])}>
+              注册
+            </div>
           </div>
-        </Modal>
-        <Outlet></Outlet>
-      </header>
+          {choose[0] && (
+            <Form
+              name="complex-form"
+              onFinish={onFinishLogin}
+              onFinishFailed={onFinishFailed}
+              labelCol={{ span: 8 }}
+              wrapperCol={{ span: 16 }}
+              style={{
+                display: "flex",
+                flexDirection: "column",
+                alignItems: "center",
+                marginTop: "20px",
+              }}>
+              <Form.Item
+                label={<span style={{ color: "#C9C9CA" }}>用户名</span>}
+                name="username"
+                rules={[{ required: true, message: "请输入用户名!" }]}>
+                <Input className={styles.input} />
+              </Form.Item>
+
+              <Form.Item
+                label={<span style={{ color: "#C9C9CA" }}>用户密码</span>}
+                name="password"
+                rules={[{ required: true, message: "请输入用户密码!" }]}>
+                <Input.Password className={styles.input} />
+              </Form.Item>
+
+              <Form.Item
+                wrapperCol={{
+                  offset: 8,
+                  span: 16,
+                }}
+                style={{
+                  width: "100%",
+                }}>
+                <Button type="primary" htmlType="submit" disabled={loginWaiting}>
+                  登录
+                </Button>
+              </Form.Item>
+            </Form>
+          )}
+          {choose[1] && (
+            <Form
+              name="complex-form"
+              onFinish={onFinishRegister}
+              onFinishFailed={onFinishFailed}
+              labelCol={{ span: 8 }}
+              wrapperCol={{ span: 16 }}
+              style={{
+                display: "flex",
+                flexDirection: "column",
+                alignItems: "center",
+                marginTop: "20px",
+              }}>
+              <Form.Item
+                label={<span style={{ color: "#C9C9CA" }}>用户名</span>}
+                name="username"
+                rules={[
+                  {
+                    required: true,
+                    message: "请输入用户名!",
+                  },
+                  {
+                    max: 32,
+                    message: "用户名长度不能超过32位",
+                  },
+                ]}>
+                <Input className={styles.input} />
+              </Form.Item>
+
+              <Form.Item
+                label={<span style={{ color: "#C9C9CA" }}>用户密码</span>}
+                name="password"
+                rules={[
+                  {
+                    required: true,
+                    message: "请输入用户密码!",
+                  },
+                  {
+                    min: 6,
+                    message: "密码长度不能小于6位",
+                  },
+                ]}>
+                <Input.Password className={styles.input} />
+              </Form.Item>
+
+              <Form.Item
+                wrapperCol={{
+                  offset: 8,
+                  span: 16,
+                }}
+                style={{
+                  width: "100%",
+                }}>
+                <Button htmlType="submit" disabled={registerWaiting}>
+                  注册
+                </Button>
+              </Form.Item>
+            </Form>
+          )}
+        </div>
+      </Modal>
+      <Outlet></Outlet>
+    </header>
   );
 }
 

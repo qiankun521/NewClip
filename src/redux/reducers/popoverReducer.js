@@ -35,7 +35,7 @@ const popoverReducer = (state = initState, action) => {
     case "HIDE_ALL":
       return { ...initState };
     default:
-      return initState;
+      return state;
   }
 };
 

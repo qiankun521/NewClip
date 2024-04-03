@@ -7,7 +7,16 @@ function InfoModal() {
   const isShowInfo = useSelector((state) => state?.popover?.isShowInfo);
   return (
     <Modal open={isShowInfo} onClose={() => dispatch(hideInfo())}>
-      <Form></Form>
+      <Form
+        name="info"
+        labelCol={{
+          span: 8,
+        }}
+        wrapperCol={{
+          span: 16,
+        }}>
+        <Form.Item label="Title">Title</Form.Item>
+      </Form>
     </Modal>
   );
 }

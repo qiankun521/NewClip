@@ -1,9 +1,4 @@
-export const changeVideos = (
-  videoId,
-  newState,
-  isChild = false,
-  childName = ""
-) => {
+export const changeVideos = (videoId, newState, isChild = false, childName = "") => {
   return {
     type: "CHANGE_VIDEOS",
     videoId,
@@ -19,12 +14,12 @@ export const updateVideos = (videos) => {
     videos,
   };
 };
-export const updateVideosObj = (videos) => { 
+export const updateVideosObj = (videos) => {
   return {
     type: "UPDATE_VIDEOS_OBJ",
     videos,
   };
-}
+};
 export const resetVideos = (videos) => {
   return {
     type: "RESET_VIDEOS",
@@ -57,5 +52,21 @@ export const changeChooseClass = (chooseClass) => {
   return {
     type: "CHANGE_CHOOSE_CLASS",
     chooseClass,
+  };
+};
+export const changeAnalysis = (
+  videoId,
+  completeTimes,
+  watchedSeconds,
+  totalSeconds,
+  isFavorite
+) => {
+  return {
+    type: "CHANGE_ANALYSIS",
+    videoId,
+    completeTimes,
+    watchedSeconds,
+    totalSeconds,
+    isFavorite,
   };
 };
