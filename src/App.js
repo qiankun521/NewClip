@@ -61,6 +61,11 @@ function App() {
       .then((res) => {
         switch (res.status_code) {
           case 0:
+            if (!res.video_list) {
+              dispatch(changeNextTime(res.next_time));
+              updateVideos();
+              break;
+            }
             dispatch(updateVideos(res.video_list));
             dispatch(changeNextTime(res.next_time));
             break;
