@@ -25,14 +25,15 @@ function App() {
     dispatch(changeMute(true)); //每次刷新页面都将视频静音
     dispatch(hideAll()); //每次刷新页面都将所有弹窗隐藏
     function refreshVideos() {
+      console.log(chooseClass, nextTime[chooseClass]);
       const latest_time = nextTime[chooseClass] || undefined;
       getVideo(latest_time, token, videoClass[chooseClass])
         .then((res) => {
           switch (res.status_code) {
             case 0:
-              if (!res.video_list) {
+              if (!res.video_list || res.video_list.length === 0) {
                 dispatch(changeNextTime(res.next_time));
-                refreshVideos(); //当前类别没有更多的视频，重新请求之后后端从头开始返回
+                setTimeout(() => refreshVideos(), 10); //当前类别没有更多的视频，重新请求之后后端从头开始返回
                 break;
               }
               dispatch(resetVideos(res.video_list));
@@ -61,7 +62,7 @@ function App() {
       .then((res) => {
         switch (res.status_code) {
           case 0:
-            if (!res.video_list) {
+            if (!res.video_list || res.video_list.length === 0) {
               dispatch(changeNextTime(res.next_time));
               updateVideos();
               break;
@@ -92,6 +93,13 @@ function App() {
             colorText: "#C9C9CA",
             colorTextHeading: "#C9C9CA",
           },
+          Slider: {
+            handleActiveColor: "#fe2c55",
+            handleColor: "#fe2c55",
+            dotActiveBorderColor: "#fe2c55",
+            trackBg: "#fe2c55",
+            trackHoverBg: "#fe2c55",
+          }
         },
       }}>
       <Router>

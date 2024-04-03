@@ -31,8 +31,8 @@ function Controls({
     setLocalPlaySeconds(value);
     videoRef.current?.seekTo(value, "seconds");
   };
-  const throttleHandleVolumeChange = throttle(handleVolumeChange, 20);
-  const throttleHandleVideoProgress = throttle(handleVideoProgress, 50);
+  const throttleHandleVolumeChange = throttle(handleVolumeChange, 10);
+  const throttleHandleVideoProgress = throttle(handleVideoProgress, 10);
   useEffect(() => {
     setLocalPlaySeconds(Number(playedSeconds.toFixed(2)));
   }, [playedSeconds]);

@@ -1,7 +1,3 @@
-/**
- * @file Mainpage.js是一个React组件，用于渲染主页。它包含了三个视频swiper，可以通过滑动或按键来切换视频swiper，通过更改swiper实际加载的视频达到改变视频的效果。同时，它还提供了音量控制、静音、评论区等功能。
- * @module Mainpage
- */
 import Video from "../Video";
 import { Swiper, SwiperSlide } from "swiper/react";
 import { useRef, useEffect, useState } from "react";
@@ -11,6 +7,7 @@ import "swiper/css/navigation";
 import styles from "../../assets/styles/Mainpage.module.scss";
 import { useSelector } from "react-redux";
 import debounce from "../../utils/debounce";
+import { Slider } from "antd";
 function Mainpage({ updateVideos }) {
   const realPrevIndex = useRef(0); // 上一次播放视频的swiper的真正index
   const swiperRef = useRef(null); // 用于获取swiper的ref
@@ -116,7 +113,6 @@ function Mainpage({ updateVideos }) {
         break;
     }
   }
-
   return (
     <div className={styles.mainpage}>
       <Swiper
@@ -127,7 +123,8 @@ function Mainpage({ updateVideos }) {
         style={{ height: "100%" }}
         allowSlidePrev={canSLide[0]}
         allowSlideNext={canSLide[1]}
-        loop>
+        loop
+        simulateTouch={false}>
         {videosArr[swiper[0]] && (
           <SwiperSlide key="0">
             <Video
