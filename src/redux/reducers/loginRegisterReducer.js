@@ -1,7 +1,3 @@
-/**
- * @file
- * 这个文件包含了处理用户登录和注册的 reducer 函数
- */
 const initState = {
   logout: true,
   username: "",

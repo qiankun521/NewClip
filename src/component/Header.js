@@ -231,7 +231,6 @@ function Header() {
             <Popover
               open={isShowMessage}
               onClick={handleMessage}
-              destroyTooltipOnHide={true}
               content={<MessagePopover handleMessage={handleMessage}></MessagePopover>}>
               <div className={styles.message}>
                 <div>
@@ -285,7 +284,7 @@ function Header() {
         className={styles.modal}>
         <div className={styles.modalContainer}>
           <div className={styles.modalTitle}>登录后畅享更多精彩</div>
-          <>
+          <div className={styles.titleGroup}>
             <div className={styles.modalTitleSmall}>
               <div className={styles.icon}>
                 <BiShare />
@@ -298,7 +297,7 @@ function Header() {
               </div>
               点赞评论随心发
             </div>
-          </>
+          </div>
           <div className={styles.choose}>
             <div
               className={`${styles.chooseItem} ${choose[0] && styles.choosed}`}
@@ -317,34 +316,22 @@ function Header() {
               onFinish={onFinishLogin}
               onFinishFailed={onFinishFailed}
               labelCol={{ span: 8 }}
-              wrapperCol={{ span: 16 }}
-              style={{
-                display: "flex",
-                flexDirection: "column",
-                alignItems: "center",
-                marginTop: "20px",
-              }}>
+              wrapperCol={{ span: 10 }}>
               <Form.Item
-                label={<span style={{ color: "#C9C9CA" }}>用户名</span>}
+                label="用户名"
                 name="username"
                 rules={[{ required: true, message: "请输入用户名!" }]}>
                 <Input className={styles.input} />
               </Form.Item>
-
               <Form.Item
-                label={<span style={{ color: "#C9C9CA" }}>用户密码</span>}
+                label="用户密码"
                 name="password"
                 rules={[{ required: true, message: "请输入用户密码!" }]}>
                 <Input.Password className={styles.input} />
               </Form.Item>
-
               <Form.Item
                 wrapperCol={{
-                  offset: 8,
-                  span: 16,
-                }}
-                style={{
-                  width: "100%",
+                  offset: 8
                 }}>
                 <Button type="primary" htmlType="submit" disabled={loginWaiting}>
                   登录
@@ -358,15 +345,9 @@ function Header() {
               onFinish={onFinishRegister}
               onFinishFailed={onFinishFailed}
               labelCol={{ span: 8 }}
-              wrapperCol={{ span: 16 }}
-              style={{
-                display: "flex",
-                flexDirection: "column",
-                alignItems: "center",
-                marginTop: "20px",
-              }}>
+              wrapperCol={{ span: 10 }}>
               <Form.Item
-                label={<span style={{ color: "#C9C9CA" }}>用户名</span>}
+                label="用户名"
                 name="username"
                 rules={[
                   {
@@ -378,11 +359,10 @@ function Header() {
                     message: "用户名长度不能超过32位",
                   },
                 ]}>
-                <Input className={styles.input} />
+                <Input/>
               </Form.Item>
-
               <Form.Item
-                label={<span style={{ color: "#C9C9CA" }}>用户密码</span>}
+                label="用户密码"
                 name="password"
                 rules={[
                   {
@@ -394,16 +374,12 @@ function Header() {
                     message: "密码长度不能小于6位",
                   },
                 ]}>
-                <Input.Password className={styles.input} />
+                <Input.Password />
               </Form.Item>
 
               <Form.Item
                 wrapperCol={{
                   offset: 8,
-                  span: 16,
-                }}
-                style={{
-                  width: "100%",
                 }}>
                 <Button htmlType="submit" disabled={registerWaiting}>
                   注册

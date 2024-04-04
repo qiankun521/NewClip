@@ -2,7 +2,7 @@
   width: 25vw;
   min-width: 400px;
   flex-shrink: 1;
-  height: 90vh;
+  height: 100%;
   background-color: rgba(0, 0, 0, 0.5);
   color: #ccc;
   font-size: 1rem;
@@ -107,6 +107,7 @@
   align-items: center;
 }
 .empty {
+  text-align: center;
   width: auto;
   height: 11vh;
 }

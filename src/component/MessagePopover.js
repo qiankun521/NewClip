@@ -80,7 +80,7 @@ function MessagePopover({ handleMessage }) {
             break;
         }
       });
-    }, 3000);
+    }, 1000);
     return () => clearInterval(intervalId);
   }, [dispatch, token, user_id]);
 
@@ -102,7 +102,7 @@ function MessagePopover({ handleMessage }) {
           }
         });
       }
-    }, 3000);
+    }, 1000);
     return () => clearInterval(intervalId);
   }, [dispatch, friendList, token, user_id]);
 

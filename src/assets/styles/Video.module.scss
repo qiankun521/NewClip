@@ -1,41 +1,53 @@
 .outside {
-    width: 100%;
-    height: 100%;
-    display: flex;
-    align-items: center;
-    background-color: rgb(0, 0, 0);
-    position: relative;
+  width: 100%;
+  height: 100%;
+  display: flex;
+  align-items: center;
+  background-color: rgb(0, 0, 0);
+  position: relative;
 }
 
 .videoContainer {
-    flex-grow: 1;
-    height: 90vh;
-    background-color:transparent;
-    display: flex;
-    flex-direction: column;
-    position: relative;
+  flex-grow: 1;
+  height: 90vh;
+  background-color: transparent;
+  display: flex;
+  flex-direction: column;
+  position: relative;
 }
 
 img {
-    position: absolute;
-    width: 100%;
-    height: 100%;
-    object-fit: cover;
-    filter: blur(50px);
-    z-index: 0;
+  position: absolute;
+  width: 100%;
+  height: 100%;
+  object-fit: cover;
+  filter: blur(50px);
+  z-index: 0;
 }
 
 .playerContainer {
-    width: 100%;
-    height: 90%;
-    object-fit: contain;
-    position: relative;
+  width: 100%;
+  height: 90%;
+  object-fit: contain;
+  position: relative;
+  z-index: 100;
+  .faplay {
+    position: absolute;
+    top: 50%;
+    left: 50%;
+    transform: translate(-50%, -50%);
     z-index: 100;
+    font-size: 5rem;
+    color: rgb(255, 255, 255, 0.6);
+    &:hover {
+      color: rgb(255, 255, 255, 0.8);
+    }
+  }
 }
 
 .controlContainer {
-    flex-shrink: 0;
-    width: 100%;
-    height: 10%;
-    background-color: transparent;
+  flex-shrink: 0;
+  width: 100%;
+  height: 10%;
+  background-color: transparent;
 }

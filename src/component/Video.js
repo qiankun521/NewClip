@@ -7,7 +7,7 @@ import CommentArea from "./CommentArea";
 import { useEffect, useRef, useState } from "react";
 import { useSelector, useDispatch } from "react-redux";
 import { changeAnalysis } from "../redux/actions/videosAction";
-
+import { FaPlay } from "react-icons/fa";
 function Video({
   isPlaying, //是否正在播放
   handlePlaying, //处理播放状态的函数
@@ -35,6 +35,10 @@ function Video({
       flag.current = false;
     }
   }
+  function handlePlayIcon(e) {
+    e.stopPropagation();
+    handlePlaying();
+  }
   useEffect(() => {
     if (!isPlaying) return;
     flag.current = false;
@@ -60,7 +64,7 @@ function Video({
     <div className={styles.outside}>
       <img src={video?.cover_url} alt="background" />
       <div className={styles.videoContainer}>
-        <div className={styles.playerContainer}>
+        <div className={styles.playerContainer} onClick={handlePlaying}>
           <ReactPlayer
             ref={videoRef}
             className={styles.video}
@@ -73,8 +77,10 @@ function Video({
             loop={true}
             progressInterval={500}
             onProgress={handleProgress}
-            onDuration={(duration) => (totalSeconds.current = duration)}></ReactPlayer>
+            onDuration={(duration) => (totalSeconds.current = duration)}
+          ></ReactPlayer>
           <Describe name={video?.author?.name || "未知"} title={video?.title || "未知"}></Describe>
+          {!isPlaying && <FaPlay className={styles.faplay} onClick={handlePlayIcon} />}
         </div>
         <Sidebar video={video}></Sidebar>
         <div className={styles.controlContainer}>

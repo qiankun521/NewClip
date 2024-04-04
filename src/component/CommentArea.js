@@ -8,6 +8,7 @@ import { message } from "antd";
 import { hideComments, showComments, showLogin } from "../redux/actions/popoverAction";
 import { changeVideos } from "../redux/actions/videosAction";
 import getComments from "../utils/getComments";
+import Loading from "./Loading";
 function CommentArea({ video }) {
   const dispatch = useDispatch();
   const [commentValue, setCommentValue] = useState(""); // 评论输入框的值
@@ -69,7 +70,7 @@ function CommentArea({ video }) {
   }
   useEffect(() => {
     refreshComments();
-  // eslint-disable-next-line react-hooks/exhaustive-deps
+    // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [video]);
   return (
     <div className={styles.commentArea} onWheel={(e) => e.stopPropagation()}>
@@ -90,9 +91,9 @@ function CommentArea({ video }) {
           comments.map((comment) => {
             return <SingleComment key={comment?.id} comment={comment} />;
           })}
+        <Loading></Loading>
         <div className={styles.empty}>评论到底了~</div>
       </section>
-
       <section className={styles.sendArea}>
         <input
           className={styles.sendInput}

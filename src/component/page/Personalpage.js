@@ -134,26 +134,45 @@ function Personalpage() {
     }
     info?.is_follow
       ? postCancelFollow(info?.id, token)
+        .then((res) => {
+          switch (res.status_code) {
+            case 0:
+              setInfo((prevState) => ({
+                ...prevState,
+                is_follow: !info.is_follow,
+              }));
+              break;
+            case -1:
+              message.error(res.status_msg, 1);
+              break;
+            default:
+              message.error("操作失败", 1);
+              break;
+          }
+        })
+        .catch((err) => {
+          message.error("操作失败,请检查网络", 1);
+        })
       : postFollow(info?.id, token)
-          .then((res) => {
-            switch (res.status_code) {
-              case 0:
-                setInfo((prevState) => ({
-                  ...prevState,
-                  is_follow: !info.is_follow,
-                }));
-                break;
-              case -1:
-                message.error(res.status_msg, 1);
-                break;
-              default:
-                message.error("操作失败", 1);
-                break;
-            }
-          })
-          .catch((err) => {
-            message.error("操作失败,请检查网络", 1);
-          });
+        .then((res) => {
+          switch (res.status_code) {
+            case 0:
+              setInfo((prevState) => ({
+                ...prevState,
+                is_follow: !info.is_follow,
+              }));
+              break;
+            case -1:
+              message.error(res.status_msg, 1);
+              break;
+            default:
+              message.error("操作失败", 1);
+              break;
+          }
+        })
+        .catch((err) => {
+          message.error("操作失败,请检查网络", 1);
+        });
   }
 
   function handleMessage() {
@@ -161,7 +180,7 @@ function Personalpage() {
       message.error("请先登录", 1);
       dispatch(showLogin());
       return;
-    } else if (!friendList(trueId)) {
+    } else if (!friendList[trueId]) {
       message.error("对方不是您的好友，请互相关注后使用私信功能", 1);
       return;
     }
@@ -227,9 +246,8 @@ function Personalpage() {
             ) : (
               <div className={styles.buttonContainer}>
                 <div
-                  className={`${styles.button} ${
-                    !info?.is_follow && styles.notfollow
-                  }`}
+                  className={`${styles.button} ${!info?.is_follow && styles.notfollow
+                    }`}
                   onClick={handleFollow}
                 >
                   {info?.is_follow ? "取消关注" : "关注"}
@@ -243,17 +261,15 @@ function Personalpage() {
         </div>
         <div className={styles.classify}>
           <div
-            className={`${styles.classifyTitle} ${
-              active === 0 && styles.classifyTitleActive
-            }`}
+            className={`${styles.classifyTitle} ${active === 0 && styles.classifyTitleActive
+              }`}
             onClick={() => setActive(0)}
           >
             作品
           </div>
           <div
-            className={`${styles.classifyTitle} ${
-              active === 1 && styles.classifyTitleActive
-            }`}
+            className={`${styles.classifyTitle} ${active === 1 && styles.classifyTitleActive
+              }`}
             onClick={() => setActive(1)}
           >
             喜欢
@@ -262,23 +278,23 @@ function Personalpage() {
         <div className={styles.videoContainer}>
           {active === 0
             ? work?.map((item) => {
-                return (
-                  <SingleVideo
-                    key={item.id}
-                    video={item}
-                    handleFullScreen={handleFullScreen}
-                  ></SingleVideo>
-                );
-              })
+              return (
+                <SingleVideo
+                  key={item.id}
+                  video={item}
+                  handleFullScreen={handleFullScreen}
+                ></SingleVideo>
+              );
+            })
             : like?.map((item) => {
-                return (
-                  <SingleVideo
-                    key={item.id}
-                    video={item}
-                    handleFullScreen={handleFullScreen}
-                  ></SingleVideo>
-                );
-              })}
+              return (
+                <SingleVideo
+                  key={item.id}
+                  video={item}
+                  handleFullScreen={handleFullScreen}
+                ></SingleVideo>
+              );
+            })}
         </div>
       </div>
       {visible && (

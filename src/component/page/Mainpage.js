@@ -7,7 +7,7 @@ import "swiper/css/navigation";
 import styles from "../../assets/styles/Mainpage.module.scss";
 import { useSelector } from "react-redux";
 import debounce from "../../utils/debounce";
-import { Slider } from "antd";
+import { Slider, message } from "antd";
 function Mainpage({ updateVideos }) {
   const realPrevIndex = useRef(0); // 上一次播放视频的swiper的真正index
   const swiperRef = useRef(null); // 用于获取swiper的ref
@@ -113,6 +113,9 @@ function Mainpage({ updateVideos }) {
         break;
     }
   }
+  useEffect(() => {
+    message.info("浏览器自动静音，如需播放声音请手动打开");
+  }, []);
   return (
     <div className={styles.mainpage}>
       <Swiper
