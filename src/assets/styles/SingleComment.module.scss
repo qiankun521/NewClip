@@ -1,60 +1,64 @@
-.singleContainer{
-    display: flex;
-    padding: 15px;
-    border-radius: 5px;
-    z-index: 1;
+.singleContainer {
+  display: flex;
+  padding: 15px;
+  border-radius: 5px;
+  z-index: 1;
 }
-.avatarContainer{
-    width: 10%;
-    height: 100%;
+.avatarContainer {
+  width: 10%;
+  height: 100%;
 }
-.avatar{
-    width: 2.5rem;
-    height: 2.5rem;
-    border-radius: 50%;
-    background-color: #fff;
+.avatar {
+  width: 2.5rem;
+  height: 2.5rem;
+  border-radius: 50%;
+  background-color: #fff;
 }
-.content{
-    display: flex;
-    width: 90%;
-    flex-direction: column;
-    justify-content: center;
-    align-items: flex-start;
+.content {
+  display: flex;
+  width: 90%;
+  flex-direction: column;
+  justify-content: center;
+  align-items: flex-start;
 }
-.name{
-    font-size: 1.2rem;
-    font-weight: 600;
-    padding-left: 5%;
-    margin-bottom: 5%;
+.name {
+  font-size: 1.2rem;
+  font-weight: 600;
+  padding-left: 5%;
+  margin-bottom: 5%;
 }
-.text{
-    font-size: 1rem;
-    padding-left: 5%;
-    word-wrap: break-word;
-    text-align: start;
-    color: #fff;
+.text {
+  font-size: 1rem;
+  padding-left: 5%;
+  word-wrap: break-word;
+  text-align: start;
+  color: #fff;
 }
-.time{
-    font-size: 0.8rem;
-    padding-left: 5%;
-    margin-top: 5%;
+.time {
+  font-size: 0.8rem;
+  padding-left: 5%;
+  margin-top: 5%;
 }
-.interactive{
-    width: 100%;
-    display: flex;
-    padding-top: 5%;
-    display: flex;
+.interactive {
+  width: 100%;
+  display: flex;
+  gap: 20px;
+  padding-top: 5%;
+  padding-left: 5%;
+  justify-content: flex-start;
+  align-items: center;
 }
-.interactiveItem{
-    display: flex;
-    justify-content: center;
-    align-items: center;
-    width: 100%;
+.interactiveItem {
+  width: 50px;
+  display: flex;
+  justify-content: flex-start;
+  align-items: center;
+  gap: 2px;
 }
-.interactiveItem:hover{
-    cursor: pointer;
+.interactiveItem:hover {
+  cursor: pointer;
 }
-.littleText{
-    font-size: 0.8rem;
-    margin-left: 1%;
+.littleText {
+  font-size: 0.8rem;
+  margin-left: 1%;
 }

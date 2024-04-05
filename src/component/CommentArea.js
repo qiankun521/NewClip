@@ -16,6 +16,7 @@ function CommentArea({ video }) {
   const isShowComments = useSelector((state) => state?.popover?.isShowComments);
   const logout = useSelector((state) => state?.loginRegister?.logout); // 是否已注销
   const token = useSelector((state) => state?.loginRegister?.token); // 用户 token
+  const isCommentEnd = useState(false); // 评论是否到底
 
   function handleSendMessage() {
     if (logout) {
@@ -91,8 +92,14 @@ function CommentArea({ video }) {
           comments.map((comment) => {
             return <SingleComment key={comment?.id} comment={comment} />;
           })}
-        <Loading></Loading>
-        <div className={styles.empty}>评论到底了~</div>
+        {
+          !isCommentEnd ? <div className={styles.empty}>评论到底了~</div> :
+            <div className={styles.empty}>
+              <Loading></Loading>
+            </div>
+
+        }
+
       </section>
       <section className={styles.sendArea}>
         <input

@@ -19,6 +19,7 @@ function Video({
   const ismuted = useSelector((state) => state?.videos?.ismuted);
   const volume = useSelector((state) => state?.videos?.volume);
   const isShowComments = useSelector((state) => state?.popover?.isShowComments);
+  const speed = useSelector((state) => state?.videos?.speed);
   const completeTimes = useRef(0);
   const watchedSeconds = useRef(0);
   const totalSeconds = useRef(0);
@@ -70,6 +71,7 @@ function Video({
             className={styles.video}
             url={video?.play_url}
             playing={isPlaying}
+            playbackRate={Number(speed)}
             muted={ismuted}
             volume={volume / 100}
             width="100%"
@@ -91,7 +93,8 @@ function Video({
             playedSeconds={playedSeconds}
             setPlayedSeconds={setPlayedSeconds}
             ismuted={ismuted}
-            volume={volume}></Controls>
+            volume={volume}
+            speed={speed}></Controls>
         </div>
       </div>
       {isShowComments && <CommentArea video={video}></CommentArea>}

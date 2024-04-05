@@ -6,6 +6,7 @@ const initState = {
   ismuted: true,
   chooseClass: 1,
   analysis: {},
+  speed: "1",
 };
 const videosReducer = (state = initState, action) => {
   let newVideosOBJ;
@@ -66,6 +67,11 @@ const videosReducer = (state = initState, action) => {
       return {
         ...state,
         ismuted: action.ismuted,
+      };
+    case "CHNAEG_SPEED":
+      return {
+        ...state,
+        speed: action.speed,
       };
     case "CHANGE_CHOOSE_CLASS":
       return {

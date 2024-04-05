@@ -5,8 +5,8 @@
 
 .ball {
   position: absolute;
-  width: 10px;
-  height: 10px;
+  width: 20px;
+  height: 20px;
   border-radius: 50%;
   mix-blend-mode: multiply;
 }
@@ -30,33 +30,33 @@
 @keyframes circle {
   0%,
   100% {
-    transform: translateX(-5px) scale(1);
+    transform: translateX(-10px) scale(1);
     z-index: 1;
   }
   25% {
-    transform: translateX(4px) scale(0.75);
+    transform: translateX(8px) scale(0.75);
   }
   50% {
     transform: translateX(0px) scale(0.5);
   }
   75% {
-    transform: translateX(-4px) scale(0.75);
+    transform: translateX(-8px) scale(0.75);
   }
 }
 
 @keyframes circleSecond {
   0%,
   100% {
-    transform: translateX(-5px) scale(0.5);
+    transform: translateX(-10px) scale(0.5);
   }
   25% {
-    transform: translateX(-4px) scale(0.75);
+    transform: translateX(-8px) scale(0.75);
   }
   50% {
     transform: translateX(0px) scale(1);
     z-index: 1;
   }
   75% {
-    transform: translateX(4px) scale(0.75);
+    transform: translateX(8px) scale(0.75);
   }
 }

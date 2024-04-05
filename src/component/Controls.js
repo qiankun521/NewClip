@@ -4,9 +4,9 @@ import { PauseOutlined } from "@ant-design/icons";
 import formatSeconds from "../utils/formatSeconds";
 import { BiSolidVolumeFull as SoundOn } from "react-icons/bi";
 import { BiSolidVolumeMute as SoundOff } from "react-icons/bi";
-import { useDispatch } from "react-redux";
-import { changeMute, changeVolume } from "../redux/actions/videosAction";
-import { Slider } from "antd";
+import { useDispatch, useSelector } from "react-redux";
+import { changeMute, changeSpeed, changeVolume } from "../redux/actions/videosAction";
+import { Slider, Popover } from "antd";
 import throttle from "../utils/throttle";
 import { useState, useEffect } from "react";
 function Controls({
@@ -16,6 +16,7 @@ function Controls({
   playedSeconds, //视频已播放的秒数
   ismuted, //视频是否静音
   volume, //视频的音量
+  speed, //视频的播放速度
 }) {
   const totalSeconds = videoRef.current
     ? formatSeconds(Math.floor(videoRef.current.getDuration()))
@@ -36,6 +37,7 @@ function Controls({
   useEffect(() => {
     setLocalPlaySeconds(Number(playedSeconds.toFixed(2)));
   }, [playedSeconds]);
+  console.log(typeof speed, speed)
   return (
     <div className={styles.controlContainer}>
       <div className={styles.topContainer}>
@@ -63,22 +65,46 @@ function Controls({
           </div>
         </div>
         <div className={styles.rightContainer}>
-          <Slider
-            className={styles.volume}
-            min={0}
-            max={100}
-            step={1}
-            value={volume ? volume : 0}
-            onChange={throttleHandleVolumeChange}
-            onChangeComplete={handleVolumeChange}
-          />
-          <div
-            id="muted"
-            className={styles.button}
-            onClick={() => dispatch(changeMute(!ismuted))}
-          >
-            {!ismuted ? <SoundOn /> : <SoundOff />}
-          </div>
+          <Popover
+            content={
+              <div className={styles.speedPopover}>
+                <div className={speed === "2" ? styles.select : undefined} onClick={() => dispatch(changeSpeed("2"))}>2X</div>
+                <div className={speed === "1.5" ? styles.select : undefined} onClick={() => dispatch(changeSpeed("1.5"))}>1.5X</div>
+                <div className={speed === "1" ? styles.select : undefined} onClick={() => dispatch(changeSpeed("1"))}>1X</div>
+                <div className={speed === "0.75" ? styles.select : undefined} onClick={() => dispatch(changeSpeed("0.75"))}>0.75X</div>
+                <div className={speed === "0.5" ? styles.select : undefined} onClick={() => dispatch(changeSpeed("0.5"))}>0.5X</div>
+              </div>
+            }
+            color="#33343f"
+            arrow={false}>
+            <div className={styles.speed}>倍速</div>
+          </Popover>
+          <Popover
+            content={
+              <div className={styles.volumePopover}>
+                <Slider
+                  min={0}
+                  max={100}
+                  step={1}
+                  value={volume ? volume : 0}
+                  onChange={throttleHandleVolumeChange}
+                  onChangeComplete={handleVolumeChange}
+                  placement="left"
+                  vertical={true}
+                />
+              </div>
+            }
+            color="#33343f"
+            arrow={false}>
+            <div
+              id="muted"
+              className={styles.button}
+              onClick={() => dispatch(changeMute(!ismuted))}
+            >
+              {!ismuted ? <SoundOn /> : <SoundOff />}
+            </div>
+          </Popover>
+
         </div>
       </div>
     </div>

@@ -47,7 +47,12 @@ export const changeMute = (ismuted) => {
     ismuted,
   };
 };
-
+export const changeSpeed = (speed) => {
+  return {
+    type: "CHANGE_SPEED",
+    speed,
+  };
+};
 export const changeChooseClass = (chooseClass) => {
   return {
     type: "CHANGE_CHOOSE_CLASS",
