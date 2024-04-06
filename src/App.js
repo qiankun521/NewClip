@@ -11,7 +11,7 @@ import { logOut } from "./redux/actions/loginRegisterAction";
 import { ConfigProvider, message } from "antd";
 import Page404 from "./component/page/Page404";
 import Personalpage from "./component/page/Personalpage";
-import { changeMute, changeNextTime, resetVideos } from "./redux/actions/videosAction";
+import { changeMute, changeNextTime, changeSpeed, resetVideos } from "./redux/actions/videosAction";
 import { hideAll, showLogin } from "./redux/actions/popoverAction";
 function App() {
   const dispatch = useDispatch();
@@ -24,6 +24,7 @@ function App() {
   useEffect(() => {
     dispatch(changeMute(true)); //每次刷新页面都将视频静音
     dispatch(hideAll()); //每次刷新页面都将所有弹窗隐藏
+    dispatch(changeSpeed("1"))
     function refreshVideos() {
       console.log(chooseClass, nextTime[chooseClass]);
       const latest_time = nextTime[chooseClass] || undefined;

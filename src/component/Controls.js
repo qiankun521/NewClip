@@ -37,7 +37,6 @@ function Controls({
   useEffect(() => {
     setLocalPlaySeconds(Number(playedSeconds.toFixed(2)));
   }, [playedSeconds]);
-  console.log(typeof speed, speed)
   return (
     <div className={styles.controlContainer}>
       <div className={styles.topContainer}>

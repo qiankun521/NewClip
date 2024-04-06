@@ -68,7 +68,7 @@ const videosReducer = (state = initState, action) => {
         ...state,
         ismuted: action.ismuted,
       };
-    case "CHNAEG_SPEED":
+    case "CHANGE_SPEED":
       return {
         ...state,
         speed: action.speed,
