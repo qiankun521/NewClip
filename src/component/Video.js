@@ -28,9 +28,7 @@ function Video({
   function handleProgress(state) {
     setPlayedSeconds(state.playedSeconds);
     watchedSeconds.current = state.playedSeconds;
-    if (!flag.current && totalSeconds.current > 0 && state.playedSeconds < 2) {
-      flag.current = true;
-    }
+    if (!flag.current && totalSeconds.current > 0 && state.playedSeconds < 2) flag.current = true;
     if (flag.current && totalSeconds.current > 0 && Math.abs(totalSeconds.current - state.playedSeconds) < 1) {
       completeTimes.current += 1;
       flag.current = false;
@@ -47,15 +45,13 @@ function Video({
     watchedSeconds.current = 0;
     totalSeconds.current = 0;
     const id = setInterval(() => {
-      dispatch(
-        changeAnalysis(
-          video?.id,
-          completeTimes.current,
-          watchedSeconds.current,
-          totalSeconds.current,
-          video?.is_favorite
-        )
-      );
+      dispatch(changeAnalysis(
+        video?.id,
+        completeTimes.current,
+        watchedSeconds.current,
+        totalSeconds.current,
+        video?.is_favorite
+      ));
     }, 1000);
     return () => clearInterval(id);
     // eslint-disable-next-line react-hooks/exhaustive-deps

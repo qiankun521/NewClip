@@ -3,13 +3,7 @@
  * @module Describe
  */
 import styles from '../assets/styles/Describe.module.scss';
-/**
- * @description 视频描述组件，用于展示用户名称和视频标题
- * @param {Object} props - 组件属性
- * @param {string} props.name - 用户名
- * @param {string} props.title - 标题
- * @returns {JSX.Element} 描述组件
- */
+
 function Describe({ name, title }) {
     return (
         <div className={styles.describeContainer}>

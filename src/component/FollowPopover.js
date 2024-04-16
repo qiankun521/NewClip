@@ -15,9 +15,9 @@ function FollowPopover({ info }) {
     return (
         <div className={styles.FollowPopover}>
             {
-                info&&info.map((item,index)=>{
+                info && info.map((item, index) => {
                     return (
-                        <div key={item.id} className={styles.person} onClick={()=>{
+                        <div key={item.id} className={styles.person} onClick={() => {
                             navigate(`/personal?user_id=${item.id}`);
                         }}>
                             <div>

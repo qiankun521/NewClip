@@ -34,7 +34,7 @@ function App() {
             case 0:
               if (!res.video_list || res.video_list.length === 0) {
                 dispatch(changeNextTime(res.next_time));
-                setTimeout(() => refreshVideos(), 10); //当前类别没有更多的视频，重新请求之后后端从头开始返回
+                refreshVideos();
                 break;
               }
               dispatch(resetVideos(res.video_list));

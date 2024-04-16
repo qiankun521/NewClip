@@ -1,7 +1,3 @@
-/**
- * @file 单个视频组件
- * @module SingleVideo
- */
 import styles from "../assets/styles/SingleVideo.module.scss";
 import { AiOutlineHeart } from "react-icons/ai";
 

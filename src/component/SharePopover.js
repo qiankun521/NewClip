@@ -11,8 +11,7 @@ function SharePopover({ video }) {
   const token = useSelector((state) => state?.loginRegister?.token);
   const friendList = useSelector((state) => state?.personal?.friendList);
   const [friendIndex, setFriendIndex] = useState(0);
-  const inputValue =
-    "我正在看@" + video?.author.name + "的视频《" + video?.title + "》，快来一起看吧！";
+  const inputValue = "我正在看@" + video?.author.name + "的视频《" + video?.title + "》，快来一起看吧！";
   const copyToClipboard = async () => {
     try {
       await navigator.clipboard.writeText(window.location.href);

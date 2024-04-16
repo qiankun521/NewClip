@@ -1,7 +1,3 @@
-/**
- * @file 单个评论组件
- * @module SingleComment
- */
 import styles from '../assets/styles/SingleComment.module.scss';
 import { AiOutlineMessage } from 'react-icons/ai';
 import { FaRegHeart } from "react-icons/fa";

@@ -1,7 +1,7 @@
 .commentArea {
-  width: 25vw;
+  flex: 1;
+  flex-basis: 25%;
   min-width: 400px;
-  flex-shrink: 1;
   height: 100%;
   background-color: rgba(0, 0, 0, 0.5);
   color: #ccc;

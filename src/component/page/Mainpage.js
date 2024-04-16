@@ -7,7 +7,7 @@ import "swiper/css/navigation";
 import styles from "../../assets/styles/Mainpage.module.scss";
 import { useSelector } from "react-redux";
 import debounce from "../../utils/debounce";
-import { Slider, message } from "antd";
+import { message } from "antd";
 function Mainpage({ updateVideos }) {
   const realPrevIndex = useRef(0); // 上一次播放视频的swiper的真正index
   const swiperRef = useRef(null); // 用于获取swiper的ref
@@ -126,32 +126,27 @@ function Mainpage({ updateVideos }) {
         style={{ height: "100%" }}
         allowSlidePrev={canSLide[0]}
         allowSlideNext={canSLide[1]}
+        simulateTouch={false}
         loop
-        simulateTouch={false}>
-        {videosArr[swiper[0]] && (
-          <SwiperSlide key="0">
-            <Video
-              video={videosObj[videosArr[swiper[0]]]}
-              isPlaying={isPlaying[0]}
-              handlePlaying={handlePlaying}></Video>
-          </SwiperSlide>
-        )}
-        {videosArr[swiper[1]] && (
-          <SwiperSlide key="1">
-            <Video
-              video={videosObj[videosArr[swiper[1]]]}
-              isPlaying={isPlaying[1]}
-              handlePlaying={handlePlaying}></Video>
-          </SwiperSlide>
-        )}
-        {videosArr[swiper[2]] && (
-          <SwiperSlide key="2">
-            <Video
-              video={videosObj[videosArr[swiper[2]]]}
-              isPlaying={isPlaying[2]}
-              handlePlaying={handlePlaying}></Video>
-          </SwiperSlide>
-        )}
+      >
+        <SwiperSlide key="0">
+          <Video
+            video={videosObj[videosArr[swiper[0]]]}
+            isPlaying={isPlaying[0]}
+            handlePlaying={handlePlaying}></Video>
+        </SwiperSlide>
+        <SwiperSlide key="1">
+          <Video
+            video={videosObj[videosArr[swiper[1]]]}
+            isPlaying={isPlaying[1]}
+            handlePlaying={handlePlaying}></Video>
+        </SwiperSlide>
+        <SwiperSlide key="2">
+          <Video
+            video={videosObj[videosArr[swiper[2]]]}
+            isPlaying={isPlaying[2]}
+            handlePlaying={handlePlaying}></Video>
+        </SwiperSlide>
       </Swiper>
     </div>
   );

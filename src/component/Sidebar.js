@@ -120,19 +120,14 @@ function Sidebar({ video }) {
         .then((res) => {
           switch (res.status_code) {
             case 0:
-              dispatch(
-                changeVideos(
-                  video?.id,
-                  {
-                    follower_count: video?.author?.is_follow
-                      ? parseInt(video?.author?.follower_count - 1)
-                      : parseInt(video?.author?.follower_count + 1),
-                    is_follow: !video?.author?.is_follow,
-                  },
-                  true,
-                  "author"
-                )
-              );
+              dispatch(changeVideos(video?.id,
+                {
+                  follower_count: video?.author?.is_follow
+                    ? parseInt(video?.author?.follower_count - 1)
+                    : parseInt(video?.author?.follower_count + 1),
+                  is_follow: !video?.author?.is_follow,
+                }, true, "author"
+              ));
               break;
             case -1:
               message.error(res.status_msg, 1);
