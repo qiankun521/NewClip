@@ -229,6 +229,7 @@ function Header() {
               </div>
             </Popover>
             <Popover
+              destroyTooltipOnHide
               open={isShowMessage}
               onClick={handleMessage}
               content={<MessagePopover handleMessage={handleMessage}></MessagePopover>}>
