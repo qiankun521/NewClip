@@ -18,56 +18,24 @@ function CommentArea({ video }) {
   const token = useSelector((state) => state?.loginRegister?.token); // 用户 token
   const isCommentEnd = useState(false); // 评论是否到底
 
-  function handleSendMessage() {
+  async function handleSendMessage() {
     if (logout) {
       dispatch(showLogin());
       return;
     } // 如果已注销，打开登录/注册模态框
-    message.loading("发送中...", 0); // 显示加载中提示
-    postComment(token, video.id, 1, commentValue)
-      .then((data) => {
-        message.destroy();
-        switch (data.status_code) {
-          case 0:
-            setTimeout(refreshComments, 10); // 延迟 10ms 更新评论，后端出现了同步问题返回脏数据
-            setCommentValue(""); // 清空评论输入框的值
-            message.success(data.status_msg);
-            dispatch(
-              changeVideos(video?.id, {
-                comment_count: parseInt(video.comment_count + 1),
-              })
-            );
-            break;
-          case -1:
-            message.error(data.status_msg);
-            break;
-          default:
-            message.error("评论失败");
-            break;
-        }
-      })
-      .catch((err) => {
-        console.log(err);
-        message.error("评论失败,请检查网络");
-      });
+    message.loading("发送中...", 0); // 显示发送中提示
+    const data = await postComment(token, video.id, 1, commentValue)
+    refreshComments(); // 延迟 10ms 更新评论，后端出现了同步问题返回脏数据
+    setCommentValue(""); // 清空评论输入框的值
+    message.success(data.status_msg);
+    dispatch(changeVideos(video?.id, { comment_count: parseInt(video.comment_count + 1) }));
   }
   function handleComments() {
     !isShowComments ? dispatch(showComments()) : dispatch(hideComments());
   }
   function refreshComments() {
     if (!video?.id) return;
-    getComments(video?.id).then((res) => {
-      switch (res.status_code) {
-        case 0:
-          setComments(res.comment_list);
-          break;
-        case -1:
-          console.log(res.status_msg);
-          break;
-        default:
-          break;
-      }
-    });
+    getComments(video?.id).then((res) => setComments(res.comment_list));
   }
   useEffect(() => {
     refreshComments();

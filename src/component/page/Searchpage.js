@@ -27,21 +27,10 @@ function Searchpage() {
     message.loading("搜索中...", 0);
     getSearchItem(keyword, token)
       .then((res) => {
-        switch (res.status_code) {
-          case 0:
-            setVideos(res.video_list);
-            dispatch(updateVideosObj(res.video_list));
-            break;
-          default:
-            message.error(res.status_msg);
-            break;
-        }
+        setVideos(res.video_list);
+        dispatch(updateVideosObj(res.video_list));
         message.destroy();
       })
-      .catch((err) => {
-        message.destroy();
-        message.error("搜索失败");
-      });
   }, [dispatch, keyword, token]);
 
   function handleFullScreen(videoId) {

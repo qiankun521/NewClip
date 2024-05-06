@@ -54,33 +54,9 @@ function Header() {
   useEffect(() => {
     if (logout || !id || !token) return;
     getPersonalInfo(id, token)
-      .then((res) => {
-        switch (res.status_code) {
-          case 0:
-            dispatch(changeInfo(res.user));
-            break;
-          case -1:
-            message.error(res.status_msg);
-            break;
-          default:
-            break;
-        }
-      })
-      .catch((err) => {
-        console.log(err);
-      });
-    getFriendList(id, token).then((res) => {
-      switch (res.status_code) {
-        case 0:
-          dispatch(changeFriendList(res.user_list));
-          break;
-        case -1:
-          message.error(res.status_msg);
-          break;
-        default:
-          break;
-      }
-    });
+      .then((res) => dispatch(changeInfo(res.user)))
+    getFriendList(id, token)
+      .then((res) => dispatch(changeFriendList(res.user_list)));
   }, [id, token, isShowPersonal, isShowMessage, logout, dispatch]);
 
   function onFinishLogin(values) {
@@ -89,25 +65,9 @@ function Header() {
     login(values.username, values.password)
       .then((res) => {
         message.destroy();
-        switch (res.status_code) {
-          case 0:
-            message.success(res.status_msg);
-            dispatch(loginSuccess(values.username, res.token, res.status_msg, res.user_id));
-            dispatch(hideLogin());
-            break;
-          case -1:
-            message.error(res.status_msg, 2);
-            dispatch(loginFailure(res?.status_msg));
-            break;
-          default:
-            break;
-        }
+        dispatch(loginSuccess(values.username, res.token, res.status_msg, res.user_id));
+        dispatch(hideLogin());
       })
-      .catch((err) => {
-        message.destroy();
-        message.error("登录失败，请检查网络连接");
-        dispatch(loginFailure(err));
-      });
   }
 
   function onFinishRegister(values) {
@@ -116,24 +76,9 @@ function Header() {
     register(values.username, values.password)
       .then((res) => {
         message.destroy();
-        switch (res.status_code) {
-          case 0:
-            message.success(res.status_msg);
-            dispatch(registerSuccess(res.status_msg));
-            break;
-          case -1:
-            message.error(res.status_msg);
-            dispatch(registerFailure(res.status_msg));
-            break;
-          default:
-            break;
-        }
+        message.success(res.status_msg);
+        dispatch(registerSuccess(res.status_msg));
       })
-      .catch((err) => {
-        message.destroy();
-        message.error("注册失败，请检查网络连接");
-        dispatch(registerFailure(err));
-      });
   }
   function onFinishFailed(errorInfo) {
     console.log("Failed:", errorInfo);
@@ -360,7 +305,7 @@ function Header() {
                     message: "用户名长度不能超过32位",
                   },
                 ]}>
-                <Input/>
+                <Input />
               </Form.Item>
               <Form.Item
                 label="用户密码"

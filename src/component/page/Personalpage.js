@@ -50,79 +50,24 @@ function Personalpage() {
     }
     getPersonalInfo(trueId, token)
       .then((res) => {
-        switch (res.status_code) {
-          case 0:
-            if (trueId === id) dispatch(changeInfo(res.user));
-            setInfo(res.user);
-            break;
-          case -1:
-            console.log(res.status_msg);
-            navigate("/");
-            break;
-          default:
-            break;
-        }
+        if (trueId === id) dispatch(changeInfo(res.user));
+        setInfo(res.user);
       })
-      .catch((err) => {
-        console.log(err);
-      });
     getPersonalLike(trueId, token)
       .then((res) => {
-        switch (res.status_code) {
-          case 0:
-            setLike(res.video_list);
-            dispatch(updateVideosObj(res.video_list));
-            break;
-          case -1:
-            console.log(res.status_msg);
-            break;
-          default:
-            break;
-        }
+        setLike(res.video_list);
+        dispatch(updateVideosObj(res.video_list));
       })
-      .catch((err) => {
-        console.log(err);
-      });
     getPersonalWork(trueId, token)
       .then((res) => {
-        switch (res.status_code) {
-          case 0:
-            setWork(res.video_list);
-            dispatch(updateVideosObj(res.video_list));
-            break;
-          case -1:
-            console.log(res.status_msg);
-            break;
-          default:
-            break;
-        }
+        setWork(res.video_list);
+        dispatch(updateVideosObj(res.video_list));
       })
-      .catch((err) => {
-        console.log(err);
-      });
-    getFollow(trueId, token).then((res) => {
-      switch (res.status_code) {
-        case 0:
-          setFollow(res.user_list);
-          break;
-        case -1:
-          console.log(res.status_msg);
-          break;
-        default:
-          break;
-      }
-    });
+    getFollow(trueId, token).then((res) =>
+      setFollow(res.user_list)
+    );
     getFollower(trueId, token).then((res) => {
-      switch (res.status_code) {
-        case 0:
-          setFollower(res.user_list);
-          break;
-        case -1:
-          console.log(res.status_msg);
-          break;
-        default:
-          break;
-      }
+      setFollower(res.user_list);
     });
   }, [trueId, token, id, logout, navigate, user_id, visible, dispatch]);
 
@@ -134,45 +79,19 @@ function Personalpage() {
     }
     info?.is_follow
       ? postCancelFollow(info?.id, token)
-        .then((res) => {
-          switch (res.status_code) {
-            case 0:
-              setInfo((prevState) => ({
-                ...prevState,
-                is_follow: !info.is_follow,
-              }));
-              break;
-            case -1:
-              message.error(res.status_msg, 1);
-              break;
-            default:
-              message.error("操作失败", 1);
-              break;
-          }
-        })
-        .catch((err) => {
-          message.error("操作失败,请检查网络", 1);
+        .then(() => {
+          setInfo((prevState) => ({
+            ...prevState,
+            is_follow: !info.is_follow,
+          }));
         })
       : postFollow(info?.id, token)
-        .then((res) => {
-          switch (res.status_code) {
-            case 0:
-              setInfo((prevState) => ({
-                ...prevState,
-                is_follow: !info.is_follow,
-              }));
-              break;
-            case -1:
-              message.error(res.status_msg, 1);
-              break;
-            default:
-              message.error("操作失败", 1);
-              break;
-          }
+        .then(() => {
+          setInfo((prevState) => ({
+            ...prevState,
+            is_follow: !info.is_follow,
+          }))
         })
-        .catch((err) => {
-          message.error("操作失败,请检查网络", 1);
-        });
   }
 
   function handleMessage() {

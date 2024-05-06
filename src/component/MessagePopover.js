@@ -31,22 +31,7 @@ function MessagePopover({ handleMessage }) {
 
   function handleSendMessage() {
     sendMessage(token, chattingFriendId, inputValue)
-      .then((res) => {
-        switch (res.status_code) {
-          case 0:
-            setInputValue("");
-            break;
-          case -1:
-            message.error(res.status_msg);
-            break;
-          default:
-            message.error("未知错误");
-            break;
-        }
-      })
-      .catch((err) => {
-        console.log(err);
-      });
+      .then(() => setInputValue(""))
   }
 
   useEffect(() => {
@@ -68,18 +53,8 @@ function MessagePopover({ handleMessage }) {
   useEffect(() => {
     if (!token || !user_id) return;
     const intervalId = setInterval(() => {
-      getFriendList(user_id, token).then((res) => {
-        switch (res.status_code) {
-          case 0:
-            dispatch(changeFriendList(res.user_list));
-            break;
-          case -1:
-            message.error(res.status_msg);
-            break;
-          default:
-            break;
-        }
-      });
+      getFriendList(user_id, token)
+        .then((res) => dispatch(changeFriendList(res.user_list)));
     }, 1000);
     return () => clearInterval(intervalId);
   }, [dispatch, token, user_id]);
@@ -89,18 +64,8 @@ function MessagePopover({ handleMessage }) {
     const friendListArr = Object.values(friendList);
     const intervalId = setInterval(() => {
       for (const item of friendListArr) {
-        getMessages(token, item.id).then((res) => {
-          switch (res.status_code) {
-            case 0:
-              dispatch(changeMessages(item.id, res.message_list));
-              break;
-            case -1:
-              message.error(res.status_msg);
-              break;
-            default:
-              break;
-          }
-        });
+        getMessages(token, item.id)
+          .then((res) => dispatch(changeMessages(item.id, res.message_list)));
       }
     }, 1000);
     return () => clearInterval(intervalId);

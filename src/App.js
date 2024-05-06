@@ -25,65 +25,29 @@ function App() {
     dispatch(changeMute(true)); //每次刷新页面都将视频静音
     dispatch(hideAll()); //每次刷新页面都将所有弹窗隐藏
     dispatch(changeSpeed("1"))
-    function refreshVideos() {
-      console.log(chooseClass, nextTime[chooseClass]);
+    async function refreshVideos() {
       const latest_time = nextTime[chooseClass] || undefined;
-      getVideo(latest_time, token, videoClass[chooseClass])
-        .then((res) => {
-          switch (res.status_code) {
-            case 0:
-              if (!res.video_list || res.video_list.length === 0) {
-                dispatch(changeNextTime(res.next_time));
-                refreshVideos();
-                break;
-              }
-              dispatch(resetVideos(res.video_list));
-              dispatch(changeNextTime(res.next_time));
-              break;
-            case -1:
-              message.error(res.status_msg);
-              dispatch(logOut()); //token过期，踢出重新登录
-              dispatch(hideAll());
-              dispatch(showLogin());
-              break;
-            default:
-              break;
-          }
-        })
-        .catch((err) => {
-          console.log(err);
-        });
+      const res = await getVideo(latest_time, token, videoClass[chooseClass])
+      if (!res.video_list || res.video_list.length === 0) {
+        dispatch(changeNextTime(res.next_time));
+        refreshVideos();
+        return;
+      }
+      dispatch(resetVideos(res.video_list));
     }
     refreshVideos(); // eslint-disable-next-line
   }, [logout, chooseClass]); //登录状态改变、视频类别改变时重新获取视频
 
-  function updateVideos() {
+  async function updateVideos() {
     const latest_time = nextTime[chooseClass] || undefined; //更新视频列表
-    getVideo(latest_time, token, videoClass[chooseClass])
-      .then((res) => {
-        switch (res.status_code) {
-          case 0:
-            if (!res.video_list || res.video_list.length === 0) {
-              dispatch(changeNextTime(res.next_time));
-              updateVideos();
-              break;
-            }
-            dispatch(updateVideos(res.video_list));
-            dispatch(changeNextTime(res.next_time));
-            break;
-          case -1:
-            message.error(res.status_msg);
-            dispatch(logOut());
-            dispatch(hideAll());
-            dispatch(showLogin());
-            break;
-          default:
-            break;
-        }
-      })
-      .catch((err) => {
-        console.log(err);
-      });
+    const res = await getVideo(latest_time, token, videoClass[chooseClass])
+    if (!res.video_list || res.video_list.length === 0) {
+      dispatch(changeNextTime(res.next_time));
+      updateVideos();
+      return;
+    }
+    dispatch(updateVideos(res.video_list));
+    dispatch(changeNextTime(res.next_time));
   }
   return (
     <ConfigProvider

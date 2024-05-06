@@ -21,22 +21,7 @@ function SharePopover({ video }) {
     }
   };
   function handleShare() {
-    sendMessage(token, friendList[friendIndex].id, inputValue)
-      .then((res) => {
-        switch (res.status_code) {
-          case 0:
-            message.success("分享成功！", 1);
-            break;
-          case -1:
-            console.log(res.status_msg);
-            break;
-          default:
-            break;
-        }
-      })
-      .catch((err) => {
-        console.log(err);
-      });
+    sendMessage(token, friendList[friendIndex].id, inputValue);
   }
   function Qrcode() {
     return (

@@ -11,6 +11,7 @@
     "@vercel/analytics": "^1.2.2",
     "@vercel/speed-insights": "^1.0.10",
     "antd": "^5.10.2",
+    "axios": "^1.6.8",
     "rc-queue-anim": "^2.0.0",
     "react": "^18.2.0",
     "react-dom": "^18.2.0",
