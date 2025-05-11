@@ -5,6 +5,7 @@ import { Modal, Form, Input, Button, message, Popover } from "antd";
 import { useEffect, useState } from "react";
 import { BiShare, BiSearchAlt2 } from "react-icons/bi";
 import { AiOutlineHeart, AiOutlineMessage, AiOutlineMore } from "react-icons/ai";
+import { OpenAIFilled } from '@ant-design/icons';
 import { useDispatch } from "react-redux";
 import { useSelector } from "react-redux/es/hooks/useSelector";
 import { login, register } from "../utils/loginRegister";
@@ -35,6 +36,7 @@ import {
 import { changeInfo } from "../redux/actions/personalAction";
 import { changeChooseClass } from "../redux/actions/videosAction";
 import { changeFriendList } from "../redux/actions/personalAction";
+import AiChatPopover from "./AiChatPopover";
 function Header() {
   const navigate = useNavigate();
   const dispatch = useDispatch();
@@ -161,6 +163,14 @@ function Header() {
             </div>
           </div>
           <div className={styles.personalbar}>
+            <div className={styles.more}>
+              <Popover
+                trigger="click"
+                content={<AiChatPopover></AiChatPopover>}>
+                <OpenAIFilled />
+              </Popover>
+              {/* <div className={styles.moreText}>AI助手</div> */}
+            </div>
             <Popover
               open={isShowUpload}
               onClick={handleFileChange}
@@ -185,12 +195,6 @@ function Header() {
                 <div className={styles.messageText}>私信</div>
               </div>
             </Popover>
-            <div className={styles.more}>
-              <div>
-                <AiOutlineMore></AiOutlineMore>
-              </div>
-              <div className={styles.moreText}>更多</div>
-            </div>
           </div>
           <div className={styles.person}>
             {logout ? (

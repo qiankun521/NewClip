@@ -11,7 +11,7 @@ import { logOut } from "./redux/actions/loginRegisterAction";
 import { ConfigProvider, message } from "antd";
 import Page404 from "./component/page/Page404";
 import Personalpage from "./component/page/Personalpage";
-import { changeMute, changeNextTime, changeSpeed, resetVideos } from "./redux/actions/videosAction";
+import { changeMute, changeNextTime, changeSpeed, resetVideos, updateVideos } from "./redux/actions/videosAction";
 import { hideAll, showLogin } from "./redux/actions/popoverAction";
 function App() {
   const dispatch = useDispatch();
@@ -33,17 +33,18 @@ function App() {
         refreshVideos();
         return;
       }
+      dispatch(changeNextTime(res.next_time));
       dispatch(resetVideos(res.video_list));
     }
     refreshVideos(); // eslint-disable-next-line
   }, [logout, chooseClass]); //登录状态改变、视频类别改变时重新获取视频
 
-  async function updateVideos() {
+  async function updateVideos_() {
     const latest_time = nextTime[chooseClass] || undefined; //更新视频列表
     const res = await getVideo(latest_time, token, videoClass[chooseClass])
     if (!res.video_list || res.video_list.length === 0) {
       dispatch(changeNextTime(res.next_time));
-      updateVideos();
+      updateVideos_();
       return;
     }
     dispatch(updateVideos(res.video_list));
@@ -70,7 +71,7 @@ function App() {
       <Router>
         <Routes>
           <Route path="/" element={<Header></Header>}>
-            <Route index element={<Mainpage updateVideos={updateVideos}></Mainpage>}></Route>
+            <Route index element={<Mainpage updateVideos={updateVideos_}></Mainpage>}></Route>
             <Route path="search" element={<Searchpage></Searchpage>}></Route>
             <Route path="personal" element={<Personalpage></Personalpage>}></Route>
           </Route>
